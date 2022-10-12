@@ -3,6 +3,8 @@ from typing import Mapping
 from flask import Flask
 from flask_restful import Api
 
+from .resources.user_resource import UserResource
+
 
 def create_app(test_config: Mapping = None) -> Flask:
     """Flask app function factory definition"""
@@ -16,6 +18,8 @@ def create_app(test_config: Mapping = None) -> Flask:
         app.config.from_mapping(test_config)
 
     api = Api(app)
+
+    api.add_resource(UserResource, "/api/users")
 
     return app
 
