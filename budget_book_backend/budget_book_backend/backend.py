@@ -3,7 +3,10 @@ from typing import Mapping
 from flask import Flask
 from flask_restful import Api
 
-from .resources.user_resource import UserResource
+from resources.transactions_resource import TransactionsResource
+from resources.user_resource import UserResource
+
+from models.db_setup import DbSetup
 
 
 def create_app(test_config: Mapping = None) -> Flask:
@@ -11,15 +14,23 @@ def create_app(test_config: Mapping = None) -> Flask:
     app = Flask(__name__)
 
     app.config.from_mapping(
-        SECRET_KEY="dev", DATABASE=path.join(app.instance_path, "database.db")
+        SECRET_KEY="dev",
+        DATABASE="sqlite:///"
+        + path.join(path.dirname(__file__), "models/databases/database.db"),
     )
+
+    print(app.config.get("DATABASE"))
 
     if test_config:
         app.config.from_mapping(test_config)
 
+    with app.app_context():
+        DbSetup.set_engine()
+
     api = Api(app)
 
     api.add_resource(UserResource, "/api/users")
+    api.add_resource(TransactionsResource, "/api/transactions")
 
     return app
 

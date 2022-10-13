@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Float, Boolean, Integer, String
 
-from .database_common import Base
+from db_setup import DbSetup
 
 
-class Account(Base):
+class Account(DbSetup.Base):
     """ORM for individual accounts.
 
     Each account always has an ID, a name, a balance, and whether or not
@@ -17,7 +17,8 @@ class Account(Base):
     balance = Column(Float(precision=2))
     debit_inc = Column(Boolean)
 
-    # Also has properties debit_transactions and credit_transactions for the transactions that change the account balance.
+    # Also has properties debit_transactions and credit_transactions for
+    # the transactions that change the account balance.
 
     def __repr__(self):
         return f"<Account id={self.id} name={self.name}, balance={self.balance}, debit_inc={self.debit_inc}>"

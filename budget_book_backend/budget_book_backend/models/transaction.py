@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
-from .database_common import Base
+from db_setup import DbSetup
 
 
-class Transaction(Base):
+class Transaction(DbSetup.Base):
     """ORM for individual transactions.
 
     Each transaction always have a unique ID, a name, a description, an
