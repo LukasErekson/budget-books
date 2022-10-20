@@ -23,7 +23,9 @@ class Transaction(DbSetup.Base):
     debit_account_id = Column(ForeignKey("accounts.id"), nullable=True)
     credit_account_id = Column(ForeignKey("accounts.id"), nullable=True)
     debit_account = relationship(
-        "Account", foreign_keys=[debit_account_id], backref="debit_transactions"
+        "Account",
+        foreign_keys=[debit_account_id],
+        backref="debit_transactions",
     )
     credit_account = relationship(
         "Account",
@@ -32,4 +34,7 @@ class Transaction(DbSetup.Base):
     )
 
     def __repr__(self):
-        return f"<Transaction id={self.id} name={self.name}, amount={self.amount}>"
+        return (
+            f"<Transaction id={self.id} name={self.name}, "
+            f"amount={self.amount}>"
+        )

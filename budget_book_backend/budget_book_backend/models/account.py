@@ -21,4 +21,7 @@ class Account(DbSetup.Base):
     # the transactions that change the account balance.
 
     def __repr__(self):
-        return f"<Account id={self.id} name={self.name}, balance={self.balance}, debit_inc={self.debit_inc}>"
+        return (
+            f"<Account id={self.id} name={self.name}, balance={self.balance}, "
+            f"debit_inc={self.debit_inc}>"
+        )
