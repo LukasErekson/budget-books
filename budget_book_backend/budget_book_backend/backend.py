@@ -26,6 +26,7 @@ def create_app(test_config: Mapping = None) -> Flask:
 
     with app.app_context():
         DbSetup.set_engine()
+        DbSetup.add_tables()
 
     api = Api(app)
 

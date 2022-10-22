@@ -1,8 +1,8 @@
 from sqlalchemy import Column, Boolean, Integer, String
 from datetime import datetime
-from transaction import Transaction
+from models.transaction import Transaction
 
-from db_setup import DbSetup
+from models.db_setup import DbSetup
 
 
 class Account(DbSetup.Base):

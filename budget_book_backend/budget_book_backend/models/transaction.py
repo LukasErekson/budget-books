@@ -2,7 +2,7 @@ from sqlalchemy import Column, Float, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-from db_setup import DbSetup
+from models.db_setup import DbSetup
 
 
 class Transaction(DbSetup.Base):
