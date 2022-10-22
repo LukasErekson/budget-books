@@ -10,7 +10,7 @@
     (user_id, account_id(s), and/or category_id(s)) => (message: str, transactions:[])
 
   POST : Add new transaction(s) to the respective accounts.
-    (user_id and account_id(s)) => (message: str)
+    (user_id, transactions:[]) => (message: str)
 
   PUT : Categorize the given transaction(s) to their respective category accounts.
     (user_id and transaction_ids and category/account_ids to map them to. Maybe even tuples?) => (message: str)
@@ -27,9 +27,13 @@
     (user_id, balance_start_date?, balance_end_date?) => (message: str, acocunts:[])
 
   POST : Add a new account.
-    (user_id, account_name, debit_inc) #=> (message: str)
+    (user_id, account_name, account_type, debit_inc) #=> (message: str)
 
   PATCH : Update an account's name, type, and whether or not it's a debit increase account.
+    (user_id, acount_name, account_type, account_type, debit_inc) => (message: str)
+
+  DELETE : Delete account(s) of given id(s).
+    (user_id, account_ids:[]) => (message: str)
 
 """
 ```
