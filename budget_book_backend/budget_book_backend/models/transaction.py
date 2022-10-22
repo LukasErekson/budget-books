@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Float, ForeignKey, Integer, String
+from sqlalchemy import Column, Float, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
+from datetime import datetime
 
 from db_setup import DbSetup
 
@@ -32,6 +33,8 @@ class Transaction(DbSetup.Base):
         foreign_keys=[credit_account_id],
         backref="credit_transactions",
     )
+    transaction_date = Column(DateTime, default=datetime.now())
+    date_entered = Column(DateTime, default=datetime.now())
 
     def __repr__(self):
         return (
