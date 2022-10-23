@@ -28,11 +28,10 @@ class TransactionsResource(Resource):
 
         user_id: int = request_json.get("user_id", None)
 
+        # TODO : Verify all account_ids belong to user for verification
         account_ids: list[int] = json.loads(
             request_json.get("account_ids", "[]")
         )
-
-        # TODO : Verify all account_ids belong to user for verification
 
         if len(account_ids) == 0:
             return (
@@ -44,12 +43,21 @@ class TransactionsResource(Resource):
                 500,
             )
 
-        df: pd.DataFrame = pd.read_sql_query(
-            f"""SELECT * FROM transactions
-                WHERE debit_account_id IN {tuple(account_ids)}
-                    OR credit_account_id IN {tuple(account_ids)}""",
-            DbSetup.engine,
-        )
+        elif len(account_ids) == 1:
+            df: pd.DataFrame = pd.read_sql_query(
+                f"""SELECT * FROM transactions
+                WHERE debit_account_id = {account_ids[0]}
+                    OR credit_account_id = {account_ids[0]}""",
+                DbSetup.engine,
+            )
+
+        else:
+            df: pd.DataFrame = pd.read_sql_query(
+                f"""SELECT * FROM transactions
+                    WHERE debit_account_id IN {tuple(account_ids)}
+                        OR credit_account_id IN {tuple(account_ids)}""",
+                DbSetup.engine,
+            )
 
         df.fillna("undefined", inplace=True)
 
