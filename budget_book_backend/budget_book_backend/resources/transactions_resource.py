@@ -15,8 +15,15 @@ class TransactionsResource(Resource):
     """
 
     def get(self):
-        """eturn all the transactions that are associated with the
-        account_id OR all of the given transaction categories."""
+        """Return all the transactions that are associated with the
+        account_id OR all of the given transaction categories.
+
+        Example request.json:
+        {
+          "account_ids": "[1, 2]",
+          "user_id": "1"
+        }
+        """
         request_json: Mapping = request.get_json()
 
         user_id: int = request_json.get("user_id", None)
@@ -52,7 +59,22 @@ class TransactionsResource(Resource):
         return (return_dict, 200)
 
     def post(self):
-        """Add new transaction(s) to the respective accounts."""
+        """Add new transaction(s) to the respective accounts.
+
+        Example request.json:
+        {
+            "user_id": "0",
+            "transactions": [
+                {
+                    "name": "Test Post",
+                    "description": "A Postman test to write to the database.",
+                    "amount": "50.24",
+                    "credit_account_id": "1",
+                    "transaction_date": "2022-10-02"
+                }
+            ]
+        }
+        """
         request_json: Mapping = request.get_json()
 
         # TODO : User verification that all the accounts involved belong
@@ -89,7 +111,75 @@ class TransactionsResource(Resource):
         message: str = "SUCCESS"
 
         if len(problem_transactions) != 0:
-            message = "There were some errors processing the following given transactions:"
+            message = (
+                "There were some errors processing the following transactions:"
+            )
+
+            for idx, problem in problem_transactions:
+                message += f"\n{idx}: {problem}"
+
+        return (
+            json.dumps(
+                dict(
+                    message=message,
+                )
+            ),
+            200,
+        )
+
+    def put(self):
+        """Categorize the given transaction(s) to their respective
+            category accounts.
+
+            Example request.json:
+        {
+          "user_id": "0",
+          "transactions": [
+            {
+              "transaction_id": "1",
+              "category_id": "1",
+              "debit_or_credit": "debit"
+            }
+          ]
+        }
+        """
+        request_json: Mapping = request.get_json()
+
+        # TODO : User verification that all the accounts involved belong
+        # to the user
+        user_id: int = request_json.get("user_id", None)
+
+        transactions: list[Mapping] = request_json.get("transactions", [])
+
+        problem_transactions: list[tuple] = []
+
+        with DbSetup.Session() as session:
+
+            for i, trxn in enumerate(transactions):
+                try:
+                    transaction: Transaction = (
+                        session.query(Transaction)
+                        .filter(Transaction.id == trxn["transaction_id"])
+                        .scalar()
+                    )
+
+                    if trxn["debit_or_credit"] == "debit":
+                        transaction.debit_account_id = int(trxn["category_id"])
+                    else:
+                        transaction.credit_account_id = int(
+                            trxn["category_id"]
+                        )
+
+                    session.commit()
+                except Exception as e:
+                    problem_transactions.append(i, str(e))
+
+        message: str = "SUCCESS"
+
+        if len(problem_transactions) != 0:
+            message = (
+                "There were some errors processing the following transactions:"
+            )
 
             for idx, problem in problem_transactions:
                 message += f"\n{idx}: {problem}"
