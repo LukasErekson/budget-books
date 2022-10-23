@@ -52,9 +52,18 @@
 
   Example request.json:
   {
-    "user_id": "0",
-    "transaction_ids": [1, 2]
-  }
+      "user_id": "0",
+      "transactions": [
+          {
+            "id": "2",
+            "name": "Test Post TWO",
+            "description": "A Postman test to write to the database. That has been patched!",
+            "amount": "50.24",
+            "credit_account_id": "1",
+            "transaction_date": "2022-10-03"
+          }
+      ]
+    }
 
   DELETE : Delete transaction(s) of given id(s).
     (user_id and transaction_ids) => (message: str)

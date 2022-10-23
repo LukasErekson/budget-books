@@ -195,6 +195,91 @@ class TransactionsResource(Resource):
             200,
         )
 
+    def patch(self):
+        """Change existing transaction(s) to have new values.
+
+        Example request.json:
+        {
+          "user_id": "0",
+          "transactions": [
+              {
+                "id": "2",
+                "name": "Test Post",
+                "description": "A Postman test to write to the database.",
+                "amount": "50.24",
+                "credit_account_id": "1",
+                "transaction_date": "2022-10-02"
+              }
+          ]
+        }
+        """
+        request_json: Mapping = request.get_json()
+
+        # TODO : User verification that all the accounts involved belong
+        # to the user
+        user_id: int = request_json.get("user_id", None)
+
+        transactions: list[Mapping] = request_json.get("transactions", [])
+
+        problem_transactions: list[tuple] = []
+
+        with DbSetup.Session() as session:
+
+            for i, trxn in enumerate(transactions):
+                try:
+                    transaction: Transaction = (
+                        session.query(Transaction)
+                        .filter(Transaction.id == trxn["id"])
+                        .scalar()
+                    )
+
+                    transaction.name = trxn.get("name") or transaction.name
+                    transaction.description = (
+                        trxn.get("description") or transaction.description
+                    )
+                    transaction.amount = (
+                        trxn.get("amount") or transaction.amount
+                    )
+                    transaction.debit_account_id = (
+                        trxn.get("debit_account_id")
+                        or transaction.debit_account_id
+                    )
+                    transaction.credit_account_id = (
+                        trxn.get("credit_account_id")
+                        or transaction.credit_account_id
+                    )
+                    transaction.transaction_date = (
+                        datetime.fromisoformat(
+                            trxn.get("transaction_date", None)
+                        )
+                        or transaction.transaction_date
+                    )
+                    transaction.date_entered = datetime.now()
+
+                    session.commit()
+
+                except Exception as e:
+                    problem_transactions.append((i, str(e)))
+
+        message: str = "SUCCESS"
+
+        if len(problem_transactions) != 0:
+            message = (
+                "There were some errors processing the following transactions:"
+            )
+
+            for idx, problem in problem_transactions:
+                message += f"\n{idx}: {problem}"
+
+        return (
+            json.dumps(
+                dict(
+                    message=message,
+                )
+            ),
+            200,
+        )
+
     def delete(self):
         """Delete transaction(s) of given id(s).
 
