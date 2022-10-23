@@ -59,6 +59,13 @@
   DELETE : Delete transaction(s) of given id(s).
     (user_id and transaction_ids) => (message: str)
 
+  Example request.json:
+  {
+    "user_id": "0",
+    "transaction_ids": [1, 2]
+  }
+
+
 /api/accounts
 -------------
   GET : Return all the accounts that are associated with the user, listing their id, name, balance (as of today), and whether they are a debit increase account or not.

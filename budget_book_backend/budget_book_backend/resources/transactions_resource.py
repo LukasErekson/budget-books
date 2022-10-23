@@ -28,7 +28,9 @@ class TransactionsResource(Resource):
 
         user_id: int = request_json.get("user_id", None)
 
-        account_ids: list[int] = request_json.get("account_ids", [])
+        account_ids: list[int] = json.loads(
+            request_json.get("account_ids", "[]")
+        )
 
         # TODO : Verify all account_ids belong to user for verification
 
@@ -172,7 +174,7 @@ class TransactionsResource(Resource):
 
                     session.commit()
                 except Exception as e:
-                    problem_transactions.append(i, str(e))
+                    problem_transactions.append((i, str(e)))
 
         message: str = "SUCCESS"
 
@@ -190,5 +192,57 @@ class TransactionsResource(Resource):
                     message=message,
                 )
             ),
+            200,
+        )
+
+    def delete(self):
+        """Delete transaction(s) of given id(s).
+
+        Example request.json:
+        {
+          "user_id": "0",
+          "transaction_ids": [1, 2]
+        }
+        """
+        request_json: Mapping = request.get_json()
+
+        # TODO : User verification that all the accounts involved belong
+        # to the user
+        user_id: int = request_json.get("user_id", None)
+
+        transaction_ids: list[int] = json.loads(
+            request_json.get("transaction_ids", "[]")
+        )
+
+        problem_transactions: list[tuple] = []
+
+        with DbSetup.Session() as session:
+
+            for transaction_id in transaction_ids:
+                try:
+                    transaction: Transaction = (
+                        session.query(Transaction)
+                        .filter(Transaction.id == transaction_id)
+                        .one()
+                    )
+
+                    session.delete(transaction)
+
+                    session.commit()
+                except Exception as e:
+                    problem_transactions.append((transaction_id, str(e)))
+
+        message: str = "SUCCESS"
+
+        if len(problem_transactions) != 0:
+            message = (
+                "There were some errors processing the following transactions:"
+            )
+
+            for idx, problem in problem_transactions:
+                message += f"\n{idx}: {problem}"
+
+        return (
+            json.dumps(dict(message=message)),
             200,
         )
