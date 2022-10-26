@@ -67,10 +67,16 @@ class Account(DbSetup.Base):
 
             return 0.0
 
-        return (-1 * self.debit_inc) * (
+        final_balance: float = round(
             sum(map(transaction_filter, self.credit_transactions))
-            - sum(map(transaction_filter, self.debit_transactions))
+            - sum(map(transaction_filter, self.debit_transactions)),
+            2,
         )
+
+        if self.debit_inc:
+            return -final_balance
+
+        return final_balance
 
     def __repr__(self):
         return (

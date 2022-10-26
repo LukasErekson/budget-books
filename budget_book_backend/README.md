@@ -78,7 +78,7 @@
 /api/accounts
 -------------
   GET : Return all the accounts that are associated with the user, listing their id, name, balance (as of today), and whether they are a debit increase account or not.
-    (user_id, balance_start_date?, balance_end_date?) => (message: str, acocunts:[])
+    (user_id, type?, balance_start_date?, balance_end_date?) => (message: str, acocunts:[])
 
   POST : Add a new account.
     (user_id, account_name, account_type, debit_inc) #=> (message: str)
