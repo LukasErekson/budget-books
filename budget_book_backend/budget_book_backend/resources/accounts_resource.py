@@ -86,3 +86,59 @@ class AccountResource(Resource):
             ),
             200,
         )
+
+    def post(self):
+        """Add a new account.
+
+        JSON Parameters
+        ---------------
+            user_id (int) : The user's unique ID. TODO : Implement
+                verification, etc.
+            name (str) : The name of the account- what it will appear as
+                accross the app and on the balance sheet/expense report.
+            account_type (str) : The type of account that it should be.
+                This can be Checking, Credit Card, Expense, Income, etc.
+            debit_inc (bool): Whether debits to the account increase the
+                balance or not.
+
+        Example request.json:
+        {
+            "user_id": "0",
+            "name": "American Express CC",
+            "account_type": "Credit Card",
+            "debit_inc": false
+        }
+        """
+        request_json: Mapping = request.get_json()
+
+        user_id: int = request_json.get("user_id")
+
+        with DbSetup.Session() as session:
+            try:
+                new_acct = Account(
+                    name=request_json["name"],
+                    account_type=request_json["account_type"],
+                    debit_inc=request_json["debit_inc"],
+                )
+
+                session.add(new_acct)
+
+                session.commit()
+
+            except Exception as e:
+                return (
+                    json.dumps(
+                        dict(
+                            message="There was a problem posting the new account.",
+                            error=str(e),
+                        )
+                    ),
+                    500,
+                )
+
+        return (
+            json.dumps(
+                dict(message="SUCCESS", account_name=request_json["name"])
+            ),
+            200,
+        )

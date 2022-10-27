@@ -78,10 +78,24 @@
 /api/accounts
 -------------
   GET : Return all the accounts that are associated with the user, listing their id, name, balance (as of today), and whether they are a debit increase account or not.
-    (user_id, type?, balance_start_date?, balance_end_date?) => (message: str, acocunts:[])
+    (user_id, account_type?, balance_start_date?, balance_end_date?) => (message: str, accounts:[])
+
+  Example request.json:
+      {
+          "user_id": "0",
+          "account_type": "bank",
+      }
 
   POST : Add a new account.
     (user_id, account_name, account_type, debit_inc) #=> (message: str)
+
+  Example request.json:
+        {
+            "user_id": "0",
+            "name": "American Express CC",
+            "account_type": "Credit Card",
+            "debit_inc": false
+        }
 
   PATCH : Update an account's name, type, and whether or not it's a debit increase account.
     (user_id, acount_name, account_type, account_type, debit_inc) => (message: str)
