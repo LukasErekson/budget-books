@@ -21,7 +21,7 @@ class AccountResource(Resource):
         ---------------
             user_id (int) : The user's unique ID. TODO : Implement
                 verification, etc.
-            type (str) : The type of accounts to fetch. Usually, one of
+            account_type (str) : The type of accounts to fetch. Usually, one of
                 "bank", "category", or "all". Defaults to "all"
             balance_start_date (date str) : When computing account
                 balances, use this as the start date. Optional.
@@ -31,14 +31,21 @@ class AccountResource(Resource):
         Example request.json:
         {
             "user_id": "0",
-            "type": "bank",
+            "account_type": "bank",
         }
         """
         request_json: Mapping = request.get_json()
 
         user_id: int = request_json.get("user_id")
 
-        type: str = request_json.get("type")
+        account_type: str = request_json.get("account_type")
+
+        types: tuple[str] | str = ()
+
+        if account_type == "bank":
+            types = ("Checking", "Savings", "Credit Card")
+        else:
+            types = account_type
 
         balance_start_date: str = request_json.get(
             "balance_start_date", datetime(1, 1, 1)
@@ -49,8 +56,10 @@ class AccountResource(Resource):
 
         sql_statement: str = """SELECT * FROM accounts """
 
-        if type is not None:
-            sql_statement += f"WHERE account_type = '{type}'"
+        if isinstance(account_type, str):
+            sql_statement += f" WHERE account_type = '{account_type}'"
+        elif types:
+            sql_statement += f" WHERE account_type IN {types}"
 
         df: pd.DataFrame = pd.read_sql_query(sql_statement, DbSetup.engine)
 
