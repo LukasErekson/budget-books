@@ -56,11 +56,10 @@ class AccountResource(Resource):
 
         sql_statement: str = """SELECT * FROM accounts """
 
-        if isinstance(account_type, str):
+        if isinstance(types, str):
             sql_statement += f" WHERE account_type = '{account_type}'"
         elif types:
             sql_statement += f" WHERE account_type IN {types}"
-
         df: pd.DataFrame = pd.read_sql_query(sql_statement, DbSetup.engine)
 
         df["balance"] = 0.0
