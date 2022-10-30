@@ -18,20 +18,10 @@ class TransactionsResource(Resource):
         """Return all the transactions that are associated with the
         account_id OR all of the given transaction categories.
 
-        Example request.json:
-        {
-          "account_ids": "[1, 2]",
-          "user_id": "1"
-        }
+        Example of arguments:
+            ?account_ids=1,2
         """
-        request_json: Mapping = request.get_json()
-
-        user_id: int = request_json.get("user_id", None)
-
-        # TODO : Verify all account_ids belong to user for verification
-        account_ids: list[int] = json.loads(
-            request_json.get("account_ids", "[]")
-        )
+        account_ids: list[int] = request.args["account_ids"].split(",")
 
         if len(account_ids) == 0:
             return (
