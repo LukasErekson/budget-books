@@ -38,7 +38,7 @@ class AccountResource(Resource):
 
         user_id: int = request_json.get("user_id")
 
-        account_type: str = request_json.get("account_type")
+        account_type: str = request_json.get("account_type", "all")
 
         types: tuple[str] | str = ()
 
@@ -57,7 +57,8 @@ class AccountResource(Resource):
         sql_statement: str = """SELECT * FROM accounts """
 
         if isinstance(types, str):
-            sql_statement += f" WHERE account_type = '{account_type}'"
+            if types != "all":
+                sql_statement += f" WHERE account_type = '{account_type}'"
         elif types:
             sql_statement += f" WHERE account_type IN {types}"
         df: pd.DataFrame = pd.read_sql_query(sql_statement, DbSetup.engine)
