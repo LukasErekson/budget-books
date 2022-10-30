@@ -17,7 +17,7 @@ class AccountResource(Resource):
         listing their id, name, balance (as of today), and whether they
         are a debit increase account or not.
 
-        JSON Parameters
+        Request Parameters
         ---------------
             user_id (int) : The user's unique ID. TODO : Implement
                 verification, etc.
@@ -28,17 +28,9 @@ class AccountResource(Resource):
             balance_end_date (date str) : When computing account
                 balances, use this as the end date. Optional.
 
-        Example request.json:
-        {
-            "user_id": "0",
-            "account_type": "bank",
-        }
+        Example url:
         """
-        request_json: Mapping = request.get_json()
-
-        user_id: int = request_json.get("user_id")
-
-        account_type: str = request_json.get("account_type", "all")
+        account_type: str = request.args.get("account_type", "all")
 
         types: tuple[str] | str = ()
 
@@ -47,10 +39,10 @@ class AccountResource(Resource):
         else:
             types = account_type
 
-        balance_start_date: str = request_json.get(
+        balance_start_date: str = request.args.get(
             "balance_start_date", datetime(1, 1, 1)
         )
-        balance_end_date: str = request_json.get(
+        balance_end_date: str = request.args.get(
             "balance_end_date", datetime.now()
         )
 
