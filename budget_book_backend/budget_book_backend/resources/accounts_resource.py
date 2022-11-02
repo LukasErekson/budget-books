@@ -46,6 +46,16 @@ class AccountResource(Resource):
             "balance_end_date", datetime.now()
         )
 
+        if isinstance(balance_start_date, str):
+            balance_start_date = datetime.strptime(
+                balance_start_date, "%Y-%m-%d"
+            )
+
+        if isinstance(balance_end_date, str):
+            balance_start_date = datetime.strptime(
+                balance_end_date, "%Y-%m-%d"
+            )
+
         sql_statement: str = """SELECT * FROM accounts """
 
         if isinstance(types, str):

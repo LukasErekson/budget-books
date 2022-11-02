@@ -62,7 +62,7 @@ class Account(DbSetup.Base):
                     the given dates, returns 0.
             """
             t_date = transaction.transaction_date
-            if t_date > start_date and t_date < end_date:
+            if t_date >= start_date and t_date <= end_date:
                 return transaction.amount
 
             return 0.0
