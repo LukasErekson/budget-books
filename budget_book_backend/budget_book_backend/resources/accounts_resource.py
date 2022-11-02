@@ -4,7 +4,7 @@ import pandas as pd
 from typing import Mapping
 from flask_restful import Resource
 from models.db_setup import DbSetup
-from .utils import dict_to_json
+from .utils import dict_to_json, endpoint_error_wrapper
 from flask import request
 from models.account import Account
 
@@ -12,6 +12,7 @@ from models.account import Account
 class AccountResource(Resource):
     """Resource for interacting with the account model."""
 
+    @endpoint_error_wrapper
     def get(self):
         """Return all the accounts that are associated with the user,
         listing their id, name, balance (as of today), and whether they
@@ -89,6 +90,7 @@ class AccountResource(Resource):
             200,
         )
 
+    @endpoint_error_wrapper
     def post(self):
         """Add a new account.
 

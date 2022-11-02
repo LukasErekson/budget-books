@@ -4,7 +4,7 @@ import pandas as pd
 from typing import Mapping
 from flask_restful import Resource
 from models.db_setup import DbSetup
-from .utils import dict_to_json
+from .utils import dict_to_json, endpoint_error_wrapper
 from flask import request
 from models.transaction import Transaction
 
@@ -14,6 +14,7 @@ class TransactionsResource(Resource):
     page.
     """
 
+    @endpoint_error_wrapper
     def get(self):
         """Return all the transactions that are associated with the
         account_id OR all of the given transaction categories.
@@ -58,6 +59,7 @@ class TransactionsResource(Resource):
 
         return (return_dict, 200)
 
+    @endpoint_error_wrapper
     def post(self):
         """Add new transaction(s) to the respective accounts.
 
@@ -127,6 +129,7 @@ class TransactionsResource(Resource):
             200,
         )
 
+    @endpoint_error_wrapper
     def put(self):
         """Categorize the given transaction(s) to their respective
             category accounts.
@@ -193,6 +196,7 @@ class TransactionsResource(Resource):
             200,
         )
 
+    @endpoint_error_wrapper
     def patch(self):
         """Change existing transaction(s) to have new values.
 
@@ -278,6 +282,7 @@ class TransactionsResource(Resource):
             200,
         )
 
+    @endpoint_error_wrapper
     def delete(self):
         """Delete transaction(s) of given id(s).
 
