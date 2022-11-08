@@ -76,3 +76,10 @@ code {
 .negative {
     color: darkred;
 }
+
+.account-card .account-end-date {
+    position: absolute;
+    bottom: -0.5rem;
+    right: 0.5rem;
+    color: rgba(0, 0, 0, 0.5);
+}

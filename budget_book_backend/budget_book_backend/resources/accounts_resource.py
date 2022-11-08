@@ -18,8 +18,8 @@ class AccountResource(Resource):
         listing their id, name, balance (as of today), and whether they
         are a debit increase account or not.
 
-        Request Parameters
-        ---------------
+        Request Arguments
+        -----------------
             user_id (int) : The user's unique ID. TODO : Implement
                 verification, etc.
             account_type (str) : The type of accounts to fetch. Usually, one of
@@ -30,6 +30,7 @@ class AccountResource(Resource):
                 balances, use this as the end date. Optional.
 
         Example url:
+            ?balance_start_date=2022-10-02&account_type=bank
         """
         account_type: str = request.args.get("account_type", "all")
 
@@ -67,7 +68,8 @@ class AccountResource(Resource):
         df: pd.DataFrame = pd.read_sql_query(sql_statement, DbSetup.engine)
 
         df["balance"] = 0.0
-
+        df["start_date"] = datetime.strftime(balance_start_date, "%Y-%m-%d")
+        df["end_date"] = datetime.strftime(balance_end_date, "%Y-%m-%d")
         with DbSetup.Session() as session:
             ids: list[int] = df["id"].to_list()
 
@@ -81,11 +83,9 @@ class AccountResource(Resource):
                 )
 
         return (
-            json.dumps(
-                dict(
-                    message="SUCCESS",
-                    accounts=dict_to_json(df.to_dict(), df.index),
-                )
+            dict(
+                message="SUCCESS",
+                accounts=json.dumps(dict_to_json(df.to_dict(), df.index)),
             ),
             200,
         )

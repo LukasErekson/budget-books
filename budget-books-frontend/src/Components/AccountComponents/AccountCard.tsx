@@ -1,7 +1,8 @@
 import React from 'react';
+import { pyToJsDate } from '../../Common/TextFilters';
 
 function AccountCard(props: { accountData: any }): JSX.Element {
-    const { name, balance, account_type } = props.accountData;
+    const { name, balance, account_type, end_date } = props.accountData;
     const isNegative = balance < 0.0;
 
     return (
@@ -15,6 +16,9 @@ function AccountCard(props: { accountData: any }): JSX.Element {
                     }
                 >{`${isNegative ? '-' : ''}$${Math.abs(balance)}`}</h2>
                 <p className={'account-type'}>{account_type}</p>
+                <p className={'account-end-date'}>
+                    As of {pyToJsDate(end_date)}
+                </p>
             </div>
         </>
     );
