@@ -102,9 +102,14 @@ code {
     align-self: flex-end;
     justify-self: center;
     margin: 0 0 1rem 0;
-    text-shadow: 1px 1px 2px var(--quarter-shadow);
+    text-shadow: 1px 1px 1px var(--quarter-shadow);
 }
 
 .muted {
     color: var(--half-shadow);
+}
+
+.uncategorized-alert {
+    color: rgb(231, 127, 0);
+    font-weight: bold;
 }

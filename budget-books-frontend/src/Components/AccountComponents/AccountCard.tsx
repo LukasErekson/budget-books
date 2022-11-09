@@ -2,8 +2,16 @@ import React from 'react';
 import { pyToJsDate } from '../../Common/TextFilters';
 
 function AccountCard(props: { accountData: any }): JSX.Element {
-    const { name, balance, account_type, end_date } = props.accountData;
+    const {
+        name,
+        balance,
+        account_type,
+        end_date,
+        uncategorized_transactions,
+    } = props.accountData;
     const isNegative = balance < 0.0;
+
+    console.log(uncategorized_transactions);
 
     return (
         <>
@@ -24,7 +32,16 @@ function AccountCard(props: { accountData: any }): JSX.Element {
                     2
                 )}`}</h2>
                 {/* TODO: Add the actual number of uncategorized transactions - Muted if it's 0, a different class otherwise.*/}
-                <p className={'account-uncategorized-transactions muted'}>0</p>
+                <p
+                    className={
+                        'account-uncategorized-transactions ' +
+                        (+uncategorized_transactions === 0
+                            ? 'muted'
+                            : 'uncategorized-alert')
+                    }
+                >
+                    {uncategorized_transactions}
+                </p>
             </div>
         </>
     );
