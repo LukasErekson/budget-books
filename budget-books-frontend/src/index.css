@@ -1,3 +1,8 @@
+:root {
+    --half-shadow: rgba(0, 0, 0, 0.5);
+    --quarter-shadow: rgba(0, 0, 0, 0.25);
+}
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
@@ -13,18 +18,18 @@ code {
 }
 
 .accounts-container {
-    height: 200px;
-    /* padding: 10px; */
-    padding: 3px;
+    height: 12rem;
+    padding: 5px;
     overflow-x: scroll;
     overflow-y: hidden;
 
     display: flex;
     flex-wrap: false;
+    align-items: center;
 
     gap: 0px;
 
-    border: 2px solid rgba(0, 0, 0, 0.25);
+    border: 2px solid var(--quarter-shadow);
     border-radius: 10px;
 }
 
@@ -36,39 +41,46 @@ code {
 
 .account-card {
     margin: 10px;
-    background-color: aliceblue;
+    background-color: white;
     border-radius: 5px;
     position: relative;
     display: grid;
-    grid-template-areas:
-        'name'
-        'balance';
-    grid-template-rows: 1.5rem 1fr;
-    padding: 1rem;
+    grid-template-rows: 3.5rem 1fr;
+    grid-template-columns: 1fr 0.25fr;
     height: 150px;
     min-width: 300px;
     max-width: 300px;
+    box-shadow: 1px 1px 5px var(--quarter-shadow);
 }
 
-.account-card .account-name {
-    grid-area: name;
-    justify-self: left;
-    align-self: top;
+.account-card .account-card-header {
+    height: 2.5rem;
+    padding: 0.5rem;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid var(--quarter-shadow);
+}
+
+.account-card-header .account-name {
+    margin: 1rem 0 0 0;
     font-size: 1.5rem;
-    height: 1.5rem;
 }
 
 .account-card .account-type {
     position: absolute;
-    top: 0px;
-    right: 15px;
+    top: -5px;
+    left: 10px;
     font-size: 0.75rem;
     color: rgba(0, 0, 0, 0.5);
 }
 
 .account-card .account-balance-num {
-    grid-area: balance;
     font-size: 2.5rem;
+    margin-top: 1rem;
     justify-self: center;
     align-self: center;
 }
@@ -79,7 +91,20 @@ code {
 
 .account-card .account-end-date {
     position: absolute;
-    bottom: -0.5rem;
+    top: -0.5rem;
     right: 0.5rem;
     color: rgba(0, 0, 0, 0.5);
+    font-size: 0.75rem;
+}
+
+.account-card .account-uncategorized-transactions {
+    font-size: 1.5rem;
+    align-self: flex-end;
+    justify-self: center;
+    margin: 0 0 1rem 0;
+    text-shadow: 1px 1px 2px var(--quarter-shadow);
+}
+
+.muted {
+    color: var(--half-shadow);
 }

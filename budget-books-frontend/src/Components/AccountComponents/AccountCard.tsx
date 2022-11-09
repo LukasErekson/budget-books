@@ -8,17 +8,23 @@ function AccountCard(props: { accountData: any }): JSX.Element {
     return (
         <>
             <div className='account-card'>
-                <h3 className={'account-name'}>{name}</h3>
+                <div className='account-card-header'>
+                    <h3 className={'account-name'}>{name}</h3>
+                    <p className={'account-type'}>{account_type}</p>
+                    <p className={'account-end-date'}>
+                        As of {pyToJsDate(end_date)}
+                    </p>
+                </div>
                 <h2
                     className={
                         (isNegative ? 'negative' : 'positive') +
                         ' account-balance-num'
                     }
-                >{`${isNegative ? '-' : ''}$${Math.abs(balance)}`}</h2>
-                <p className={'account-type'}>{account_type}</p>
-                <p className={'account-end-date'}>
-                    As of {pyToJsDate(end_date)}
-                </p>
+                >{`${isNegative ? '-' : ''}$${Math.abs(balance).toFixed(
+                    2
+                )}`}</h2>
+                {/* TODO: Add the actual number of uncategorized transactions - Muted if it's 0, a different class otherwise.*/}
+                <p className={'account-uncategorized-transactions muted'}>0</p>
             </div>
         </>
     );
