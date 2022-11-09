@@ -70,6 +70,8 @@ class AccountResource(Resource):
         df["balance"] = 0.0
         df["start_date"] = datetime.strftime(balance_start_date, "%Y-%m-%d")
         df["end_date"] = datetime.strftime(balance_end_date, "%Y-%m-%d")
+        df["uncategorized_transactions"] = 0
+
         with DbSetup.Session() as session:
             ids: list[int] = df["id"].to_list()
 
@@ -80,6 +82,13 @@ class AccountResource(Resource):
             for account in account_objs:
                 df.loc[df["id"] == account.id, "balance"] = account.balance(
                     balance_start_date, balance_end_date
+                )
+                df.loc[
+                    df["id"] == account.id, "uncategorized_transactions"
+                ] = len(
+                    account.uncategorized_transactions(
+                        balance_start_date, balance_end_date
+                    )
                 )
 
         return (

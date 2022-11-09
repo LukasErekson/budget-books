@@ -39,7 +39,8 @@ class Account(DbSetup.Base):
                 If not given, defaults to the earliest datetime Python
                 allows.
             end_date (datetime) : Optional. The date to calculate the
-                account balance change up to. Defaults to now.
+                account balance change up to. If not given, it defaults
+                to now.
 
         Returns
         -------
@@ -77,6 +78,60 @@ class Account(DbSetup.Base):
             return -final_balance
 
         return final_balance
+
+    def uncategorized_transactions(
+        self,
+        start_date: datetime = datetime(1, 1, 1),
+        end_date: datetime = datetime.now(),
+    ) -> list[Transaction]:
+        """Return a list of the uncategorized transactions within the
+        given timeframe.
+
+        Parameters
+        ----------
+            start_date (datetime) : Optional. The starting date when the
+                transactions will start to be considered.
+                If not given, defaults to the earliest datetime Python
+                allows.
+            end_date (datetime) : Optional. The date to find the
+                transactions up to. If not given, it defaults to now.
+
+        Returns
+        -------
+            uncategorized_transactions (list of Transactions): The list
+                of transaction objects that are uncategorized.
+        """
+
+        def transaction_filter(transaction: Transaction) -> bool:
+            """Returns True if the transaction is within the given
+            dates and is uncategorized, otherwise returns False.
+
+            Parameters
+            ----------
+                transaction (Transaction) : The transaction to check
+                    whether it's within the given dates.
+
+            Returns
+            -------
+                (bool) : Whether the transaction is within the given
+                    dates or not.
+            """
+            t_date = transaction.transaction_date
+            if t_date >= start_date and t_date <= end_date:
+                # Since it's associated with this account, only one or
+                # the other will be None if uncategorized.
+                return (
+                    transaction.credit_account_id is None
+                    or transaction.debit_account_id is None
+                )
+
+            return False
+
+        uncategorized_transactions: list[Transaction] = list(
+            filter(transaction_filter, self.credit_transactions)
+        ) + list(filter(transaction_filter, self.debit_transactions))
+
+        return uncategorized_transactions
 
     def __repr__(self):
         return (
