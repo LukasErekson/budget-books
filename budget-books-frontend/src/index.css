@@ -1,6 +1,8 @@
 :root {
     --half-shadow: rgba(0, 0, 0, 0.5);
     --quarter-shadow: rgba(0, 0, 0, 0.25);
+    --negative-num: darkred;
+    --alert-color: rgb(231, 127, 0);
 }
 
 body {
@@ -17,6 +19,12 @@ code {
         monospace;
 }
 
+/* General */
+.muted {
+    color: var(--half-shadow);
+}
+
+/* Accounts */
 .accounts-container {
     height: 12rem;
     padding: 5px;
@@ -86,7 +94,7 @@ code {
 }
 
 .negative {
-    color: darkred;
+    color: var(--negative-num);
 }
 
 .account-card .account-end-date {
@@ -105,11 +113,7 @@ code {
     text-shadow: 1px 1px 1px var(--quarter-shadow);
 }
 
-.muted {
-    color: var(--half-shadow);
-}
-
 .uncategorized-alert {
-    color: rgb(231, 127, 0);
+    color: var(--alert-color);
     font-weight: bold;
 }
