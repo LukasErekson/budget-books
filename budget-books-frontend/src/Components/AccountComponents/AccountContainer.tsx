@@ -3,6 +3,7 @@ import { connect, useSelector } from 'react-redux';
 import AccountCard from './AccountCard';
 import { fetchAllAccounts } from './accountThunks';
 import { selectAccounts } from './accountSelectors';
+import { AiFillPlusCircle } from 'react-icons/ai';
 
 function AccountContainer(props: {
     selectAccounts: any[];
@@ -36,7 +37,10 @@ function AccountContainer(props: {
                     <p>Loading Accounts...</p>
                 )}
                 <div className='new-account-btn-card'>
-                    <button className='new-account-btn'>Add New Account</button>
+                    <button className='new-account-btn'>
+                        <AiFillPlusCircle />
+                        Add New Account
+                    </button>
                 </div>
             </div>
         </>
