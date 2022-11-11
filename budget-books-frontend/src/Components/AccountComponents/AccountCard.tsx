@@ -7,7 +7,7 @@ function AccountCard(props: { accountData: any }): JSX.Element {
         balance,
         account_type,
         end_date,
-        uncategorized_transactions,
+        uncategorized_transactions, // TODO: Make this part of the store so that it communicates in real time with categorization.
     } = props.accountData;
     const isNegative = balance < 0.0;
 

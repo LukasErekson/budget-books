@@ -4,7 +4,7 @@ import AccountCard from './AccountCard';
 import { fetchAllAccounts } from './accountThunks';
 import { selectAccounts } from './accountSelectors';
 
-function AccountHeader(props: {
+function AccountContainer(props: {
     selectAccounts: any[];
     fetchAllAccounts: Function;
 }): JSX.Element {
@@ -19,7 +19,7 @@ function AccountHeader(props: {
             props.fetchAllAccounts();
             setIsAccountsLoaded(true);
         }
-    }, []);
+    }, [isAccountsLoaded, props]);
 
     return (
         <>
@@ -35,6 +35,9 @@ function AccountHeader(props: {
                 ) : (
                     <p>Loading Accounts...</p>
                 )}
+                <div className='new-account-btn-card'>
+                    <button className='new-account-btn'>Add New Account</button>
+                </div>
             </div>
         </>
     );
@@ -52,4 +55,4 @@ const mapDipsatchToProps = (dispatch: Function) => {
     };
 };
 
-export default connect(mapStateToProps, mapDipsatchToProps)(AccountHeader);
+export default connect(mapStateToProps, mapDipsatchToProps)(AccountContainer);
