@@ -99,7 +99,7 @@ code {
     color: var(--negative-num);
 }
 
-.account-card .account-end-date {
+.account-card .account-updated-date {
     position: absolute;
     top: -0.5rem;
     right: 0.5rem;

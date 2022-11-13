@@ -6,7 +6,7 @@ function AccountCard(props: { accountData: any }): JSX.Element {
         name,
         balance,
         account_type,
-        end_date,
+        last_updated,
         uncategorized_transactions, // TODO: Make this part of the store so that it communicates in real time with categorization.
     } = props.accountData;
     const isNegative = balance < 0.0;
@@ -17,8 +17,8 @@ function AccountCard(props: { accountData: any }): JSX.Element {
                 <div className='account-card-header'>
                     <h3 className={'account-name'}>{name}</h3>
                     <p className={'account-type'}>{account_type}</p>
-                    <p className={'account-end-date'}>
-                        As of {pyToJsDate(end_date)}
+                    <p className={'account-updated-date'}>
+                        As of {pyToJsDate(last_updated)}
                     </p>
                 </div>
                 <h2
