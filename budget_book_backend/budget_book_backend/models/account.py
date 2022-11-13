@@ -133,6 +133,38 @@ class Account(DbSetup.Base):
 
         return uncategorized_transactions
 
+    def last_updated(self) -> datetime:
+        """Returns the date that the account was last updated (based on
+        when the most recent transaciton in the database associated wtih
+        the account).
+
+        Returns
+        -------
+            (datetime) : The date of the most recent transaction that
+                changes the account's balance. If no transactions are
+                associated with the account, returns today's date.
+        """
+        if (
+            len(self.credit_transactions) == 0
+            and len(self.debit_transactions) == 0
+        ):
+            return datetime.now()
+
+        credit_transactions_latest: datetime = datetime(1, 1, 1)
+        debit_transactions_latest: datetime = datetime(1, 1, 1)
+
+        if self.credit_transactions:
+            credit_transactions_latest = max(
+                [t.transaction_date for t in self.credit_transactions]
+            )
+
+        if self.debit_transactions:
+            debit_transactions_latest = max(
+                [t.transaction_date for t in self.debit_transactions]
+            )
+
+        return max(credit_transactions_latest, debit_transactions_latest)
+
     def __repr__(self):
         return (
             f"<Account id={self.id} name={self.name}, "
