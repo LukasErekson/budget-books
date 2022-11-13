@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialAccounts: any[] = [];
+
 export const accountSlice: any = createSlice({
     name: 'accounts',
     initialState: {
-        accounts: [],
+        accounts: initialAccounts,
     },
     reducers: {
         loadAccounts: (state, action) => {

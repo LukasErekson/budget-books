@@ -11,8 +11,6 @@ function AccountCard(props: { accountData: any }): JSX.Element {
     } = props.accountData;
     const isNegative = balance < 0.0;
 
-    console.log(uncategorized_transactions);
-
     return (
         <>
             <div className='account-card'>
