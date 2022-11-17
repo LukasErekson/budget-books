@@ -11,5 +11,5 @@ class AccountType(DbSetup.Base):
     __tablename__ = "account_types"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String(120))
+    name = Column(String(120), unique=True)
     group = Column(String(120))
