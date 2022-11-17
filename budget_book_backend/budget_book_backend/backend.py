@@ -6,6 +6,7 @@ from flask_restful import Api
 from resources.accounts_resource import AccountResource
 from resources.transactions_resource import TransactionsResource
 from resources.user_resource import UserResource
+from resources.account_types_resource import AccountTypeResource
 
 from models.db_setup import DbSetup
 
@@ -34,6 +35,7 @@ def create_app(test_config: Mapping = None) -> Flask:
     api.add_resource(UserResource, "/api/users")
     api.add_resource(TransactionsResource, "/api/transactions")
     api.add_resource(AccountResource, "/api/accounts")
+    api.add_resource(AccountTypeResource, "/api/accounttype")
 
     return app
 
