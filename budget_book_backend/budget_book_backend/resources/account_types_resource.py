@@ -7,6 +7,7 @@ from models.db_setup import DbSetup
 from .utils import dict_to_json, endpoint_error_wrapper
 from flask import request
 from models.account import Account
+from models.account_type import AccountType
 
 
 class AccountResource(Resource):
