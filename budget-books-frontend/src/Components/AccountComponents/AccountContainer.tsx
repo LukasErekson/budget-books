@@ -41,11 +41,7 @@ function AccountContainer(props: {
                     <button
                         className='new-account-btn'
                         onClick={() => {
-                            props.addNewAccount(
-                                'Example Account',
-                                'Fake',
-                                true
-                            );
+                            props.addNewAccount('Example Account', 1, true);
                         }}
                     >
                         <AiFillPlusCircle />

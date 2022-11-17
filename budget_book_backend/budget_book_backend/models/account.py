@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Boolean, Integer, String
+from sqlalchemy import Column, Boolean, Integer, String, ForeignKey
 from datetime import datetime
+from sqlalchemy.orm import relationship
+from models.account_type import AccountType
 from models.transaction import Transaction
 
 from models.db_setup import DbSetup
@@ -16,7 +18,12 @@ class Account(DbSetup.Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(120))
-    account_type = Column(String(120))
+    account_type_id = Column(ForeignKey("account_types.id"), nullable=False)
+    account_type = relationship(
+        "AccountType",
+        foreign_keys=[account_type_id],
+        backref="accts",
+    )
     debit_inc = Column(Boolean)
 
     # Also has properties debit_transactions and credit_transactions for

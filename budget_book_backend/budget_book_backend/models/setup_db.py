@@ -1,8 +1,9 @@
-from db_setup import DbSetup
+from models.db_setup import DbSetup
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from account import Account
-from transaction import Transaction
+from models.account import Account
+from models.account_type import AccountType
+from models.transaction import Transaction
 
 
 def main(file_name: str, test: bool = True):
@@ -12,10 +13,11 @@ def main(file_name: str, test: bool = True):
     DbSetup.add_tables()
 
     if test:
+        credit_card = AccountType(name="Credit Card", group="Liabilities")
         amex = Account(
             name="AMEX",
-            account_type="Credit Card",
             debit_inc=False,
+            account_type_id=1,
         )
         trans1 = Transaction(
             name="Test Transaction",
@@ -30,7 +32,7 @@ def main(file_name: str, test: bool = True):
             debit_account_id=1,
         )
         with DbSetup.Session() as session:
-            session.add_all([amex, trans1, payment1])
+            session.add_all([credit_card, amex, trans1, payment1])
             session.commit()
 
 

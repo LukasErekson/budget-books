@@ -72,6 +72,7 @@ class AccountResource(Resource):
         df["end_date"] = datetime.strftime(balance_end_date, "%Y-%m-%d")
         df["last_updated"] = datetime.strftime(datetime.today(), "%Y-%m-%d")
         df["uncategorized_transactions"] = 0
+        df["account_type"] = ""
 
         with DbSetup.Session() as session:
             ids: list[int] = df["id"].to_list()
@@ -94,6 +95,9 @@ class AccountResource(Resource):
                 df.loc[
                     df["id"] == account.id, "last_updated"
                 ] = datetime.strftime(account.last_updated(), "%Y-%m-%d")
+                df.loc[
+                    df["id"] == account.id, "account_type"
+                ] = account.account_type.name
 
         return (
             dict(
@@ -134,7 +138,7 @@ class AccountResource(Resource):
             try:
                 new_acct = Account(
                     name=request_json["name"],
-                    account_type=request_json["account_type"],
+                    account_type_id=request_json["account_type"],
                     debit_inc=request_json["debit_inc"],
                 )
 
