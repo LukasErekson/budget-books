@@ -15,7 +15,7 @@ function NewAccountModal(props: {
     selectAccountTypes: any[];
     selectAccountTypeByGroups: any;
 }): JSX.Element {
-    const options: any = props.selectAccountTypeByGroups;
+    const options: any[] = props.selectAccountTypeByGroups;
 
     console.log(options);
 
