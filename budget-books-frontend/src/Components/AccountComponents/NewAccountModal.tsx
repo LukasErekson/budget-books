@@ -30,10 +30,15 @@ function NewAccountModal(props: {
 
     return (
         <>
-            <Modal isOpen={props.isOpen} onRequestClose={props.onRequestClose}>
+            <Modal
+                isOpen={props.isOpen}
+                onRequestClose={props.onRequestClose}
+                appElement={document.getElementById('root') || undefined}
+            >
                 <h1>Add New Account</h1>
-                <p>Category:</p>
+                <label htmlFor='accountType'>Category:</label>
                 <Select
+                    name={'accountType'}
                     options={options.concat({
                         label: `Create new category: ${inputCategory}`,
                         value: -1,
@@ -46,6 +51,9 @@ function NewAccountModal(props: {
                         // Allow for a new category.
                         if (newCategory.value === -1) {
                             newCategory.label = newCategory.label.slice(21);
+                            if (newCategory.label === '') {
+                                return;
+                            }
                         }
                         setCategory(newCategory);
                     }}
