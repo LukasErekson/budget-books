@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import Select from 'react-select';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
 import {
     selectAccountTypes,
@@ -15,9 +15,12 @@ function NewAccountModal(props: {
     selectAccountTypes: any[];
     selectAccountTypeByGroups: any;
 }): JSX.Element {
+    const [category, setCategory]: [any, Function] = useState({});
+    const [inputCategory, setInputCategory]: [string, Function] = useState('');
+
     const options: any[] = props.selectAccountTypeByGroups;
 
-    console.log(options);
+    console.log(category);
 
     useEffect(() => {
         if (Object.keys(options).length === 0) {
@@ -30,7 +33,23 @@ function NewAccountModal(props: {
             <Modal isOpen={props.isOpen} onRequestClose={props.onRequestClose}>
                 <h1>Add New Account</h1>
                 <p>Category:</p>
-                <Select options={options} />
+                <Select
+                    options={options.concat({
+                        label: `Create new category: ${inputCategory}`,
+                        value: -1,
+                    })}
+                    onInputChange={(newValue: string) =>
+                        setInputCategory(newValue)
+                    }
+                    value={category}
+                    onChange={(newCategory: any) => {
+                        // Allow for a new category.
+                        if (newCategory.value === -1) {
+                            newCategory.label = newCategory.label.slice(21);
+                        }
+                        setCategory(newCategory);
+                    }}
+                />
             </Modal>
         </>
     );
