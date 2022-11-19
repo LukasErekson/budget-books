@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const initialAccountTypes: any = {};
+const initialAccountTypes: any[] = [];
 const initialAccountGroups: string[] = [];
 
 export const accountTypeSlice: any = createSlice({
@@ -11,7 +11,7 @@ export const accountTypeSlice: any = createSlice({
     },
     reducers: {
         setAccountTypes: (state, action) => {
-            const accountTypes: any = action.payload.accountTypes;
+            const accountTypes: any[] = action.payload.accountTypes;
             const accountGroups: string[] = action.payload.accountGroups;
 
             return {

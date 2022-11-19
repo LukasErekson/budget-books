@@ -3,17 +3,30 @@ import { RootState } from '../../store';
 
 const selectSelf = (state: RootState) => state;
 
-export const selectAccountTypes = (state: any) =>
-    state.accountTypes.accountTypes;
-
-export const selectAccountTypeGroups = createSelector(
+// Return the account type objects of the form {id: #, name: '', group: ''}
+export const selectAccountTypes = createSelector(
     selectSelf,
-    (state: any) => state.accountTypes.accountGroups
+    (state: any) => state.accountTypes.accountTypes
 );
 
+// Return an array of the unique group names.
+export const selectAccountTypeGroups = createSelector(
+    selectSelf,
+    (state: any): string[] => state.accountTypes.accountGroups
+);
+
+// Return an array of the account labels.
+export const selectAccountTypeNames = createSelector(
+    selectSelf,
+    (state: any): string[] =>
+        state.accountTypes.accountTypes.map(
+            (accountTypeGroup: any) => accountTypeGroup.name
+        )
+);
+// Return an array of objects ordered by group - good for passing into the "options" parameter of <Select />
 export const selectAccountTypeByGroups = createSelector(
     selectSelf,
-    (state: any) => {
+    (state: any): any[] => {
         const groups: string[] = selectAccountTypeGroups(state);
 
         const orderedGroups: string[] = JSON.parse(

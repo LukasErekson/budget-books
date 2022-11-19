@@ -6,6 +6,7 @@ import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
 import {
     selectAccountTypes,
     selectAccountTypeByGroups,
+    selectAccountTypeNames,
 } from '../AccountTypeComponents/accountTypeSelectors';
 
 function NewAccountModal(props: {
@@ -13,7 +14,8 @@ function NewAccountModal(props: {
     onRequestClose: any;
     fetchAccountTypes: Function;
     selectAccountTypes: any[];
-    selectAccountTypeByGroups: any;
+    selectAccountTypeByGroups: any[];
+    selectAccountTypeNames: string[];
 }): JSX.Element {
     const [category, setCategory]: [any, Function] = useState({});
     const [inputCategory, setInputCategory]: [string, Function] = useState('');
@@ -54,6 +56,23 @@ function NewAccountModal(props: {
                             if (newCategory.label === '') {
                                 return;
                             }
+                            if (
+                                props.selectAccountTypeNames.includes(
+                                    newCategory.label
+                                )
+                            ) {
+                                const matchingAccountType: any =
+                                    props.selectAccountTypes.filter(
+                                        (accountTypeObject: any) =>
+                                            accountTypeObject.name ===
+                                            newCategory.label
+                                    )[0];
+                                setCategory({
+                                    label: matchingAccountType.name,
+                                    value: matchingAccountType.id,
+                                });
+                                return;
+                            }
                         }
                         setCategory(newCategory);
                     }}
@@ -67,6 +86,7 @@ const mapStateToProps = (state: any) => {
     return {
         selectAccountTypes: selectAccountTypes(state),
         selectAccountTypeByGroups: selectAccountTypeByGroups(state),
+        selectAccountTypeNames: selectAccountTypeNames(state),
     };
 };
 
