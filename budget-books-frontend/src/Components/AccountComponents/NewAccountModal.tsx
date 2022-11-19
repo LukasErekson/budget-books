@@ -1,0 +1,53 @@
+import React, { useEffect } from 'react';
+import Modal from 'react-modal';
+import Select from 'react-select';
+import { connect, useSelector } from 'react-redux';
+import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
+import {
+    selectAccountTypes,
+    selectAccountTypeByGroups,
+} from '../AccountTypeComponents/accountTypeSelectors';
+
+function NewAccountModal(props: {
+    isOpen: boolean;
+    onRequestClose: any;
+    fetchAccountTypes: Function;
+    selectAccountTypes: any[];
+    selectAccountTypeByGroups: any;
+}): JSX.Element {
+    const options: any = props.selectAccountTypeByGroups;
+
+    console.log(options);
+
+    useEffect(() => {
+        if (Object.keys(options).length === 0) {
+            props.fetchAccountTypes('all');
+        }
+    }, [options, props]);
+
+    return (
+        <>
+            <Modal isOpen={props.isOpen} onRequestClose={props.onRequestClose}>
+                <h1>Add New Account</h1>
+                <p>Category:</p>
+                <Select options={options} />
+            </Modal>
+        </>
+    );
+}
+
+const mapStateToProps = (state: any) => {
+    return {
+        selectAccountTypes: selectAccountTypes(state),
+        selectAccountTypeByGroups: selectAccountTypeByGroups(state),
+    };
+};
+
+const mapDipsatchToProps = (dispatch: Function) => {
+    return {
+        fetchAccountTypes: (group: string) =>
+            dispatch(fetchAccountTypes(group)),
+    };
+};
+
+export default connect(mapStateToProps, mapDipsatchToProps)(NewAccountModal);

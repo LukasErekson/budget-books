@@ -38,7 +38,7 @@ class AccountTypeResource(Resource):
         return (
             dict(
                 message="SUCCESS",
-                accounts=json.dumps(dict_to_json(df.to_dict(), df.index)),
+                account_types=json.dumps(dict_to_json(df.to_dict(), df.index)),
             ),
             200,
         )

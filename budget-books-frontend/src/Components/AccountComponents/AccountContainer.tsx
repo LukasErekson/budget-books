@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect, useSelector } from 'react-redux';
+import NewAccountModal from './NewAccountModal';
 import AccountCard from './AccountCard';
 import { addNewAccount, fetchAllAccounts } from './accountThunks';
 import { selectAccounts } from './accountSelectors';
@@ -16,6 +17,8 @@ function AccountContainer(props: {
         (state: any) => state.accounts.accounts
     );
 
+    const [modalIsOpen, setModalIsOpen]: [boolean, Function] = useState(false);
+
     useEffect(() => {
         if (!isAccountsLoaded) {
             props.fetchAllAccounts();
@@ -25,6 +28,10 @@ function AccountContainer(props: {
 
     return (
         <>
+            <NewAccountModal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+            />
             <div className='accounts-container'>
                 <p className={'accounts-header-title'}>Accounts</p>
                 {isAccountsLoaded ? (
@@ -41,7 +48,7 @@ function AccountContainer(props: {
                     <button
                         className='new-account-btn'
                         onClick={() => {
-                            props.addNewAccount('Example Account', 1, true);
+                            setModalIsOpen(true);
                         }}
                     >
                         <AiFillPlusCircle />

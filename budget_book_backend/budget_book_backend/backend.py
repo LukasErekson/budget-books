@@ -35,7 +35,7 @@ def create_app(test_config: Mapping = None) -> Flask:
     api.add_resource(UserResource, "/api/users")
     api.add_resource(TransactionsResource, "/api/transactions")
     api.add_resource(AccountResource, "/api/accounts")
-    api.add_resource(AccountTypeResource, "/api/accounttype")
+    api.add_resource(AccountTypeResource, "/api/accounttypes")
 
     return app
 
