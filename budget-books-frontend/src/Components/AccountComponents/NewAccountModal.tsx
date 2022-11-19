@@ -22,12 +22,10 @@ function NewAccountModal(props: {
 
     const options: any[] = props.selectAccountTypeByGroups;
 
-    console.log(category);
-
     useEffect(() => {
         if (Object.keys(options).length === 0) {
             props.fetchAccountTypes('all');
-        }
+        } else setCategory(options[0].options[0]);
     }, [options, props]);
 
     return (
@@ -38,6 +36,7 @@ function NewAccountModal(props: {
                 appElement={document.getElementById('root') || undefined}
             >
                 <h1>Add New Account</h1>
+
                 <label htmlFor='accountType'>Category:</label>
                 <Select
                     name={'accountType'}
