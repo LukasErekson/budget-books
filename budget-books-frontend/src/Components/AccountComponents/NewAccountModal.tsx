@@ -20,7 +20,14 @@ function NewAccountModal(props: {
     const [category, setCategory]: [any, Function] = useState({});
     const [inputCategory, setInputCategory]: [string, Function] = useState('');
 
+    const [accountName, setAccountName]: [string, Function] = useState('');
+
+    const [debitInc, setDebitInc]: [boolean, Function] = useState(true);
+
     const options: any[] = props.selectAccountTypeByGroups;
+
+    console.log(accountName);
+    console.log(debitInc);
 
     useEffect(() => {
         if (Object.keys(options).length === 0) {
@@ -36,6 +43,18 @@ function NewAccountModal(props: {
                 appElement={document.getElementById('root') || undefined}
             >
                 <h1>Add New Account</h1>
+                <label htmlFor='accountName'>Account Name:</label>
+                <input
+                    type='text'
+                    name='accountName'
+                    value={accountName}
+                    placeholder='Account Name...'
+                    onChange={(event: any) =>
+                        setAccountName(event.target.value)
+                    }
+                />
+
+                <br />
 
                 <label htmlFor='accountType'>Category:</label>
                 <Select
@@ -75,6 +94,18 @@ function NewAccountModal(props: {
                         }
                         setCategory(newCategory);
                     }}
+                />
+
+                <br />
+
+                <label htmlFor='debitInc'>Balance increases with debits?</label>
+                <input
+                    type='checkbox'
+                    name='debitInc'
+                    id='debitIncCB'
+                    checked={debitInc}
+                    onChange={(event) => setDebitInc(!debitInc)}
+                    defaultChecked={true}
                 />
             </Modal>
         </>
