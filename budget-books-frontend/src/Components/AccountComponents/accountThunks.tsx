@@ -22,7 +22,7 @@ export const fetchAllAccounts =
     };
 
 export const addNewAccount =
-    (name: string, account_type: string, debit_inc: boolean) =>
+    (name: string, account_type_id: number, debit_inc: boolean) =>
     async (dispatch: Function, getState: Function) => {
         try {
             const {
@@ -30,7 +30,7 @@ export const addNewAccount =
             }: { cancel: Function; responsePromise: Promise<Response> } =
                 DataFetch('POST', '/api/accounts', {
                     name,
-                    account_type,
+                    account_type_id,
                     debit_inc,
                 });
 

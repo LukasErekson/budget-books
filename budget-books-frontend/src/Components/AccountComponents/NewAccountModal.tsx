@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import Select from 'react-select';
 import { connect } from 'react-redux';
 import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
+import { addNewAccount } from './accountThunks';
 import {
     selectAccountTypes,
     selectAccountTypeByGroups,
@@ -13,6 +14,7 @@ function NewAccountModal(props: {
     isOpen: boolean;
     onRequestClose: any;
     fetchAccountTypes: Function;
+    addNewAccount: Function;
     selectAccountTypes: any[];
     selectAccountTypeByGroups: any[];
     selectAccountTypeNames: string[];
@@ -35,6 +37,18 @@ function NewAccountModal(props: {
         } else setCategory(options[0].options[0]);
     }, [options, props]);
 
+    function postNewAccount(event: React.FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        if (accountName.length === 0) {
+            alert('Please input an account name!');
+            return;
+        }
+
+        props.addNewAccount(accountName, category.value, debitInc);
+
+        props.onRequestClose();
+    }
+
     return (
         <>
             <Modal
@@ -43,70 +57,85 @@ function NewAccountModal(props: {
                 appElement={document.getElementById('root') || undefined}
             >
                 <h1>Add New Account</h1>
-                <label htmlFor='accountName'>Account Name:</label>
-                <input
-                    type='text'
-                    name='accountName'
-                    value={accountName}
-                    placeholder='Account Name...'
-                    onChange={(event: any) =>
-                        setAccountName(event.target.value)
+                <form
+                    className='modal-form'
+                    onSubmit={(event: React.FormEvent<HTMLFormElement>) =>
+                        postNewAccount(event)
                     }
-                />
-
-                <br />
-
-                <label htmlFor='accountType'>Category:</label>
-                <Select
-                    name={'accountType'}
-                    options={options.concat({
-                        label: `Create new category: ${inputCategory}`,
-                        value: -1,
-                    })}
-                    onInputChange={(newValue: string) =>
-                        setInputCategory(newValue)
-                    }
-                    value={category}
-                    onChange={(newCategory: any) => {
-                        // Allow for a new category.
-                        if (newCategory.value === -1) {
-                            newCategory.label = newCategory.label.slice(21);
-                            if (newCategory.label === '') {
-                                return;
+                >
+                    <label htmlFor='accountName'>Account Name:</label>
+                    <div className='modal-input'>
+                        <input
+                            type='text'
+                            name='accountName'
+                            value={accountName}
+                            placeholder='Account Name...'
+                            onChange={(event: any) =>
+                                setAccountName(event.target.value)
                             }
-                            if (
-                                props.selectAccountTypeNames.includes(
-                                    newCategory.label
-                                )
-                            ) {
-                                const matchingAccountType: any =
-                                    props.selectAccountTypes.filter(
-                                        (accountTypeObject: any) =>
-                                            accountTypeObject.name ===
-                                            newCategory.label
-                                    )[0];
-                                setCategory({
-                                    label: matchingAccountType.name,
-                                    value: matchingAccountType.id,
-                                });
-                                return;
-                            }
+                        />
+                    </div>
+                    <br />
+                    <label htmlFor='accountType'>Category:</label>
+                    <Select
+                        name={'accountType'}
+                        options={options.concat({
+                            label: `Create new category: ${inputCategory}`,
+                            value: -1,
+                        })}
+                        onInputChange={(newValue: string) =>
+                            setInputCategory(newValue)
                         }
-                        setCategory(newCategory);
-                    }}
-                />
+                        value={category}
+                        onChange={(newCategory: any) => {
+                            // Allow for a new category.
+                            if (newCategory.value === -1) {
+                                newCategory.label = newCategory.label.slice(21);
+                                if (newCategory.label === '') {
+                                    return;
+                                }
+                                if (
+                                    props.selectAccountTypeNames.includes(
+                                        newCategory.label
+                                    )
+                                ) {
+                                    const matchingAccountType: any =
+                                        props.selectAccountTypes.filter(
+                                            (accountTypeObject: any) =>
+                                                accountTypeObject.name ===
+                                                newCategory.label
+                                        )[0];
+                                    setCategory({
+                                        label: matchingAccountType.name,
+                                        value: matchingAccountType.id,
+                                    });
+                                    return;
+                                }
+                            }
+                            setCategory(newCategory);
+                        }}
+                    />
+                    <br />
+                    <div className='modal-input'>
+                        <label htmlFor='debitInc'>
+                            Balance increases with debits?
+                        </label>
+                        <input
+                            type='checkbox'
+                            name='debitInc'
+                            id='debitIncCB'
+                            checked={debitInc}
+                            onChange={(event) => setDebitInc(!debitInc)}
+                            defaultChecked={true}
+                        />
+                    </div>
 
-                <br />
-
-                <label htmlFor='debitInc'>Balance increases with debits?</label>
-                <input
-                    type='checkbox'
-                    name='debitInc'
-                    id='debitIncCB'
-                    checked={debitInc}
-                    onChange={(event) => setDebitInc(!debitInc)}
-                    defaultChecked={true}
-                />
+                    <div className='center'>
+                        <button className={'modal-btn'} type='submit'>
+                            Add Account
+                        </button>
+                    </div>
+                </form>
             </Modal>
         </>
     );
@@ -124,6 +153,11 @@ const mapDipsatchToProps = (dispatch: Function) => {
     return {
         fetchAccountTypes: (group: string) =>
             dispatch(fetchAccountTypes(group)),
+        addNewAccount: (
+            name: string,
+            account_type_id: number,
+            debit_inc: boolean
+        ) => dispatch(addNewAccount(name, account_type_id, debit_inc)),
     };
 };
 

@@ -132,7 +132,7 @@ class AccountResource(Resource):
             try:
                 new_acct: Account = Account(
                     name=request_json["name"],
-                    account_type_id=request_json["account_type"],
+                    account_type_id=request_json["account_type_id"],
                     debit_inc=request_json["debit_inc"],
                 )
 

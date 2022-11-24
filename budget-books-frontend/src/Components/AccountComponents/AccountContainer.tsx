@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { connect, useSelector } from 'react-redux';
 import NewAccountModal from './NewAccountModal';
 import AccountCard from './AccountCard';
-import { addNewAccount, fetchAllAccounts } from './accountThunks';
+import { fetchAllAccounts } from './accountThunks';
 import { selectAccounts } from './accountSelectors';
 import { AiFillPlusCircle } from 'react-icons/ai';
 
 function AccountContainer(props: {
     selectAccounts: any[];
     fetchAllAccounts: Function;
-    addNewAccount: Function;
 }): JSX.Element {
     const [isAccountsLoaded, setIsAccountsLoaded]: [boolean, Function] =
         useState(false);
@@ -69,11 +68,6 @@ const mapStateToProps = (state: any) => {
 const mapDipsatchToProps = (dispatch: Function) => {
     return {
         fetchAllAccounts: () => dispatch(fetchAllAccounts()),
-        addNewAccount: (
-            name: string,
-            account_type: string,
-            debit_inc: boolean
-        ) => dispatch(addNewAccount(name, account_type, debit_inc)),
     };
 };
 
