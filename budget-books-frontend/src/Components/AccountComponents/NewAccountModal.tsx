@@ -26,7 +26,7 @@ function NewAccountModal(props: {
 
     const [debitInc, setDebitInc]: [boolean, Function] = useState(true);
 
-    const options: any[] = props.selectAccountTypeByGroups;
+    let options: any[] = props.selectAccountTypeByGroups;
 
     console.log(accountName);
     console.log(debitInc);
@@ -44,7 +44,9 @@ function NewAccountModal(props: {
             return;
         }
 
-        props.addNewAccount(accountName, category.value, debitInc);
+        console.log({ accountName, category, debitInc });
+
+        props.addNewAccount(accountName, category, debitInc);
 
         props.onRequestClose();
     }
@@ -153,11 +155,8 @@ const mapDipsatchToProps = (dispatch: Function) => {
     return {
         fetchAccountTypes: (group: string) =>
             dispatch(fetchAccountTypes(group)),
-        addNewAccount: (
-            name: string,
-            account_type_id: number,
-            debit_inc: boolean
-        ) => dispatch(addNewAccount(name, account_type_id, debit_inc)),
+        addNewAccount: (name: string, account_type: any, debit_inc: boolean) =>
+            dispatch(addNewAccount(name, account_type, debit_inc)),
     };
 };
 

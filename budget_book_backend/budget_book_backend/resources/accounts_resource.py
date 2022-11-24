@@ -7,6 +7,7 @@ from models.db_setup import DbSetup
 from .utils import dict_to_json, endpoint_error_wrapper
 from flask import request
 from models.account import Account
+from models.account_type import AccountType
 
 
 class AccountResource(Resource):
@@ -130,9 +131,31 @@ class AccountResource(Resource):
 
         with DbSetup.Session() as session:
             try:
+                # Create a new account Type if the id is -1.
+                account_type_id: int = int(
+                    request_json["account_type"]["value"]
+                )
+                if account_type_id == -1:
+                    new_acct_type: AccountType = AccountType(
+                        name=request_json["account_type"]["label"],
+                        group="Misc.",
+                    )
+                    session.add(new_acct_type)
+                    session.commit()
+
+                    account_type_id = (
+                        session.query(AccountType)
+                        .filter(
+                            AccountType.name
+                            == request_json["account_type"]["label"]
+                        )
+                        .first()
+                        .id
+                    )
+
                 new_acct: Account = Account(
                     name=request_json["name"],
-                    account_type_id=request_json["account_type_id"],
+                    account_type_id=account_type_id,
                     debit_inc=request_json["debit_inc"],
                 )
 
