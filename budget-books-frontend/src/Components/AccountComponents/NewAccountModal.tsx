@@ -44,9 +44,9 @@ function NewAccountModal(props: {
             return;
         }
 
-        console.log({ accountName, category, debitInc });
-
         props.addNewAccount(accountName, category, debitInc);
+
+        setAccountName('');
 
         props.onRequestClose();
     }
