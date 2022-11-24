@@ -36,7 +36,7 @@ class AccountResource(Resource):
         types: tuple[str] | str = ()
 
         if account_type == "bank":
-            types = ("Checking", "Savings", "Credit Card")
+            types = ("Checking Account", "Savings Account", "Credit Card")
         else:
             types = account_type
 
@@ -57,13 +57,13 @@ class AccountResource(Resource):
                 balance_end_date, "%Y-%m-%d"
             )
 
-        sql_statement: str = """SELECT * FROM accounts """
+        sql_statement: str = """SELECT * FROM accounts"""
 
         if isinstance(types, str):
             if types != "all":
-                sql_statement += f" WHERE account_type = '{account_type}'"
+                sql_statement += f" WHERE account_type_id IN (SELECT id FROM account_types WHERE name = '{types}')"
         elif types:
-            sql_statement += f" WHERE account_type IN {types}"
+            sql_statement += f" WHERE account_type_id IN (SELECT id FROM account_types WHERE name in {types})"
         df: pd.DataFrame = pd.read_sql_query(sql_statement, DbSetup.engine)
 
         df["balance"] = 0.0
