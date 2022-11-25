@@ -39,6 +39,8 @@ class AccountResource(Resource):
             types = ("Checking Account", "Savings Account", "Credit Card")
         else:
             types = tuple(account_type.split(","))
+            if len(types) == 1:
+                types = types[0]
 
         balance_start_date: str = request.args.get(
             "balance_start_date", datetime(1, 1, 1)
