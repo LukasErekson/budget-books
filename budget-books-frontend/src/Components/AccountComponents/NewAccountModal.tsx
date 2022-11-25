@@ -28,9 +28,6 @@ function NewAccountModal(props: {
 
     let options: any[] = props.selectAccountTypeByGroups;
 
-    console.log(accountName);
-    console.log(debitInc);
-
     useEffect(() => {
         if (Object.keys(options).length === 0) {
             props.fetchAccountTypes('all');
@@ -128,7 +125,6 @@ function NewAccountModal(props: {
                             id='debitIncCB'
                             checked={debitInc}
                             onChange={(event) => setDebitInc(!debitInc)}
-                            defaultChecked={true}
                         />
                     </div>
 
