@@ -9,6 +9,7 @@ import {
     selectAccountTypeByGroups,
     selectAccountTypeNames,
 } from '../AccountTypeComponents/accountTypeSelectors';
+import { FiHelpCircle } from 'react-icons/fi';
 
 function NewAccountModal(props: {
     isOpen: boolean;
@@ -54,8 +55,9 @@ function NewAccountModal(props: {
                 isOpen={props.isOpen}
                 onRequestClose={props.onRequestClose}
                 appElement={document.getElementById('root') || undefined}
+                style={{ content: { height: 'fit-content' } }}
             >
-                <h1>Add New Account</h1>
+                <h1 className='center'>Add New Account</h1>
                 <form
                     className='modal-form'
                     onSubmit={(event: React.FormEvent<HTMLFormElement>) =>
@@ -119,12 +121,19 @@ function NewAccountModal(props: {
                         <label htmlFor='debitInc'>
                             Balance increases with debits?
                         </label>
+                        <abbr
+                            title={
+                                'This is typically true for bank accounts and expenses, but it is not true for credit cards, loans, and other liabilities.'
+                            }
+                        >
+                            <FiHelpCircle />
+                        </abbr>
                         <input
                             type='checkbox'
                             name='debitInc'
                             id='debitIncCB'
                             checked={debitInc}
-                            onChange={(event) => setDebitInc(!debitInc)}
+                            onChange={() => setDebitInc(!debitInc)}
                         />
                     </div>
 
