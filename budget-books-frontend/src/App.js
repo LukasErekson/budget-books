@@ -4,13 +4,13 @@ import Transactions from './Components/Transactions';
 import AccountContainer from './Components/AccountComponents/AccountContainer';
 
 function App() {
-    return (
-        <div className='App'>
-            <Navbar />
-            <AccountContainer />
-            <Transactions />
-        </div>
-    );
+  return (
+    <div className='App'>
+      <Navbar />
+      <AccountContainer />
+      <Transactions />
+    </div>
+  );
 }
 
 export default App;
