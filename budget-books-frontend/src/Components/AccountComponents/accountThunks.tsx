@@ -3,14 +3,15 @@ import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
 import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
 
-export const fetchAllAccounts =
-  () => async (dispatch: Function, getState: Function) => {
+export const fetchAccounts =
+  (accountType: string = 'all') =>
+  async (dispatch: Function, getState: Function) => {
     try {
       const {
         responsePromise,
       }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
         'GET',
-        '/api/accounts?account_type=all'
+        `/api/accounts?account_type=${accountType}`
       );
 
       const response: Response = await responsePromise;
@@ -42,7 +43,7 @@ export const addNewAccount =
 
       const response: Response = await responsePromise;
       if (response.ok) {
-        dispatch(fetchAllAccounts());
+        dispatch(fetchAccounts());
         dispatch(fetchAccountTypes('all'));
       } else {
         const responseData: any = await response.json();
