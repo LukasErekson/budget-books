@@ -1,14 +1,12 @@
 import './App.css';
 import Navbar from './Components/Navbar';
-import Transactions from './Components/Transactions';
-import AccountContainer from './Components/AccountComponents/AccountContainer';
+import PageContainer from './Pages/PageContainer';
 
 function App() {
   return (
     <div className='App'>
       <Navbar />
-      <AccountContainer />
-      <Transactions />
+      <PageContainer />
     </div>
   );
 }

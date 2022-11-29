@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DataFetch from '../Common/DataFetch';
 import { pyToJsDate } from '../Common/TextFilters';
 
-function Transactions(): JSX.Element {
+function Transactions(props: { accountIDs: Number[] }): JSX.Element {
   const [transactions, setTransactions]: [any[], Function] = useState([]);
   const [isTransactionsLoaded, setIsTransactionsLoaded]: [boolean, Function] =
     useState(false);
@@ -13,7 +13,7 @@ function Transactions(): JSX.Element {
         responsePromise,
       }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
         'GET',
-        '/api/transactions?account_ids=1,2'
+        `/api/transactions?account_ids=${props.accountIDs}`
       );
 
       const response = await responsePromise;
