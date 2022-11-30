@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import DataFetch from '../../Common/DataFetch';
 import { pyToJsDate } from '../../Common/TextFilters';
+import CategorizeTxnForm from './CategorizeTxnForm';
 
-function Transactions(props: { accountIDs: Number[] }): JSX.Element {
+function CategorizeList(props: { accountIDs: Number[] }): JSX.Element {
   const [transactions, setTransactions]: [any[], Function] = useState([]);
   const [isTransactionsLoaded, setIsTransactionsLoaded]: [boolean, Function] =
     useState(false);
@@ -40,11 +41,8 @@ function Transactions(props: { accountIDs: Number[] }): JSX.Element {
   return (
     <>
       {isTransactionsLoaded ? (
-        transactions.map((val) => (
-          <p key={val.id}>
-            {pyToJsDate(val.transaction_date)} {val.name}, {val.description} $
-            {val.amount}
-          </p>
+        transactions.map((txn) => (
+          <CategorizeTxnForm key={txn.id} transacitonData={txn} />
         ))
       ) : (
         <p>Loading...</p>
@@ -53,4 +51,4 @@ function Transactions(props: { accountIDs: Number[] }): JSX.Element {
   );
 }
 
-export default Transactions;
+export default CategorizeList;

@@ -217,3 +217,9 @@ code {
   align-content: center;
   justify-content: center;
 }
+
+.categorize-txn-form {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 2rem;
+}

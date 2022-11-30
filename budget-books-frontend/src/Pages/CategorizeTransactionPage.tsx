@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AccountContainer from '../Components/AccountComponents/AccountContainer';
-import Transactions from '../Components/TransactionComponents/Transactions';
+import CategorizeList from '../Components/TransactionComponents/CategorizeList';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { changeActiveAccount } from '../Components/PageComponents/PageSlice';
 
@@ -12,7 +12,7 @@ function CategorizeTransactionsPage(props: any) {
     state.accounts.accounts.map((account: any) => account.id)
   );
   const [accountTransactions, setAccountTransactions]: [JSX.Element, Function] =
-    useState(<Transactions accountIDs={[activeAccountID]} />);
+    useState(<CategorizeList accountIDs={[activeAccountID]} />);
 
   const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ function CategorizeTransactionsPage(props: any) {
   }, [dispatch, activeAccountID, possibleAccounts]);
 
   useEffect(() => {
-    setAccountTransactions(<Transactions accountIDs={[activeAccountID]} />);
+    setAccountTransactions(<CategorizeList accountIDs={[activeAccountID]} />);
   }, [activeAccountID]);
 
   console.log(`Active Account ID: ${activeAccountID}`);

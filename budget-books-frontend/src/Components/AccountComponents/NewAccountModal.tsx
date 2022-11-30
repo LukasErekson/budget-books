@@ -10,6 +10,7 @@ import {
   selectAccountTypeNames,
 } from '../AccountTypeComponents/accountTypeSelectors';
 import { FiHelpCircle } from 'react-icons/fi';
+import AccountTypeSelect from '../AccountTypeComponents/accountTypeSelect';
 
 function NewAccountModal(props: {
   isOpen: boolean;
@@ -26,14 +27,6 @@ function NewAccountModal(props: {
   const [accountName, setAccountName]: [string, Function] = useState('');
 
   const [debitInc, setDebitInc]: [boolean, Function] = useState(true);
-
-  let options: any[] = props.selectAccountTypeByGroups;
-
-  useEffect(() => {
-    if (Object.keys(options).length === 0) {
-      props.fetchAccountTypes('all');
-    } else setCategory(options[0].options[0]);
-  }, [options, props]);
 
   function postNewAccount(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -76,36 +69,11 @@ function NewAccountModal(props: {
           </div>
           <br />
           <label htmlFor='accountType'>Category:</label>
-          <Select
-            name={'accountType'}
-            options={options.concat({
-              label: `Create new category: ${inputCategory}`,
-              value: -1,
-            })}
-            onInputChange={(newValue: string) => setInputCategory(newValue)}
-            value={category}
-            onChange={(newCategory: any) => {
-              // Allow for a new category.
-              if (newCategory.value === -1) {
-                newCategory.label = newCategory.label.slice(21);
-                if (newCategory.label === '') {
-                  return;
-                }
-                if (props.selectAccountTypeNames.includes(newCategory.label)) {
-                  const matchingAccountType: any =
-                    props.selectAccountTypes.filter(
-                      (accountTypeObject: any) =>
-                        accountTypeObject.name === newCategory.label
-                    )[0];
-                  setCategory({
-                    label: matchingAccountType.name,
-                    value: matchingAccountType.id,
-                  });
-                  return;
-                }
-              }
-              setCategory(newCategory);
-            }}
+          <AccountTypeSelect
+            setCategory={setCategory}
+            category={category}
+            setInputCategory={setInputCategory}
+            inputCategory={inputCategory}
           />
           <br />
           <div className='modal-input'>

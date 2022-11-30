@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import CategorizeTransactionsPage from './CategorizeTransactionsPage';
+import CategorizeTransactionsPage from './CategorizeTransactionPage';
 
 function PageContainer(props: any) {
   return (
