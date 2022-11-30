@@ -3,19 +3,19 @@ import { connect, useSelector } from 'react-redux';
 import NewAccountModal from './NewAccountModal';
 import AccountCard from './AccountCard';
 import { fetchAccounts } from './accountThunks';
-import { selectAccounts } from './accountSelectors';
+import { selectBankAccounts } from './accountSelectors';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { changeActiveAccount } from '../PageComponents/PageSlice';
 
 function AccountContainer(props: {
-  selectAccounts: any[];
-  fetchAccounts: Function;
   changeActiveAccount: Function;
+  fetchAccounts: Function;
 }): JSX.Element {
   const [isAccountsLoaded, setIsAccountsLoaded]: [boolean, Function] =
     useState(false);
-  const accountData: any[] = useSelector(
-    (state: any) => state.accounts.accounts
+
+  const accountData: any[] = useSelector((state: any) =>
+    selectBankAccounts(state)
   );
 
   const [modalIsOpen, setModalIsOpen]: [boolean, Function] = useState(false);
@@ -25,7 +25,7 @@ function AccountContainer(props: {
       props.fetchAccounts('bank');
       setIsAccountsLoaded(true);
     }
-  }, [isAccountsLoaded, props]);
+  }, [props, isAccountsLoaded]);
 
   return (
     <>
@@ -63,17 +63,15 @@ function AccountContainer(props: {
 }
 
 const mapStateToProps = (state: any) => {
-  return {
-    selectAccounts: selectAccounts(state),
-  };
+  return {};
 };
 
 const mapDipsatchToProps = (dispatch: Function) => {
   return {
-    fetchAccounts: (accountType: string) =>
-      dispatch(fetchAccounts(accountType)),
     changeActiveAccount: (accountID: Number) =>
       dispatch(changeActiveAccount(accountID)),
+    fetchAccounts: (accountType: string) =>
+      dispatch(fetchAccounts(accountType)),
   };
 };
 

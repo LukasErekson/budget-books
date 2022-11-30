@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import DataFetch from '../Common/DataFetch';
-import { pyToJsDate } from '../Common/TextFilters';
+import DataFetch from '../../Common/DataFetch';
+import { pyToJsDate } from '../../Common/TextFilters';
 
 function Transactions(props: { accountIDs: Number[] }): JSX.Element {
   const [transactions, setTransactions]: [any[], Function] = useState([]);

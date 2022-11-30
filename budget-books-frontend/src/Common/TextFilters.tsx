@@ -6,4 +6,8 @@ function pyToJsDate(pyDate: string): string {
   return jsDate;
 }
 
-export { pyToJsDate };
+function dayMonthYear(jsDate: Date): string {
+  return `${jsDate.getDate()}-${jsDate.getMonth()}-${jsDate.getFullYear}`;
+}
+
+export { pyToJsDate, dayMonthYear };

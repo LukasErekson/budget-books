@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AccountContainer from '../Components/AccountComponents/AccountContainer';
-import Transactions from '../Components/Transactions';
+import Transactions from '../Components/TransactionComponents/Transactions';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { changeActiveAccount } from '../Components/PageComponents/PageSlice';
 

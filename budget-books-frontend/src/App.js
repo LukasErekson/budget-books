@@ -1,5 +1,5 @@
 import './App.css';
-import Navbar from './Components/Navbar';
+import Navbar from './Pages/Navbar';
 import PageContainer from './Pages/PageContainer';
 
 function App() {
