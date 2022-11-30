@@ -5,6 +5,7 @@
   --alert-color: rgb(231, 127, 0);
   --primary: rgb(0, 140, 255);
   --dark-primary: rgb(0, 100, 182);
+  --dark-primary-alpha: rgba(0, 100, 182, 0.5);
 }
 
 body {
@@ -24,6 +25,10 @@ code {
 /* General */
 .muted {
   color: var(--half-shadow);
+}
+
+.negative {
+  color: var(--negative-num);
 }
 
 /* Accounts */
@@ -61,6 +66,7 @@ code {
   min-width: 300px;
   max-width: 300px;
   box-shadow: 1px 1px 5px var(--quarter-shadow);
+  cursor: pointer;
 }
 
 .account-card .account-card-header {
@@ -95,10 +101,6 @@ code {
   align-self: center;
 }
 
-.negative {
-  color: var(--negative-num);
-}
-
 .account-card .account-updated-date {
   position: absolute;
   top: -0.5rem;
@@ -113,6 +115,11 @@ code {
   justify-self: center;
   margin: 0 0 1rem 0;
   text-shadow: 1px 1px 1px var(--quarter-shadow);
+}
+
+.account-card.active-account-card {
+  outline: 0.2rem solid var(--quarter-shadow);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.75);
 }
 
 .uncategorized-alert {

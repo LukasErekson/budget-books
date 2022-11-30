@@ -1,19 +1,34 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { pyToJsDate } from '../../Common/TextFilters';
 
-function AccountCard(props: { accountData: any }): JSX.Element {
+function AccountCard(props: {
+  accountData: any;
+  onClick: Function;
+}): JSX.Element {
   const {
+    id,
     name,
     balance,
     account_type,
     last_updated,
     uncategorized_transactions, // TODO: Make this part of the store so that it communicates in real time with categorization.
   } = props.accountData;
-  const isNegative = balance < 0.0;
+  const isNegative: boolean = balance < 0.0;
+
+  const activeAccountID: Number = useSelector(
+    (state: any) => state.pageSlice.activeAccountID
+  );
 
   return (
     <>
-      <div className='account-card'>
+      <div
+        className={
+          'account-card ' +
+          (id === activeAccountID ? 'active-account-card' : '')
+        }
+        onClick={() => props.onClick()}
+      >
         <div className='account-card-header'>
           <h3 className={'account-name'}>{name}</h3>
           <p className={'account-type'}>{account_type}</p>

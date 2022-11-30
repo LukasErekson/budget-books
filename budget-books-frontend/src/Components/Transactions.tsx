@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DataFetch from '../Common/DataFetch';
 import { pyToJsDate } from '../Common/TextFilters';
 
@@ -33,9 +33,9 @@ function Transactions(props: { accountIDs: Number[] }): JSX.Element {
     }
   }
 
-  if (!isTransactionsLoaded) {
+  useEffect(() => {
     fetchTransactions();
-  }
+  }, [props]);
 
   return (
     <>

@@ -5,10 +5,12 @@ import AccountCard from './AccountCard';
 import { fetchAccounts } from './accountThunks';
 import { selectAccounts } from './accountSelectors';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { changeActiveAccount } from '../PageComponents/PageSlice';
 
 function AccountContainer(props: {
   selectAccounts: any[];
   fetchAccounts: Function;
+  changeActiveAccount: Function;
 }): JSX.Element {
   const [isAccountsLoaded, setIsAccountsLoaded]: [boolean, Function] =
     useState(false);
@@ -35,7 +37,11 @@ function AccountContainer(props: {
         <p className={'accounts-header-title'}>Accounts</p>
         {isAccountsLoaded ? (
           accountData.map((val, idx) => (
-            <AccountCard key={`account-${val.id}`} accountData={val} />
+            <AccountCard
+              key={`account-${val.id}`}
+              accountData={val}
+              onClick={() => props.changeActiveAccount(val.id)}
+            />
           ))
         ) : (
           <p>Loading Accounts...</p>
@@ -66,6 +72,8 @@ const mapDipsatchToProps = (dispatch: Function) => {
   return {
     fetchAccounts: (accountType: string) =>
       dispatch(fetchAccounts(accountType)),
+    changeActiveAccount: (accountID: Number) =>
+      dispatch(changeActiveAccount(accountID)),
   };
 };
 
