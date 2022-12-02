@@ -17,7 +17,7 @@ function AccountCard(props: {
   const isNegative: boolean = balance < 0.0;
 
   const activeAccountID: Number = useSelector(
-    (state: any) => state.pageSlice.activeAccountID
+    (state: any) => state.pageSlice.activeAccount.id
   );
 
   return (

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import DataFetch from '../../Common/DataFetch';
-import { pyToJsDate } from '../../Common/TextFilters';
 import CategorizeTxnForm from './CategorizeTxnForm';
 
-function CategorizeList(props: { accountIDs: Number[] }): JSX.Element {
+function CategorizeList(props: { account: any }): JSX.Element {
   const [transactions, setTransactions]: [any[], Function] = useState([]);
   const [isTransactionsLoaded, setIsTransactionsLoaded]: [boolean, Function] =
     useState(false);
@@ -14,7 +13,7 @@ function CategorizeList(props: { accountIDs: Number[] }): JSX.Element {
         responsePromise,
       }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
         'GET',
-        `/api/transactions?account_ids=${props.accountIDs}`
+        `/api/transactions?account_ids=${props.account.id}`
       );
 
       const response = await responsePromise;
@@ -35,8 +34,10 @@ function CategorizeList(props: { accountIDs: Number[] }): JSX.Element {
   }
 
   useEffect(() => {
-    fetchTransactions();
-  }, [props]);
+    if (Object.keys(props.account).length) {
+      fetchTransactions();
+    }
+  }, [props.account]);
 
   return (
     <>

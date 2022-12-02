@@ -5,29 +5,29 @@ import { connect, useDispatch, useSelector } from 'react-redux';
 import { changeActiveAccount } from '../Components/PageComponents/PageSlice';
 
 function CategorizeTransactionsPage(props: any) {
-  const activeAccountID: Number = useSelector(
-    (state: any) => state.pageSlice.activeAccountID
+  const activeAccount: any = useSelector(
+    (state: any) => state.pageSlice.activeAccount
   );
-  const possibleAccounts: Number[] = useSelector((state: any) =>
-    state.accounts.accounts.map((account: any) => account.id)
+  const possibleAccounts: Number[] = useSelector(
+    (state: any) => state.accounts.accounts
   );
   const [accountTransactions, setAccountTransactions]: [JSX.Element, Function] =
-    useState(<CategorizeList accountIDs={[activeAccountID]} />);
+    useState(<CategorizeList account={activeAccount} />);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!activeAccountID || activeAccountID === 0) {
+    if (Object.keys(activeAccount).length === 0 || activeAccount.id === 0) {
       if (possibleAccounts.length > 0)
         dispatch(changeActiveAccount(possibleAccounts[0]));
     }
-  }, [dispatch, activeAccountID, possibleAccounts]);
+  }, [dispatch, activeAccount, possibleAccounts]);
 
   useEffect(() => {
-    setAccountTransactions(<CategorizeList accountIDs={[activeAccountID]} />);
-  }, [activeAccountID]);
+    setAccountTransactions(<CategorizeList account={activeAccount} />);
+  }, [activeAccount]);
 
-  console.log(`Active Account ID: ${activeAccountID}`);
+  console.log(`Active Account: ${activeAccount}`);
 
   return (
     <>
@@ -43,8 +43,8 @@ const mapStateToProps = (state: any) => {
 
 const mapDipsatchToProps = (dispatch: Function) => {
   return {
-    changeActiveAccount: (newAccountID: Number) =>
-      dispatch(changeActiveAccount(newAccountID)),
+    changeActiveAccount: (newAccount: any) =>
+      dispatch(changeActiveAccount(newAccount)),
   };
 };
 

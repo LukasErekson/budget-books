@@ -6,7 +6,7 @@ export const pageSlice: any = createSlice({
   name: 'pageSlice',
   initialState: {
     activePage: homePage,
-    activeAccountID: 0,
+    activeAccount: {},
   },
   reducers: {
     changeActivePage: (state, action) => {
@@ -15,8 +15,8 @@ export const pageSlice: any = createSlice({
       return { ...state, activePage: newPage };
     },
     changeActiveAccount: (state, action) => {
-      const newActiveAccountID: number = action.payload;
-      return { ...state, activeAccountID: newActiveAccountID };
+      const newActiveAccount: any = action.payload;
+      return { ...state, activeAccount: newActiveAccount };
     },
   },
 });

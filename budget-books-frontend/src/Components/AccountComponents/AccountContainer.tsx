@@ -43,7 +43,7 @@ function AccountContainer(props: {
             <AccountCard
               key={`account-${val.id}`}
               accountData={val}
-              onClick={() => props.changeActiveAccount(val.id)}
+              onClick={() => props.changeActiveAccount(val)}
             />
           ))
         ) : (
@@ -71,8 +71,8 @@ const mapStateToProps = (state: any) => {
 
 const mapDipsatchToProps = (dispatch: Function) => {
   return {
-    changeActiveAccount: (accountID: Number) =>
-      dispatch(changeActiveAccount(accountID)),
+    changeActiveAccount: (account: any) =>
+      dispatch(changeActiveAccount(account)),
     fetchAccounts: (accountType: string) =>
       dispatch(fetchAccounts(accountType)),
     fetchAccountTypes: (group: string) => dispatch(fetchAccountTypes(group)),
