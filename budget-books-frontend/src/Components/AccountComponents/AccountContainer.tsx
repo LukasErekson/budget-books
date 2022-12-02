@@ -6,10 +6,12 @@ import { fetchAccounts } from './accountThunks';
 import { selectBankAccounts } from './accountSelectors';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { changeActiveAccount } from '../PageComponents/PageSlice';
+import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
 
 function AccountContainer(props: {
   changeActiveAccount: Function;
   fetchAccounts: Function;
+  fetchAccountTypes: Function;
 }): JSX.Element {
   const [isAccountsLoaded, setIsAccountsLoaded]: [boolean, Function] =
     useState(false);
@@ -22,7 +24,8 @@ function AccountContainer(props: {
 
   useEffect(() => {
     if (!isAccountsLoaded) {
-      props.fetchAccounts('bank');
+      props.fetchAccounts('all');
+      props.fetchAccountTypes('all');
       setIsAccountsLoaded(true);
     }
   }, [props, isAccountsLoaded]);
@@ -72,6 +75,7 @@ const mapDipsatchToProps = (dispatch: Function) => {
       dispatch(changeActiveAccount(accountID)),
     fetchAccounts: (accountType: string) =>
       dispatch(fetchAccounts(accountType)),
+    fetchAccountTypes: (group: string) => dispatch(fetchAccountTypes(group)),
   };
 };
 

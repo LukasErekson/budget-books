@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { pyToJsDate } from '../../Common/TextFilters';
-import AccountTypeSelect from '../AccountTypeComponents/accountTypeSelect';
+import AccountSelect from '../AccountComponents/AccountSelect';
 
 function CategorizeTxnForm(props: { transacitonData: any }): JSX.Element {
   const { id, transaction_date, name, description, amount } =
@@ -18,7 +18,7 @@ function CategorizeTxnForm(props: { transacitonData: any }): JSX.Element {
       <span className='categorize-txn-item'>{description}</span>{' '}
       <span className='categorize-txn-item'>${amount}</span>
       <span className='categorize-txn-item'>
-        <AccountTypeSelect
+        <AccountSelect
           setCategory={setCategory}
           category={category}
           setInputCategory={setInputCategory}
