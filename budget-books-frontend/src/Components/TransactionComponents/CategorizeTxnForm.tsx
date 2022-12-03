@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DataFetch from '../../Common/DataFetch';
 import { pyToJsDate } from '../../Common/TextFilters';
 import AccountSelect from '../AccountComponents/AccountSelect';
 
@@ -18,6 +19,42 @@ function CategorizeTxnForm(props: {
 
   const [category, setCategory]: [any, Function] = useState({});
   const [inputCategory, setInputCategory]: [string, Function] = useState('');
+
+  async function categorizeTransaction(
+    transaction_id: number,
+    category_id: number
+  ) {
+    try {
+      const {
+        responsePromise,
+      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+        'PUT',
+        `/api/transactions`,
+        {
+          transactions: [
+            {
+              transaction_id,
+              category_id,
+              debit_or_credit: isDebitTransaction ? 'credit' : 'debit', // Flipped because if it's a debit transaction, then the credit ID is undefined.
+            },
+          ],
+        }
+      );
+
+      const response = await responsePromise;
+
+      if (response.ok) {
+        const responseData: any = await response.json();
+      } else {
+        return { error: 'Problem!' };
+      }
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.log('Aborted');
+      }
+      console.log(error);
+    }
+  }
 
   return (
     <div className='categorize-txn-form' key={id}>
@@ -43,7 +80,9 @@ function CategorizeTxnForm(props: {
         />
       </span>
       <span className='categorize-txn-item'>
-        <button>Categorize</button>
+        <button onClick={() => categorizeTransaction(id, category.value)}>
+          Categorize
+        </button>
       </span>
     </div>
   );
