@@ -2,6 +2,7 @@
   --half-shadow: rgba(0, 0, 0, 0.5);
   --quarter-shadow: rgba(0, 0, 0, 0.25);
   --negative-num: darkred;
+  --positive-num: darkgreen;
   --alert-color: rgb(231, 127, 0);
   --primary: rgb(0, 140, 255);
   --dark-primary: rgb(0, 100, 182);
@@ -29,6 +30,10 @@ code {
 
 .negative {
   color: var(--negative-num);
+}
+
+.positive {
+  color: var(--positive-num);
 }
 
 /* Accounts */
@@ -220,6 +225,18 @@ code {
 
 .categorize-txn-form {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 2rem;
+  grid-template-columns: 12ch 1fr 2fr 0.5fr 1fr 0.5fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.categorize-txn-form:nth-child(2n) {
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
+.txn-form-header {
+  padding: 0.25rem;
+  font-size: 1.2rem;
+  background-color: rgba(0, 0, 0, 0.1);
+  color: rgb(46, 46, 46);
 }

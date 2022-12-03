@@ -7,6 +7,8 @@ function CategorizeList(props: { account: any }): JSX.Element {
   const [isTransactionsLoaded, setIsTransactionsLoaded]: [boolean, Function] =
     useState(false);
 
+  const debitInc = props.account.debit_inc === 1;
+
   async function fetchTransactions() {
     try {
       const {
@@ -41,13 +43,28 @@ function CategorizeList(props: { account: any }): JSX.Element {
 
   return (
     <>
-      {isTransactionsLoaded ? (
-        transactions.map((txn) => (
-          <CategorizeTxnForm key={txn.id} transacitonData={txn} />
-        ))
-      ) : (
-        <p>Loading...</p>
-      )}
+      <div className='categorize-txn-form txn-form-header'>
+        <span className='categorize-txn-item'>Date</span>{' '}
+        <span className='categorize-txn-item'>Name</span>{' '}
+        <span className='categorize-txn-item'>Description</span>{' '}
+        <span className='categorize-txn-item'>Amount</span>
+        <span className='categorize-txn-item'>Account</span>
+        <span className='categorize-txn-item'></span>
+      </div>
+      <div className='txn-form-container'>
+        {isTransactionsLoaded ? (
+          transactions.map((txn) => (
+            <CategorizeTxnForm
+              key={txn.id}
+              transacitonData={txn}
+              debitInc={debitInc}
+              excludeAccount={props.account}
+            />
+          ))
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
     </>
   );
 }

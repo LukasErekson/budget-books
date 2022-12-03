@@ -12,8 +12,11 @@ function AccountSelect(props: {
   category: Number;
   setInputCategory: Function;
   inputCategory: string;
+  excludeAccount: any | null;
 }): JSX.Element {
   let options: any[] = useSelector((state: any) => selectAccountOptions(state));
+
+  const excludeAccountIdx: number = options.indexOf(props.excludeAccount);
 
   const accountTypes: any[] = useSelector((state: any) =>
     selectAccountTypes(state)
@@ -53,6 +56,10 @@ function AccountSelect(props: {
             });
             return;
           }
+        }
+
+        if (newCategory.value === props.excludeAccount.id) {
+          return;
         }
         props.setCategory(newCategory);
       }}
