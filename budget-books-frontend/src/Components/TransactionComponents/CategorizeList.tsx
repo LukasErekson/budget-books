@@ -1,43 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import DataFetch from '../../Common/DataFetch';
+import React, { useEffect } from 'react';
+import { useSelector, connect } from 'react-redux';
 import CategorizeTxnForm from './CategorizeTxnForm';
+import { selectUncategorizedTransactions } from './transactionSelectors';
+import { fetchTransactions } from './transactionThunks';
 
-function CategorizeList(props: { account: any }): JSX.Element {
-  const [transactions, setTransactions]: [any[], Function] = useState([]);
-  const [isTransactionsLoaded, setIsTransactionsLoaded]: [boolean, Function] =
-    useState(false);
+function CategorizeList(props: {
+  account: any;
+  fetchTransactions: Function;
+}): JSX.Element {
+  const transactions = useSelector((state: any) =>
+    props.account.id
+      ? selectUncategorizedTransactions(state, props.account.id)
+      : []
+  );
+
+  const isTransactionsLoaded = useSelector(
+    (state: any) => state.transactions.isTransactionsLoaded
+  );
 
   const debitInc = props.account.debit_inc === 1;
 
-  async function fetchTransactions() {
-    try {
-      const {
-        responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
-        'GET',
-        `/api/transactions?account_ids=${props.account.id}`
-      );
-
-      const response = await responsePromise;
-
-      if (response.ok) {
-        const responseData: any = await response.json();
-        setTransactions(JSON.parse(responseData.transactions));
-        setIsTransactionsLoaded(true);
-      } else {
-        return { error: 'Problem!' };
-      }
-    } catch (error: any) {
-      if (error.name === 'AbortError') {
-        console.log('Aborted');
-      }
-      console.log(error);
-    }
-  }
-
   useEffect(() => {
-    if (Object.keys(props.account).length) {
-      fetchTransactions();
+    if (Object.keys(props.account).length && props.account.id) {
+      props.fetchTransactions(props.account);
     }
   }, [props.account]);
 
@@ -53,7 +38,7 @@ function CategorizeList(props: { account: any }): JSX.Element {
       </div>
       <div className='txn-form-container'>
         {isTransactionsLoaded ? (
-          transactions.map((txn) => (
+          transactions.map((txn: any) => (
             <CategorizeTxnForm
               key={txn.id}
               transacitonData={txn}
@@ -69,4 +54,10 @@ function CategorizeList(props: { account: any }): JSX.Element {
   );
 }
 
-export default CategorizeList;
+const mapDispatchToProps = (dispatch: Function) => {
+  return {
+    fetchTransactions: (account: any) => dispatch(fetchTransactions(account)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(CategorizeList);

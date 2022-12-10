@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import BadResponseError from '../../Common/BadResponseError';
 import DataFetch from '../../Common/DataFetch';
 import { pyToJsDate } from '../../Common/TextFilters';
 import AccountSelect from '../AccountComponents/AccountSelect';
-
+import {
+  categorizeTransaction,
+  setTransactionsIsLoaded,
+} from './transactionSlice';
 function CategorizeTxnForm(props: {
   transacitonData: any;
   debitInc: boolean;
@@ -20,7 +25,9 @@ function CategorizeTxnForm(props: {
   const [category, setCategory]: [any, Function] = useState({});
   const [inputCategory, setInputCategory]: [string, Function] = useState('');
 
-  async function categorizeTransaction(
+  const dispatch = useDispatch();
+
+  async function postCategorizeTransaction(
     transaction_id: number,
     category_id: number
   ) {
@@ -45,14 +52,32 @@ function CategorizeTxnForm(props: {
 
       if (response.ok) {
         const responseData: any = await response.json();
-      } else {
-        return { error: 'Problem!' };
+
+        const responseDataParsed: any = JSON.parse(responseData);
+
+        if (!(responseDataParsed.message === 'SUCCESS')) {
+          throw new BadResponseError(
+            response.status,
+            responseDataParsed.message,
+            responseDataParsed.serverError
+          );
+        }
+
+        dispatch(setTransactionsIsLoaded({ loaded: false }));
+        dispatch(
+          categorizeTransaction({
+            accountID: props.excludeAccount.id,
+            transactionID: transaction_id,
+            categoryID: category_id,
+            debitOrCredit: isDebitTransaction ? 'credit' : 'debit',
+          })
+        );
       }
     } catch (error: any) {
       if (error.name === 'AbortError') {
         console.log('Aborted');
       }
-      console.log(error);
+      console.log(error.status, error.message, error.serverError);
     }
   }
 
@@ -80,7 +105,7 @@ function CategorizeTxnForm(props: {
         />
       </span>
       <span className='categorize-txn-item'>
-        <button onClick={() => categorizeTransaction(id, category.value)}>
+        <button onClick={() => postCategorizeTransaction(id, category.value)}>
           Categorize
         </button>
       </span>
