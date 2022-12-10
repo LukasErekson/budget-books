@@ -1,23 +1,21 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { pyToJsDate } from '../../Common/TextFilters';
+import { selectUncategorizedTransactions } from '../TransactionComponents/transactionSelectors';
 
 function AccountCard(props: {
   accountData: any;
   onClick: Function;
 }): JSX.Element {
-  const {
-    id,
-    name,
-    balance,
-    account_type,
-    last_updated,
-    uncategorized_transactions, // TODO: Make this part of the store so that it communicates in real time with categorization.
-  } = props.accountData;
+  const { id, name, balance, account_type, last_updated } = props.accountData;
   const isNegative: boolean = balance < 0.0;
 
   const activeAccountID: Number = useSelector(
     (state: any) => state.pageSlice.activeAccount.id
+  );
+
+  const uncategorizedTransactionsList: any[] = useSelector((state: any) =>
+    selectUncategorizedTransactions(state, id)
   );
 
   return (
@@ -45,12 +43,12 @@ function AccountCard(props: {
         <p
           className={
             'account-uncategorized-transactions ' +
-            (+uncategorized_transactions === 0
+            (uncategorizedTransactionsList.length === 0
               ? 'muted'
               : 'uncategorized-alert')
           }
         >
-          {uncategorized_transactions}
+          {uncategorizedTransactionsList.length}
         </p>
       </div>
     </>
