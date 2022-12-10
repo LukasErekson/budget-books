@@ -16,7 +16,6 @@ export const selectTransctions = createSelector(
 export const selectUncategorizedTransactions = createSelector(
   [selectSelf, (state: RootState, accountID: string) => accountID],
   (state: any, accountID: string) => {
-    console.log(state.transactions.transactionList);
     if (accountID in state.transactions.transactionList) {
       return state.transactions.transactionList[accountID].filter(
         (transaction: any) => {
