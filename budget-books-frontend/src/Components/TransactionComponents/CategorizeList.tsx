@@ -1,20 +1,22 @@
 import React, { useEffect } from 'react';
 import { useSelector, connect } from 'react-redux';
+import Account from '../AccountComponents/accountTSTypes';
 import CategorizeTxnForm from './CategorizeTxnForm';
 import { selectUncategorizedTransactions } from './transactionSelectors';
 import { fetchTransactions } from './transactionThunks';
+import Transaction from './transactionTSTypes';
 
 function CategorizeList(props: {
-  account: any;
+  account: Account;
   fetchTransactions: Function;
 }): JSX.Element {
-  const transactions = useSelector((state: any) =>
+  const transactions: Transaction[] = useSelector((state: any) =>
     props.account.id
       ? selectUncategorizedTransactions(state, props.account.id)
       : []
   );
 
-  const isTransactionsLoaded = useSelector(
+  const isTransactionsLoaded: boolean = useSelector(
     (state: any) => state.transactions.isTransactionsLoaded
   );
 
@@ -38,7 +40,7 @@ function CategorizeList(props: {
       </div>
       <div className='txn-form-container'>
         {isTransactionsLoaded ? (
-          transactions.map((txn: any) => (
+          transactions.map((txn: Transaction) => (
             <CategorizeTxnForm
               key={txn.id}
               transacitonData={txn}

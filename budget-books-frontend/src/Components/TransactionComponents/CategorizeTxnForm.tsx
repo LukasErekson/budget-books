@@ -4,14 +4,17 @@ import BadResponseError from '../../Common/BadResponseError';
 import DataFetch from '../../Common/DataFetch';
 import { pyToJsDate } from '../../Common/TextFilters';
 import AccountSelect from '../AccountComponents/AccountSelect';
+import Account from '../AccountComponents/accountTSTypes';
 import {
   categorizeTransaction,
   setTransactionsIsLoaded,
 } from './transactionSlice';
+import Transaction from './transactionTSTypes';
+
 function CategorizeTxnForm(props: {
-  transacitonData: any;
+  transacitonData: Transaction;
   debitInc: boolean;
-  excludeAccount: any;
+  excludeAccount: Account;
 }): JSX.Element {
   const { id, transaction_date, name, description, amount, debit_account_id } =
     props.transacitonData;
