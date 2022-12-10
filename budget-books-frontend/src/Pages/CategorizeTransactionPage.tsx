@@ -27,8 +27,6 @@ function CategorizeTransactionsPage(props: any) {
     setAccountTransactions(<CategorizeList account={activeAccount} />);
   }, [activeAccount]);
 
-  console.log(`Active Account: ${activeAccount}`);
-
   return (
     <>
       <AccountContainer />
