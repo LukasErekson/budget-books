@@ -51,7 +51,7 @@ function CategorizeTxnForm(props: {
         }
       );
 
-      const response = await responsePromise;
+      const response: Response = await responsePromise;
 
       if (response.ok) {
         const responseData: any = await response.json();

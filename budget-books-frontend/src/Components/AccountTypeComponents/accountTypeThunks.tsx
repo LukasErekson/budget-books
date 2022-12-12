@@ -1,9 +1,11 @@
 import { setAccountTypes } from './accountTypeSlice';
 import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
+import { RootState } from '../../store';
+import AccountType from './accountTypeTSTypes';
 
 export const fetchAccountTypes =
-  (group: string) => async (dispatch: Function, getState: Function) => {
+  (group: string) => async (dispatch: Function, state: RootState) => {
     try {
       const {
         responsePromise,
@@ -18,7 +20,7 @@ export const fetchAccountTypes =
         const accountTypes: any[] = JSON.parse(responseData.account_types);
 
         const accountGroups: string[] = accountTypes.reduce(
-          (accumulator: any, currentValue: any) => {
+          (accumulator: any[], currentValue: AccountType) => {
             if (!accumulator.includes(currentValue.group)) {
               accumulator.push(currentValue.group);
             }

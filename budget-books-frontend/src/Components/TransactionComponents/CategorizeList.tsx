@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, connect } from 'react-redux';
+import { RootState } from '../../store';
 import Account from '../AccountComponents/accountTSTypes';
 import CategorizeTxnForm from './CategorizeTxnForm';
 import { selectUncategorizedTransactions } from './transactionSelectors';
@@ -10,14 +11,14 @@ function CategorizeList(props: {
   account: Account;
   fetchTransactions: Function;
 }): JSX.Element {
-  const transactions: Transaction[] = useSelector((state: any) =>
+  const transactions: Transaction[] = useSelector((state: RootState) =>
     props.account.id
       ? selectUncategorizedTransactions(state, props.account.id)
       : []
   );
 
   const isTransactionsLoaded: boolean = useSelector(
-    (state: any) => state.transactions.isTransactionsLoaded
+    (state: RootState) => state.transactions.isTransactionsLoaded
   );
 
   const debitInc = props.account.debit_inc === 1;
@@ -58,7 +59,8 @@ function CategorizeList(props: {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    fetchTransactions: (account: any) => dispatch(fetchTransactions(account)),
+    fetchTransactions: (account: Account) =>
+      dispatch(fetchTransactions(account)),
   };
 };
 
