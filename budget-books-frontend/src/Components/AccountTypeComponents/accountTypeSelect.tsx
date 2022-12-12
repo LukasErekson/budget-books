@@ -12,7 +12,7 @@ import AccountType from './accountTypeTSTypes';
 
 function AccountTypeSelector(props: {
   setCategory: Function;
-  category: number;
+  category: Number;
   setInputCategory: Function;
   inputCategory: string;
   fetchAccountTypes: Function;
@@ -29,10 +29,8 @@ function AccountTypeSelector(props: {
   );
 
   useEffect(() => {
-    if (Object.keys(options).length === 0) {
-      props.fetchAccountTypes('all');
-    } else props.setCategory(options[0].options[0]);
-  }, [props, options]);
+    props.setCategory(options[0].options[0]);
+  }, []);
 
   return (
     <Select
