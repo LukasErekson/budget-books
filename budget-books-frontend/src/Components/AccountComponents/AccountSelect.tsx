@@ -1,40 +1,48 @@
 import React, { useEffect } from 'react';
 import { useSelector, connect } from 'react-redux';
-import Select from 'react-select';
+import Select, { OptionsOrGroups } from 'react-select';
 import {
   selectAccountTypeNames,
   selectAccountTypes,
 } from '../AccountTypeComponents/accountTypeSelectors';
 import { selectAccountOptions } from '../AccountComponents/accountSelectors';
+import Account from './accountTSTypes';
+import AccountType from '../AccountTypeComponents/accountTypeTSTypes';
+import { RootState } from '../../store';
 
 function AccountSelect(props: {
   setCategory: Function;
   category: Number;
   setInputCategory: Function;
   inputCategory: string;
-  excludeAccount: any | null;
+  excludeAccount: Account;
 }): JSX.Element {
-  let options: any[] = useSelector((state: any) => selectAccountOptions(state));
+  let options: OptionsOrGroups<Number, any> = useSelector((state: any) =>
+    selectAccountOptions(state)
+  );
 
-  const excludeAccountIdx: number = options.indexOf(props.excludeAccount);
-
-  const accountTypes: any[] = useSelector((state: any) =>
+  const accountTypes: AccountType[] = useSelector((state: RootState) =>
     selectAccountTypes(state)
   );
-  const accountNames = useSelector((state: any) =>
+  const accountNames = useSelector((state: RootState) =>
     selectAccountTypeNames(state)
   );
 
   useEffect(() => {
     props.setCategory(options[0].options[0]);
-  }, [options]);
+  }, []);
 
   return (
     <Select
       name={'account'}
       options={options.concat({
-        label: `Create new category: ${props.inputCategory}`,
-        value: -1,
+        label: 'New Category',
+        options: [
+          {
+            label: `Create new category: ${props.inputCategory}`,
+            value: -1,
+          },
+        ],
       })}
       onInputChange={(newValue: string) => props.setInputCategory(newValue)}
       value={props.category}
@@ -46,13 +54,13 @@ function AccountSelect(props: {
             return;
           }
           if (accountNames.includes(newCategory.label)) {
-            const matchingAccount: any = accountTypes.filter(
-              (accountTypeObject: any) =>
+            const matchingAccountType: AccountType = accountTypes.filter(
+              (accountTypeObject: AccountType) =>
                 accountTypeObject.name === newCategory.label
             )[0];
             props.setCategory({
-              label: matchingAccount.name,
-              value: matchingAccount.id,
+              label: matchingAccountType.name,
+              value: matchingAccountType.id,
             });
             return;
           }

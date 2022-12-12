@@ -1,41 +1,45 @@
-import { createSelector } from '@reduxjs/toolkit';
+import { OptionsOrGroups } from 'react-select';
 import { RootState } from '../../store';
 import {
   selectAccountTypeGroups,
   selectAccountTypes,
 } from '../AccountTypeComponents/accountTypeSelectors';
-
-const selectSelf = (state: RootState) => state;
+import AccountType from '../AccountTypeComponents/accountTypeTSTypes';
+import Account from './accountTSTypes';
 
 const bankAccountTypes = ['Credit Card', 'Checking Account', 'Savings Account'];
 
-export const selectAccounts = (state: any) => state.accounts.accounts;
+export const selectAccounts = (state: RootState): Account[] =>
+  state.accounts.accounts;
 
-export const selectBankAccounts = (state: any) =>
+export const selectBankAccounts = (state: RootState): Account[] =>
   state.accounts.accounts.filter((account: any) =>
     bankAccountTypes.includes(account.account_type)
   );
 
-export const selectAccountTypesUsed = createSelector(
-  selectSelf,
-  (state: any): any[] =>
-    state.accounts.accounts.map((account: any) => account.account_type)
-);
+export const selectAccountTypesUsed = (state: RootState): string[] =>
+  state.accounts.accounts.map((account: Account) => account.account_type);
 
 // Return an array of objects ordered by group - good for passing into the "options" parameter of <Select />
-export const selectAccountOptions = createSelector(
-  selectSelf,
-  (state: any): any[] => {
-    const groups: string[] = selectAccountTypeGroups(state);
+export const selectAccountOptions = (
+  state: RootState
+): OptionsOrGroups<Number, any> => {
+  const groups: string[] = selectAccountTypeGroups(state);
 
-    const orderedGroups: string[] = JSON.parse(JSON.stringify(groups)).sort();
+  const orderedGroups: string[] = JSON.parse(JSON.stringify(groups)).sort();
 
-    let groupings: any = {};
+  let groupings: {
+    [accountGroup: string]: { label: string; value: number | string }[];
+  } = {};
 
-    const accountRows: any[] = selectAccounts(state);
+  const accountRows: Account[] = selectAccounts(state);
 
-    const accountTypeToGroup: any = selectAccountTypes(state).reduce(
-      (accumulator: any, currentValue: any) => {
+  const accountTypeToGroup: { [accountType: string]: string } =
+    selectAccountTypes(state).reduce(
+      (
+        accumulator: { [accountType: string]: string },
+        currentValue: AccountType
+      ) => {
         const accountType = currentValue.name;
         const accountGroup = currentValue.group;
         accumulator[accountType] = accountGroup;
@@ -44,35 +48,38 @@ export const selectAccountOptions = createSelector(
       {}
     );
 
-    if (Object.keys(accountRows).length === 0) {
-      return [];
-    }
-    accountRows.forEach((row) => {
-      const accountGroup = accountTypeToGroup[row.account_type];
-      if (!(accountGroup in groupings)) {
-        groupings[accountGroup] = [];
-      }
-      groupings[accountGroup].push({
-        label: row.name,
-        value: row.id,
-      });
-    });
+  if (Object.keys(accountRows).length === 0) {
+    return [];
+  }
 
-    let optionGroups: any[] = orderedGroups.map((group: string) => {
+  accountRows.forEach((row: Account) => {
+    const accountGroup = accountTypeToGroup[row.account_type];
+    if (!(accountGroup in groupings)) {
+      groupings[accountGroup] = [];
+    }
+    groupings[accountGroup].push({
+      label: row.name,
+      value: row.id,
+    });
+  });
+
+  let optionGroups: OptionsOrGroups<Number, any> = orderedGroups.map(
+    (group: string) => {
       return {
         label: group,
-        options: groupings[group].sort((a: any, b: any) => {
-          if (a.label < b.label) {
-            return -1;
-          } else if (a.label > b.label) {
-            return 1;
+        options: groupings[group].sort(
+          (a: { label: string }, b: { label: string }) => {
+            if (a.label < b.label) {
+              return -1;
+            } else if (a.label > b.label) {
+              return 1;
+            }
+            return 0;
           }
-          return 0;
-        }),
+        ),
       };
-    });
+    }
+  );
 
-    console.log(optionGroups);
-    return optionGroups;
-  }
-);
+  return optionGroups;
+};

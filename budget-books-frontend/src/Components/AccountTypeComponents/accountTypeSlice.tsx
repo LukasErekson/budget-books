@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialAccountTypes: any[] = [];
 const initialAccountGroups: string[] = [];
 
-export const accountTypeSlice: any = createSlice({
+export const accountTypeSlice = createSlice({
   name: 'accountTypes',
   initialState: {
     accountTypes: initialAccountTypes,

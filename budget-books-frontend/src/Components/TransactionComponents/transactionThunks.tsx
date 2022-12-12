@@ -1,9 +1,12 @@
 import { setTransactions, setTransactionsIsLoaded } from './transactionSlice';
 import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
+import Transaction from './transactionTSTypes';
+import Account from '../AccountComponents/accountTSTypes';
+import { RootState } from '../../store';
 
 export const fetchTransactions =
-  (account: any) => async (dispatch: Function, state: any) => {
+  (account: Account) => async (dispatch: Function, state: RootState) => {
     try {
       const {
         responsePromise,
@@ -12,12 +15,12 @@ export const fetchTransactions =
         `/api/transactions?account_ids=${account.id}`
       );
 
-      const response = await responsePromise;
+      const response: Response = await responsePromise;
 
       if (response.ok) {
         const responseData: any = await response.json();
 
-        const payload: any = {
+        const payload: { transactions: Transaction[] } = {
           transactions: JSON.parse(responseData.transactions),
         };
         dispatch(setTransactions(payload));
