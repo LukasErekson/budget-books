@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
+import Transaction from './transactionTSTypes';
 
-const initialTransactionList: any = {};
+const initialTransactionList: { [id: number]: Transaction[] } = {};
 
-export const transactionSlice: any = createSlice({
+export const transactionSlice = createSlice({
   name: 'transactions',
   initialState: {
     transactionList: initialTransactionList,
@@ -10,16 +11,15 @@ export const transactionSlice: any = createSlice({
   },
   reducers: {
     setTransactions: (state, action) => {
-      const transactions: any[] = action.payload.transactions;
+      const transactions: Transaction[] = action.payload.transactions;
 
       // Deep copy of the state's transactions
-      let stateTransactions: any = JSON.parse(
-        JSON.stringify(state.transactionList)
-      );
+      let stateTransactions: { [id: number | string]: Transaction[] } =
+        JSON.parse(JSON.stringify(state.transactionList));
 
       for (let trxn of transactions) {
-        const debitAcctId: string = trxn.debit_account_id;
-        const creditAcctId: string = trxn.credit_account_id;
+        const debitAcctId: number | string = trxn.debit_account_id;
+        const creditAcctId: number | string = trxn.credit_account_id;
 
         if (!(debitAcctId in stateTransactions)) {
           stateTransactions[debitAcctId] = [];
@@ -33,7 +33,7 @@ export const transactionSlice: any = createSlice({
           debitAcctId &&
           debitAcctId !== 'undefined' &&
           !stateTransactions[debitAcctId]
-            .map((transaction: any) => transaction.id)
+            .map((transaction: Transaction) => transaction.id)
             .includes(trxn.id)
         ) {
           stateTransactions[debitAcctId].push(trxn);
@@ -43,7 +43,7 @@ export const transactionSlice: any = createSlice({
           creditAcctId &&
           creditAcctId !== 'undefined' &&
           !stateTransactions[creditAcctId]
-            .map((transaction: any) => transaction.id)
+            .map((transaction: Transaction) => transaction.id)
             .includes(trxn.id)
         ) {
           stateTransactions[creditAcctId].push(trxn);
@@ -58,18 +58,17 @@ export const transactionSlice: any = createSlice({
       return { ...state, isTransactionsLoaded: loaded };
     },
     categorizeTransaction: (state, action) => {
-      const accountID = action.payload.accountID;
-      const transactionID = action.payload.transactionID;
-      const categoryID = action.payload.categoryID;
-      const debitOrCredit = action.payload.debitOrCredit;
+      const accountID: number = action.payload.accountID;
+      const transactionID: number = action.payload.transactionID;
+      const categoryID: number = action.payload.categoryID;
+      const debitOrCredit: string = action.payload.debitOrCredit;
 
       // Deep copy of the state's transactions
-      let stateTransactions: any = JSON.parse(
-        JSON.stringify(state.transactionList)
-      );
+      let stateTransactions: { [id: number | string]: Transaction[] } =
+        JSON.parse(JSON.stringify(state.transactionList));
 
       let indexOfTransaction = stateTransactions[accountID]
-        .map((trxn: any) => trxn.id)
+        .map((trxn: Transaction) => trxn.id)
         .indexOf(transactionID);
 
       stateTransactions[accountID][indexOfTransaction][

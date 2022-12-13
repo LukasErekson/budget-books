@@ -1,21 +1,24 @@
 import React, { useEffect } from 'react';
 import { useSelector, connect } from 'react-redux';
+import { RootState } from '../../store';
+import Account from '../AccountComponents/accountTSTypes';
 import CategorizeTxnForm from './CategorizeTxnForm';
 import { selectUncategorizedTransactions } from './transactionSelectors';
 import { fetchTransactions } from './transactionThunks';
+import Transaction from './transactionTSTypes';
 
 function CategorizeList(props: {
-  account: any;
+  account: Account;
   fetchTransactions: Function;
 }): JSX.Element {
-  const transactions = useSelector((state: any) =>
+  const transactions: Transaction[] = useSelector((state: RootState) =>
     props.account.id
       ? selectUncategorizedTransactions(state, props.account.id)
       : []
   );
 
-  const isTransactionsLoaded = useSelector(
-    (state: any) => state.transactions.isTransactionsLoaded
+  const isTransactionsLoaded: boolean = useSelector(
+    (state: RootState) => state.transactions.isTransactionsLoaded
   );
 
   const debitInc = props.account.debit_inc === 1;
@@ -38,7 +41,7 @@ function CategorizeList(props: {
       </div>
       <div className='txn-form-container'>
         {isTransactionsLoaded ? (
-          transactions.map((txn: any) => (
+          transactions.map((txn: Transaction) => (
             <CategorizeTxnForm
               key={txn.id}
               transacitonData={txn}
@@ -56,7 +59,8 @@ function CategorizeList(props: {
 
 const mapDispatchToProps = (dispatch: Function) => {
   return {
-    fetchTransactions: (account: any) => dispatch(fetchTransactions(account)),
+    fetchTransactions: (account: Account) =>
+      dispatch(fetchTransactions(account)),
   };
 };
 

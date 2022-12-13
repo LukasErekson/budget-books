@@ -7,6 +7,8 @@ import { selectBankAccounts } from './accountSelectors';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { changeActiveAccount } from '../PageComponents/PageSlice';
 import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
+import Account from './accountTSTypes';
+import { RootState } from '../../store';
 
 function AccountContainer(props: {
   changeActiveAccount: Function;
@@ -16,7 +18,7 @@ function AccountContainer(props: {
   const [isAccountsLoaded, setIsAccountsLoaded]: [boolean, Function] =
     useState(false);
 
-  const accountData: any[] = useSelector((state: any) =>
+  const accountData: Account[] = useSelector((state: RootState) =>
     selectBankAccounts(state)
   );
 
@@ -39,11 +41,11 @@ function AccountContainer(props: {
       <div className='accounts-container'>
         <p className={'accounts-header-title'}>Accounts</p>
         {isAccountsLoaded ? (
-          accountData.map((val, idx) => (
+          accountData.map((acct: Account) => (
             <AccountCard
-              key={`account-${val.id}`}
-              accountData={val}
-              onClick={() => props.changeActiveAccount(val)}
+              key={`account-${acct.id}`}
+              accountData={acct}
+              onClick={() => props.changeActiveAccount(acct)}
             />
           ))
         ) : (
@@ -65,7 +67,7 @@ function AccountContainer(props: {
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
   return {};
 };
 

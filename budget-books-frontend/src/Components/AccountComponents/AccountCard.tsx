@@ -1,17 +1,20 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { pyToJsDate } from '../../Common/TextFilters';
+import { RootState } from '../../store';
 import { selectUncategorizedTransactions } from '../TransactionComponents/transactionSelectors';
+import Account from './accountTSTypes';
 
 function AccountCard(props: {
-  accountData: any;
+  accountData: Account;
   onClick: Function;
 }): JSX.Element {
   const { id, name, balance, account_type, last_updated } = props.accountData;
+
   const isNegative: boolean = balance < 0.0;
 
   const activeAccountID: Number = useSelector(
-    (state: any) => state.pageSlice.activeAccount.id
+    (state: RootState) => state.pageSlice.activeAccount.id
   );
 
   const uncategorizedTransactionsList: any[] = useSelector((state: any) =>

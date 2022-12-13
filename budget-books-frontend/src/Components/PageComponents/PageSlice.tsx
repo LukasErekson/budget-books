@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
+import Account from '../AccountComponents/accountTSTypes';
 
 const homePage: string = 'Categorize Transactions';
+const initialActiveAccount: Account | any = {};
 
-export const pageSlice: any = createSlice({
+export const pageSlice = createSlice({
   name: 'pageSlice',
   initialState: {
     activePage: homePage,
-    activeAccount: {},
+    activeAccount: initialActiveAccount,
   },
   reducers: {
     changeActivePage: (state, action) => {
@@ -15,7 +17,7 @@ export const pageSlice: any = createSlice({
       return { ...state, activePage: newPage };
     },
     changeActiveAccount: (state, action) => {
-      const newActiveAccount: any = action.payload;
+      const newActiveAccount: Account = action.payload;
       return { ...state, activeAccount: newActiveAccount };
     },
   },

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import Select from 'react-select';
+import Select, { OptionsOrGroups } from 'react-select';
 import { connect } from 'react-redux';
 import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
 import { addNewAccount } from './accountThunks';
@@ -11,14 +11,15 @@ import {
 } from '../AccountTypeComponents/accountTypeSelectors';
 import { FiHelpCircle } from 'react-icons/fi';
 import AccountTypeSelect from '../AccountTypeComponents/accountTypeSelect';
+import AccountType from '../AccountTypeComponents/accountTypeTSTypes';
 
 function NewAccountModal(props: {
   isOpen: boolean;
   onRequestClose: any;
   fetchAccountTypes: Function;
   addNewAccount: Function;
-  selectAccountTypes: any[];
-  selectAccountTypeByGroups: any[];
+  selectAccountTypes: AccountType[];
+  selectAccountTypeByGroups: OptionsOrGroups<Number, any>;
   selectAccountTypeNames: string[];
 }): JSX.Element {
   const [category, setCategory]: [any, Function] = useState({});
