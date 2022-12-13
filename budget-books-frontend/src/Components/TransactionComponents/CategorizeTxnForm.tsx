@@ -14,7 +14,7 @@ import Transaction from './transactionTSTypes';
 function CategorizeTxnForm(props: {
   transacitonData: Transaction;
   debitInc: boolean;
-  excludeAccount: Account;
+  account: Account;
 }): JSX.Element {
   const { id, transaction_date, name, description, amount, debit_account_id } =
     props.transacitonData;
@@ -22,8 +22,8 @@ function CategorizeTxnForm(props: {
   const isDebitTransaction: boolean = debit_account_id !== 'undefined';
 
   const amountIsNegative: boolean =
-    (isDebitTransaction && !props.debitInc) ||
-    (!isDebitTransaction && props.debitInc);
+    (isDebitTransaction && props.debitInc) ||
+    (!isDebitTransaction && !props.debitInc);
 
   const [category, setCategory]: [any, Function] = useState({});
   const [inputCategory, setInputCategory]: [string, Function] = useState('');
@@ -69,7 +69,7 @@ function CategorizeTxnForm(props: {
         dispatch(setTransactionsIsLoaded({ loaded: false }));
         dispatch(
           categorizeTransaction({
-            accountID: props.excludeAccount.id,
+            accountID: props.account.id,
             transactionID: transaction_id,
             categoryID: category_id,
             debitOrCredit: isDebitTransaction ? 'credit' : 'debit',
@@ -104,12 +104,15 @@ function CategorizeTxnForm(props: {
           category={category}
           setInputCategory={setInputCategory}
           inputCategory={inputCategory}
-          excludeAccount={props.excludeAccount}
+          excludeAccount={props.account}
         />
       </span>
       <span className='categorize-txn-item'>
-        <button onClick={() => postCategorizeTransaction(id, category.value)}>
-          Categorize
+        <button
+          className='categorize-txn-btn'
+          onClick={() => postCategorizeTransaction(id, category.value)}
+        >
+          Add
         </button>
       </span>
     </div>

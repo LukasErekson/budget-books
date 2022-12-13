@@ -223,20 +223,34 @@ code {
   justify-content: center;
 }
 
+.txn-form-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .categorize-txn-form {
   display: grid;
   grid-template-columns: 12ch 1fr 2fr 0.5fr 1fr 0.5fr;
   gap: 1rem;
   align-items: center;
+  border-bottom: 1px solid var(--quarter-shadow);
 }
 
-.categorize-txn-form:nth-child(2n) {
+.categorize-txn-form:nth-child(2n + 1) {
   background-color: rgba(0, 0, 0, 0.075);
 }
 
 .txn-form-header {
   padding: 0.25rem;
   font-size: 1.2rem;
-  background-color: rgba(0, 0, 0, 0.1);
   color: rgb(46, 46, 46);
+}
+
+.categorize-txn-btn {
+  background: none;
+  border: 0px;
+  text-decoration: underline;
+  color: var(--dark-primary);
+
+  cursor: pointer;
 }

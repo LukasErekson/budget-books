@@ -11,7 +11,8 @@ function AccountCard(props: {
 }): JSX.Element {
   const { id, name, balance, account_type, last_updated } = props.accountData;
 
-  const isNegative: boolean = balance < 0.0;
+  const isNegative: boolean =
+    balance < 0.0 || props.accountData.debit_inc === 0;
 
   const activeAccountID: Number = useSelector(
     (state: RootState) => state.pageSlice.activeAccount.id
