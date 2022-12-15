@@ -3,6 +3,7 @@ import AccountContainer from '../Components/AccountComponents/AccountContainer';
 import CategorizeList from '../Components/TransactionComponents/CategorizeList';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import { changeActiveAccount } from '../Components/PageComponents/PageSlice';
+import { RootState } from '../store';
 
 function CategorizeTransactionsPage(props: any) {
   const activeAccount: any = useSelector(
@@ -35,7 +36,7 @@ function CategorizeTransactionsPage(props: any) {
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: RootState) => {
   return {};
 };
 

@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
-import { useSelector, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Select, { OptionsOrGroups } from 'react-select';
 import {
-  selectAccountTypeNames,
-  selectAccountTypes,
-} from '../AccountTypeComponents/accountTypeSelectors';
-import { selectAccountOptions } from '../AccountComponents/accountSelectors';
+  selectAccountNames,
+  selectAccountOptions,
+} from '../AccountComponents/accountSelectors';
 import Account from './accountTSTypes';
-import AccountType from '../AccountTypeComponents/accountTypeTSTypes';
 import { RootState } from '../../store';
 
 function AccountSelect(props: {
@@ -21,16 +19,19 @@ function AccountSelect(props: {
     selectAccountOptions(state)
   );
 
-  const accountTypes: AccountType[] = useSelector((state: RootState) =>
-    selectAccountTypes(state)
+  const accountNames: string[] = useSelector((state: RootState) =>
+    selectAccountNames(state)
   );
-  const accountNames = useSelector((state: RootState) =>
-    selectAccountTypeNames(state)
+
+  const accounts: Account[] = useSelector(
+    (state: RootState) => state.accounts.accounts
   );
 
   useEffect(() => {
     props.setCategory(options[0].options[0]);
   }, []);
+
+  console.log(accountNames);
 
   return (
     <Select
@@ -49,18 +50,19 @@ function AccountSelect(props: {
       onChange={(newCategory: any) => {
         // Allow for a new category.
         if (newCategory.value === -1) {
-          newCategory.label = newCategory.label.slice(21);
+          if (newCategory.label.includes('Create new category: ')) {
+            newCategory.label = newCategory.label.slice(21);
+          }
           if (newCategory.label === '') {
             return;
           }
           if (accountNames.includes(newCategory.label)) {
-            const matchingAccountType: AccountType = accountTypes.filter(
-              (accountTypeObject: AccountType) =>
-                accountTypeObject.name === newCategory.label
+            const matchingAccount: Account = accounts.filter(
+              (account: Account) => account.name === newCategory.name
             )[0];
             props.setCategory({
-              label: matchingAccountType.name,
-              value: matchingAccountType.id,
+              label: matchingAccount.name,
+              value: matchingAccount.id,
             });
             return;
           }
@@ -75,8 +77,4 @@ function AccountSelect(props: {
   );
 }
 
-const mapDipsatchToProps = (dispatch: Function) => {
-  return {};
-};
-
-export default connect(null, mapDipsatchToProps)(AccountSelect);
+export default AccountSelect;
