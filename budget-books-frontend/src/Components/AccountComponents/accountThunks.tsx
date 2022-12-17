@@ -2,12 +2,11 @@ import { loadAccounts } from './accountSlice';
 import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
 import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
-import { RootState } from '../../store';
 import Account from './accountTSTypes';
 
 export const fetchAccounts =
   (accountType: string = 'all') =>
-  async (dispatch: Function, state: RootState) => {
+  async (dispatch: Function) => {
     try {
       const {
         responsePromise,
@@ -29,7 +28,7 @@ export const fetchAccounts =
 
 export const addNewAccount =
   (name: string, account_type: any, debit_inc: boolean) =>
-  async (dispatch: Function, state: RootState) => {
+  async (dispatch: Function) => {
     try {
       const {
         responsePromise,

@@ -1,11 +1,10 @@
 import { setAccountTypes } from './accountTypeSlice';
 import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
-import { RootState } from '../../store';
 import AccountType from './accountTypeTSTypes';
 
 export const fetchAccountTypes =
-  (group: string) => async (dispatch: Function, state: RootState) => {
+  (group: string) => async (dispatch: Function) => {
     try {
       const {
         responsePromise,
