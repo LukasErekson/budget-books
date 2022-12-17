@@ -9,12 +9,9 @@ import { changeActiveAccount } from '../PageComponents/PageSlice';
 import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
 import Account from './accountTSTypes';
 import { RootState } from '../../store';
+import { useAppDispatch, useThunkDispatch } from '../../hooks';
 
-function AccountContainer(props: {
-  changeActiveAccount: Function;
-  fetchAccounts: Function;
-  fetchAccountTypes: Function;
-}): JSX.Element {
+function AccountContainer(): JSX.Element {
   const [isAccountsLoaded, setIsAccountsLoaded]: [boolean, Function] =
     useState(false);
 
@@ -24,13 +21,16 @@ function AccountContainer(props: {
 
   const [modalIsOpen, setModalIsOpen]: [boolean, Function] = useState(false);
 
+  const thunkDispatch = useThunkDispatch();
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     if (!isAccountsLoaded) {
-      props.fetchAccounts('all');
-      props.fetchAccountTypes('all');
+      thunkDispatch(fetchAccounts('all'));
+      thunkDispatch(fetchAccountTypes('all'));
       setIsAccountsLoaded(true);
     }
-  }, [props, isAccountsLoaded]);
+  }, [isAccountsLoaded]);
 
   return (
     <>
@@ -45,7 +45,7 @@ function AccountContainer(props: {
             <AccountCard
               key={`account-${acct.id}`}
               accountData={acct}
-              onClick={() => props.changeActiveAccount(acct)}
+              onClick={() => dispatch(changeActiveAccount(acct))}
             />
           ))
         ) : (
@@ -71,14 +71,4 @@ const mapStateToProps = (state: RootState) => {
   return {};
 };
 
-const mapDipsatchToProps = (dispatch: Function) => {
-  return {
-    changeActiveAccount: (account: any) =>
-      dispatch(changeActiveAccount(account)),
-    fetchAccounts: (accountType: string) =>
-      dispatch(fetchAccounts(accountType)),
-    fetchAccountTypes: (group: string) => dispatch(fetchAccountTypes(group)),
-  };
-};
-
-export default connect(mapStateToProps, mapDipsatchToProps)(AccountContainer);
+export default connect(mapStateToProps, null)(AccountContainer);

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSelector, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Select, { OptionsOrGroups } from 'react-select';
 import { RootState } from '../../store';
 import {
@@ -7,7 +7,6 @@ import {
   selectAccountTypeNames,
   selectAccountTypes,
 } from './accountTypeSelectors';
-import { fetchAccountTypes } from './accountTypeThunks';
 import AccountType from './accountTypeTSTypes';
 
 function AccountTypeSelector(props: {
@@ -15,7 +14,6 @@ function AccountTypeSelector(props: {
   category: Number;
   setInputCategory: Function;
   inputCategory: string;
-  fetchAccountTypes: Function;
 }): JSX.Element {
   let options: OptionsOrGroups<Number, any> = useSelector((state: RootState) =>
     selectAccountTypeByGroups(state)
@@ -71,10 +69,4 @@ function AccountTypeSelector(props: {
   );
 }
 
-const mapDipsatchToProps = (dispatch: Function) => {
-  return {
-    fetchAccountTypes: (group: string) => dispatch(fetchAccountTypes(group)),
-  };
-};
-
-export default connect(null, mapDipsatchToProps)(AccountTypeSelector);
+export default AccountTypeSelector;

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, connect } from 'react-redux';
+import { useThunkDispatch } from '../../hooks';
 import { RootState } from '../../store';
 import Account from '../AccountComponents/accountTSTypes';
 import CategorizeTxnForm from './CategorizeTxnForm';
@@ -7,10 +8,7 @@ import { selectUncategorizedTransactions } from './transactionSelectors';
 import { fetchTransactions } from './transactionThunks';
 import Transaction from './transactionTSTypes';
 
-function CategorizeList(props: {
-  account: Account;
-  fetchTransactions: Function;
-}): JSX.Element {
+function CategorizeList(props: { account: Account }): JSX.Element {
   const transactions: Transaction[] = useSelector((state: RootState) =>
     props.account.id
       ? selectUncategorizedTransactions(state, props.account.id)
@@ -23,9 +21,11 @@ function CategorizeList(props: {
 
   const debitInc = props.account.debit_inc === 1;
 
+  const thunkDispatch = useThunkDispatch();
+
   useEffect(() => {
     if (Object.keys(props.account).length && props.account.id) {
-      props.fetchTransactions(props.account);
+      thunkDispatch(fetchTransactions(props.account));
     }
   }, [props.account]);
 
@@ -59,11 +59,4 @@ function CategorizeList(props: {
   );
 }
 
-const mapDispatchToProps = (dispatch: Function) => {
-  return {
-    fetchTransactions: (account: Account) =>
-      dispatch(fetchTransactions(account)),
-  };
-};
-
-export default connect(null, mapDispatchToProps)(CategorizeList);
+export default CategorizeList;

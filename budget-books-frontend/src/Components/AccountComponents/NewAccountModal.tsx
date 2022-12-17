@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
-import Select, { OptionsOrGroups } from 'react-select';
+import { OptionsOrGroups } from 'react-select';
 import { connect } from 'react-redux';
-import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
 import { addNewAccount } from './accountThunks';
 import {
   selectAccountTypes,
@@ -12,12 +11,11 @@ import {
 import { FiHelpCircle } from 'react-icons/fi';
 import AccountTypeSelect from '../AccountTypeComponents/accountTypeSelect';
 import AccountType from '../AccountTypeComponents/accountTypeTSTypes';
+import { useThunkDispatch } from '../../hooks';
 
 function NewAccountModal(props: {
   isOpen: boolean;
   onRequestClose: any;
-  fetchAccountTypes: Function;
-  addNewAccount: Function;
   selectAccountTypes: AccountType[];
   selectAccountTypeByGroups: OptionsOrGroups<Number, any>;
   selectAccountTypeNames: string[];
@@ -29,6 +27,8 @@ function NewAccountModal(props: {
 
   const [debitInc, setDebitInc]: [boolean, Function] = useState(true);
 
+  const thunkDispatch = useThunkDispatch();
+
   function postNewAccount(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (accountName.length === 0) {
@@ -36,7 +36,7 @@ function NewAccountModal(props: {
       return;
     }
 
-    props.addNewAccount(accountName, category, debitInc);
+    thunkDispatch(addNewAccount(accountName, category, debitInc));
 
     setAccountName('');
 
@@ -114,12 +114,4 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-const mapDipsatchToProps = (dispatch: Function) => {
-  return {
-    fetchAccountTypes: (group: string) => dispatch(fetchAccountTypes(group)),
-    addNewAccount: (name: string, account_type: any, debit_inc: boolean) =>
-      dispatch(addNewAccount(name, account_type, debit_inc)),
-  };
-};
-
-export default connect(mapStateToProps, mapDipsatchToProps)(NewAccountModal);
+export default connect(mapStateToProps, null)(NewAccountModal);
