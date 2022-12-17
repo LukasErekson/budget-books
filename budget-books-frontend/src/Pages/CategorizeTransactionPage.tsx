@@ -22,7 +22,7 @@ function CategorizeTransactionsPage() {
       if (possibleAccounts.length > 0)
         dispatch(changeActiveAccount(possibleAccounts[0]));
     }
-  }, [activeAccount, possibleAccounts]);
+  }, [dispatch, activeAccount, possibleAccounts]);
 
   useEffect(() => {
     setAccountTransactions(<CategorizeList account={activeAccount} />);

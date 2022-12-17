@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSelector, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useThunkDispatch } from '../../hooks';
 import { RootState } from '../../store';
 import Account from '../AccountComponents/accountTSTypes';
@@ -27,7 +27,7 @@ function CategorizeList(props: { account: Account }): JSX.Element {
     if (Object.keys(props.account).length && props.account.id) {
       thunkDispatch(fetchTransactions(props.account));
     }
-  }, [props.account]);
+  }, [thunkDispatch, props.account]);
 
   return (
     <>

@@ -30,7 +30,7 @@ function AccountContainer(): JSX.Element {
       thunkDispatch(fetchAccountTypes('all'));
       setIsAccountsLoaded(true);
     }
-  }, [isAccountsLoaded]);
+  }, [thunkDispatch, isAccountsLoaded]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import Select, { OptionsOrGroups } from 'react-select';
 import { RootState } from '../../store';
@@ -26,9 +26,9 @@ function AccountTypeSelector(props: {
     selectAccountTypeNames(state)
   );
 
-  useEffect(() => {
+  if (Object.keys(props.category).length === 0) {
     props.setCategory(options[0].options[0]);
-  }, []);
+  }
 
   return (
     <Select
