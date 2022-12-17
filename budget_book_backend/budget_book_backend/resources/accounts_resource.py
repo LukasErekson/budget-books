@@ -131,6 +131,8 @@ class AccountResource(Resource):
         """
         request_json: Mapping = request.get_json()
 
+        account_id: int = 0
+
         with DbSetup.Session() as session:
             try:
                 # Create a new account Type if the id is -1.
@@ -163,6 +165,8 @@ class AccountResource(Resource):
 
                 session.add(new_acct)
 
+                account_id = new_acct.id
+
                 session.commit()
 
             except Exception as e:
@@ -178,7 +182,11 @@ class AccountResource(Resource):
 
         return (
             json.dumps(
-                dict(message="SUCCESS", account_name=request_json["name"])
+                dict(
+                    message="SUCCESS",
+                    account_name=request_json["name"],
+                    account_id=account_id,
+                )
             ),
             200,
         )

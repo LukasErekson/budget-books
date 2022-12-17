@@ -168,6 +168,7 @@ class TransactionsResource(Resource):
 
                     if trxn["debit_or_credit"] == "debit":
                         transaction.debit_account_id = int(trxn["category_id"])
+
                     else:
                         transaction.credit_account_id = int(
                             trxn["category_id"]
