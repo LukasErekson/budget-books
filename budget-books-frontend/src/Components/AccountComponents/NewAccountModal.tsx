@@ -1,24 +1,13 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import { OptionsOrGroups } from 'react-select';
-import { connect } from 'react-redux';
 import { addNewAccount } from './accountThunks';
-import {
-  selectAccountTypes,
-  selectAccountTypeByGroups,
-  selectAccountTypeNames,
-} from '../AccountTypeComponents/accountTypeSelectors';
 import { FiHelpCircle } from 'react-icons/fi';
 import AccountTypeSelect from '../AccountTypeComponents/accountTypeSelect';
-import AccountType from '../AccountTypeComponents/accountTypeTSTypes';
 import { useThunkDispatch } from '../../hooks';
 
 function NewAccountModal(props: {
   isOpen: boolean;
   onRequestClose: any;
-  selectAccountTypes: AccountType[];
-  selectAccountTypeByGroups: OptionsOrGroups<Number, any>;
-  selectAccountTypeNames: string[];
 }): JSX.Element {
   const [category, setCategory]: [any, Function] = useState({});
   const [inputCategory, setInputCategory]: [string, Function] = useState('');
@@ -106,12 +95,4 @@ function NewAccountModal(props: {
   );
 }
 
-const mapStateToProps = (state: any) => {
-  return {
-    selectAccountTypes: selectAccountTypes(state),
-    selectAccountTypeByGroups: selectAccountTypeByGroups(state),
-    selectAccountTypeNames: selectAccountTypeNames(state),
-  };
-};
-
-export default connect(mapStateToProps, null)(NewAccountModal);
+export default NewAccountModal;

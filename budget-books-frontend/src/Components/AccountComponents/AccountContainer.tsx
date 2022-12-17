@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import NewAccountModal from './NewAccountModal';
 import AccountCard from './AccountCard';
 import { fetchAccounts } from './accountThunks';
@@ -67,8 +67,4 @@ function AccountContainer(): JSX.Element {
   );
 }
 
-const mapStateToProps = (state: RootState) => {
-  return {};
-};
-
-export default connect(mapStateToProps, null)(AccountContainer);
+export default AccountContainer;
