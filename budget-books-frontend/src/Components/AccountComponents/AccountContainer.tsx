@@ -3,20 +3,31 @@ import { useSelector } from 'react-redux';
 import NewAccountModal from './NewAccountModal';
 import AccountCard from './AccountCard';
 import { fetchAccounts } from './accountThunks';
-import { selectBankAccounts } from './accountSelectors';
+import { selectAccounts, selectBankAccounts } from './accountSelectors';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { changeActiveAccount } from '../PageComponents/PageSlice';
 import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
 import Account from './accountTSTypes';
+import AccountType from '../AccountTypeComponents/accountTypeTSTypes';
 import { RootState } from '../../store';
 import { useAppDispatch, useThunkDispatch } from '../../hooks';
+import { fetchBankAccountTransactions } from '../TransactionComponents/transactionThunks';
+import { selectAccountTypes } from '../AccountTypeComponents/accountTypeSelectors';
 
 function AccountContainer(): JSX.Element {
   const [isAccountsLoaded, setIsAccountsLoaded]: [boolean, Function] =
     useState(false);
 
-  const accountData: Account[] = useSelector((state: RootState) =>
+  const bankAccounts: Account[] = useSelector((state: RootState) =>
     selectBankAccounts(state)
+  );
+
+  const accounts: Account[] = useSelector((state: RootState) =>
+    selectAccounts(state)
+  );
+
+  const accountTypes: AccountType[] = useSelector((state: RootState) =>
+    selectAccountTypes(state)
   );
 
   const [modalIsOpen, setModalIsOpen]: [boolean, Function] = useState(false);
@@ -26,11 +37,21 @@ function AccountContainer(): JSX.Element {
 
   useEffect(() => {
     if (!isAccountsLoaded) {
-      thunkDispatch(fetchAccounts('all'));
-      thunkDispatch(fetchAccountTypes('all'));
-      setIsAccountsLoaded(true);
+      if (!accounts.length) {
+        thunkDispatch(fetchAccounts('all'));
+      }
+      if (!accountTypes.length) {
+        thunkDispatch(fetchAccountTypes('all'));
+      }
+      if (bankAccounts.length) {
+        // Only set loaded to true when all transactions have been fetched.
+        thunkDispatch(fetchBankAccountTransactions(bankAccounts));
+      }
+      if (accounts.length && accountTypes.length && bankAccounts.length) {
+        setIsAccountsLoaded(true);
+      }
     }
-  }, [thunkDispatch, isAccountsLoaded]);
+  }, [thunkDispatch, accounts, accountTypes, bankAccounts, isAccountsLoaded]);
 
   return (
     <>
@@ -41,7 +62,7 @@ function AccountContainer(): JSX.Element {
       <div className='accounts-container'>
         <p className={'accounts-header-title'}>Accounts</p>
         {isAccountsLoaded ? (
-          accountData.map((acct: Account) => (
+          bankAccounts.map((acct: Account) => (
             <AccountCard
               key={`account-${acct.id}`}
               accountData={acct}

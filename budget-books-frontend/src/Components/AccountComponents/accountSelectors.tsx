@@ -16,7 +16,7 @@ export const selectAccountNames = (state: RootState): string[] =>
   state.accounts.accounts.map((account: Account) => account.name);
 
 export const selectBankAccounts = (state: RootState): Account[] =>
-  state.accounts.accounts.filter((account: any) =>
+  state.accounts.accounts.filter((account: Account) =>
     bankAccountTypes.includes(account.account_type)
   );
 

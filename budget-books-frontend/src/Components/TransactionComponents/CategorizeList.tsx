@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { useThunkDispatch } from '../../hooks';
 import { RootState } from '../../store';
 import Account from '../AccountComponents/accountTSTypes';
 import CategorizeTxnForm from './CategorizeTxnForm';
 import { selectUncategorizedTransactions } from './transactionSelectors';
-import { fetchTransactions } from './transactionThunks';
 import Transaction from './transactionTSTypes';
 
 function CategorizeList(props: { account: Account }): JSX.Element {
@@ -20,14 +18,6 @@ function CategorizeList(props: { account: Account }): JSX.Element {
   );
 
   const debitInc = props.account.debit_inc === 1;
-
-  const thunkDispatch = useThunkDispatch();
-
-  useEffect(() => {
-    if (Object.keys(props.account).length && props.account.id) {
-      thunkDispatch(fetchTransactions(props.account));
-    }
-  }, [thunkDispatch, props.account]);
 
   return (
     <>

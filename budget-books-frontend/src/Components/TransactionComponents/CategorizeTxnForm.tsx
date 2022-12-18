@@ -6,6 +6,9 @@ import { addNewAccount } from '../AccountComponents/accountThunks';
 import Transaction from './transactionTSTypes';
 import { useThunkDispatch } from '../../hooks';
 import { addTransactionCategory } from './transactionThunks';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { selectAccounts } from '../AccountComponents/accountSelectors';
 
 function CategorizeTxnForm(props: {
   transacitonData: Transaction;
@@ -21,12 +24,27 @@ function CategorizeTxnForm(props: {
     (isDebitTransaction && props.debitInc) ||
     (!isDebitTransaction && !props.debitInc);
 
-  const [category, setCategory]: [any, Function] = useState({});
+  const accounts: Account[] = useSelector((state: RootState) =>
+    selectAccounts(state)
+  );
+
+  let firstAccountIdx: number = 0;
+
+  if (accounts.indexOf(props.account) === 0) {
+    firstAccountIdx = 1;
+  }
+
+  const [category, setCategory]: [{ label: string; value: number }, Function] =
+    useState({
+      label: accounts[firstAccountIdx].name,
+      value: accounts[firstAccountIdx].id,
+    });
+
   const [inputCategory, setInputCategory]: [string, Function] = useState('');
 
   const thunkDispatch = useThunkDispatch();
 
-  async function postCategorizeTransaction(
+  function postCategorizeTransaction(
     transaction_id: number,
     category_id: number
   ) {

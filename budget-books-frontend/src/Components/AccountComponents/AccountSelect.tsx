@@ -10,7 +10,7 @@ import { RootState } from '../../store';
 
 function AccountSelect(props: {
   setCategory: Function;
-  category: Number;
+  category: { label: string; value: number };
   setInputCategory: Function;
   inputCategory: string;
   excludeAccount: Account;
@@ -26,10 +26,6 @@ function AccountSelect(props: {
   const accounts: Account[] = useSelector(
     (state: RootState) => state.accounts.accounts
   );
-
-  if (Object.keys(props.category).length === 0) {
-    props.setCategory(options[0].options[0]);
-  }
 
   return (
     <Select
