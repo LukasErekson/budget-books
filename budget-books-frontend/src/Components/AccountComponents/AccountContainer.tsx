@@ -3,31 +3,27 @@ import { useSelector } from 'react-redux';
 import NewAccountModal from './NewAccountModal';
 import AccountCard from './AccountCard';
 import { fetchAccounts } from './accountThunks';
-import { selectAccounts, selectBankAccounts } from './accountSelectors';
+import { selectBankAccounts } from './accountSelectors';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { changeActiveAccount } from '../PageComponents/PageSlice';
 import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
 import Account from './accountTSTypes';
-import AccountType from '../AccountTypeComponents/accountTypeTSTypes';
 import { RootState } from '../../store';
 import { useAppDispatch, useThunkDispatch } from '../../hooks';
 import { fetchBankAccountTransactions } from '../TransactionComponents/transactionThunks';
-import { selectAccountTypes } from '../AccountTypeComponents/accountTypeSelectors';
 
 function AccountContainer(): JSX.Element {
   const [isAccountsLoaded, setIsAccountsLoaded]: [boolean, Function] =
     useState(false);
 
+  const [isTypesFetched, setIsTypesFetched]: [boolean, Function] =
+    useState(false);
+
+  const [isAccountsFetched, setIsAccountsFetched]: [boolean, Function] =
+    useState(false);
+
   const bankAccounts: Account[] = useSelector((state: RootState) =>
     selectBankAccounts(state)
-  );
-
-  const accounts: Account[] = useSelector((state: RootState) =>
-    selectAccounts(state)
-  );
-
-  const accountTypes: AccountType[] = useSelector((state: RootState) =>
-    selectAccountTypes(state)
   );
 
   const [modalIsOpen, setModalIsOpen]: [boolean, Function] = useState(false);
@@ -37,21 +33,29 @@ function AccountContainer(): JSX.Element {
 
   useEffect(() => {
     if (!isAccountsLoaded) {
-      if (!accounts.length) {
+      if (!isAccountsFetched) {
         thunkDispatch(fetchAccounts('all'));
+        setIsAccountsFetched(true);
       }
-      if (!accountTypes.length) {
+      if (!isTypesFetched) {
         thunkDispatch(fetchAccountTypes('all'));
+        setIsTypesFetched(true);
       }
       if (bankAccounts.length) {
         // Only set loaded to true when all transactions have been fetched.
         thunkDispatch(fetchBankAccountTransactions(bankAccounts));
       }
-      if (accounts.length && accountTypes.length && bankAccounts.length) {
+      if (isAccountsFetched && isTypesFetched && bankAccounts.length) {
         setIsAccountsLoaded(true);
       }
     }
-  }, [thunkDispatch, accounts, accountTypes, bankAccounts, isAccountsLoaded]);
+  }, [
+    thunkDispatch,
+    bankAccounts,
+    isAccountsLoaded,
+    isAccountsFetched,
+    isTypesFetched,
+  ]);
 
   return (
     <>
