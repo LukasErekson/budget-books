@@ -269,13 +269,28 @@ code {
 .categorize-transaction-control {
   cursor: pointer;
   background: none;
-  text-decoration: underline;
-  font-size: 1rem;
+
   padding: 0.25rem;
   width: 2rem;
   height: 2rem;
 
+  text-decoration: underline;
+  font-size: 1rem;
+  color: var(--primary);
+
   border-radius: 35%;
   border: none;
   box-shadow: 1px 1px 5px var(--quarter-shadow);
+}
+
+.categorize-transaction-control:hover {
+  color: white;
+  background-color: var(--primary);
+
+  transition: 0.1s;
+}
+
+.rotate {
+  transform: rotate(360deg);
+  transition: 0.75s;
 }

@@ -38,8 +38,17 @@ function CategorizeTransactionsPage() {
   }, [activeAccount]);
 
   function refreshTransactions(): void {
+    let refreshIcon: Element =
+      document.getElementsByClassName('refresh-icon')[0];
+
+    refreshIcon.classList.toggle('rotate');
+
     dispatch(setTransactionsIsLoaded({ loaded: false }));
     thunkDispatch(fetchAccountTransactions(activeAccount));
+
+    setTimeout(() => {
+      refreshIcon.classList.toggle('rotate');
+    }, 750);
   }
 
   return (
