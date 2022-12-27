@@ -226,6 +226,10 @@ code {
 .txn-form-container {
   display: flex;
   flex-direction: column;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-top: 1px solid var(--half-shadow);
+  overflow: hidden;
 }
 
 .categorize-txn-form {
@@ -253,4 +257,25 @@ code {
   color: var(--dark-primary);
 
   cursor: pointer;
+}
+
+.categorize-table-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin: 0.75rem;
+}
+
+.categorize-transaction-control {
+  cursor: pointer;
+  background: none;
+  text-decoration: underline;
+  font-size: 1rem;
+  padding: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+
+  border-radius: 35%;
+  border: none;
+  box-shadow: 1px 1px 5px var(--quarter-shadow);
 }
