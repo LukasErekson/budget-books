@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import AccountContainer from '../Components/AccountComponents/AccountContainer';
-import CategorizeList from '../Components/TransactionComponents/CategorizeList';
+
+import Account from '../Components/AccountComponents/accountTSTypes';
+
+import { RootState } from '../store';
+import { useAppDispatch, useThunkDispatch } from '../hooks';
 import { setTransactionsIsLoaded } from '../Components/TransactionComponents/transactionSlice';
 import { fetchAccountTransactions } from '../Components/TransactionComponents/transactionThunks';
-import { useSelector } from 'react-redux';
 import { changeActiveAccount } from '../Components/PageComponents/PageSlice';
-import { useAppDispatch, useThunkDispatch } from '../hooks';
+
+import { useSelector } from 'react-redux';
+
+import AccountContainer from '../Components/AccountComponents/AccountContainer';
+import CategorizeList from '../Components/TransactionComponents/CategorizeList';
+
 import { IoMdRefresh } from 'react-icons/io';
-import { RootState } from '../store';
-import Account from '../Components/AccountComponents/accountTSTypes';
 import { FiPlusCircle } from 'react-icons/fi';
+import { BiUpload } from 'react-icons/bi';
 
 function CategorizeTransactionsPage() {
   const activeAccount: Account = useSelector(
@@ -51,6 +57,30 @@ function CategorizeTransactionsPage() {
     }, 750);
   }
 
+  function handleMouseOver(event: any): void {
+    let controlText: HTMLSpanElement;
+
+    if (event.target.tagName !== 'BUTTON') {
+      controlText = event.target.nextSibling;
+    } else {
+      controlText = event.target.children[1];
+    }
+
+    controlText?.classList.remove('hide');
+    controlText?.classList.add('unhide');
+    return;
+  }
+
+  function handleMoustOut(event: any): void {
+    if (event.target.tagName !== 'BUTTON') {
+      return;
+    }
+    let controlText: HTMLSpanElement = event.target.children[1];
+    controlText?.classList.toggle('hide');
+    controlText?.classList.toggle('unhide');
+    return;
+  }
+
   return (
     <>
       <AccountContainer />
@@ -59,14 +89,36 @@ function CategorizeTransactionsPage() {
           <label htmlFor='search-cat-txns'>Search Transactions: </label>
           <input type='text' className='search-categorize-txns' />
         </div>
-        <button className='add-trxns-btn categorize-transaction-control'>
+        <button
+          className='add-trxns-btn categorize-transaction-control'
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMoustOut}
+        >
           <FiPlusCircle />
+          <span className='categorize-transaction-control-text hide'>
+            Add Transaction
+          </span>
+        </button>
+        <button
+          className='upload-trxns-btn categorize-transaction-control'
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMoustOut}
+        >
+          <BiUpload />
+          <span className='categorize-transaction-control-text hide'>
+            Upload Transactions
+          </span>
         </button>
         <button
           className='resfresh-trxns-btn categorize-transaction-control'
           onClick={refreshTransactions}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMoustOut}
         >
           <IoMdRefresh className='refresh-icon' />
+          <span className='categorize-transaction-control-text refresh-text hide'>
+            Refresh
+          </span>
         </button>
       </div>
       {accountTransactions}
