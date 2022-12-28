@@ -9,4 +9,16 @@ interface Transaction {
   date_entered: string;
 }
 
+type transactionData = {
+  transaction_date: string;
+  name: string;
+  description: string;
+  amount: string | number;
+  credit_account_id?: number;
+  debit_account_id?: number;
+  category?: any;
+};
+
+export { transactionData };
+
 export default Transaction;

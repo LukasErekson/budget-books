@@ -5,7 +5,7 @@ import {
 } from './transactionSlice';
 import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
-import Transaction from './transactionTSTypes';
+import Transaction, { transactionData } from './transactionTSTypes';
 import Account from '../AccountComponents/accountTSTypes';
 
 export const fetchAccountTransactions =
@@ -121,6 +121,63 @@ export const addTransactionCategory =
             debitOrCredit: debit_or_credit,
           })
         );
+      }
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.log('Aborted');
+      }
+      console.log(error.status, error.message, error.serverError);
+    }
+  };
+
+export const addTransaction =
+  (account: Account, transactionData: transactionData) =>
+  async (dispatch: Function) => {
+    try {
+      const {
+        name,
+        description,
+        amount,
+        credit_account_id,
+        debit_account_id,
+        transaction_date,
+      } = transactionData;
+      const {
+        responsePromise,
+      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+        'POST',
+        `/api/transactions`,
+        {
+          transactions: [
+            {
+              name,
+              description,
+              amount,
+              credit_account_id,
+              debit_account_id,
+              transaction_date,
+            },
+          ],
+        }
+      );
+
+      const response: Response = await responsePromise;
+
+      if (response.ok) {
+        const responseData: any = await response.json();
+
+        const responseDataParsed: any = JSON.parse(responseData);
+
+        if (!(responseDataParsed.message === 'SUCCESS')) {
+          throw new BadResponseError(
+            response.status,
+            responseDataParsed.message,
+            responseDataParsed.serverError
+          );
+        }
+
+        dispatch(setTransactionsIsLoaded({ loaded: false }));
+        dispatch(fetchAccountTransactions(account));
       }
     } catch (error: any) {
       if (error.name === 'AbortError') {

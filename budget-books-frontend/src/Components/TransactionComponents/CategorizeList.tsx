@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import Account from '../AccountComponents/accountTSTypes';
+import AddTxnForm from './AddTxnForm';
 import CategorizeTxnForm from './CategorizeTxnForm';
 import { selectUncategorizedTransactions } from './transactionSelectors';
 import Transaction from './transactionTSTypes';
@@ -32,6 +33,7 @@ function CategorizeList(props: { account: Account }): JSX.Element {
           <span className='categorize-txn-item txn-form-header'>Account</span>
           <span className='categorize-txn-item txn-form-header'></span>
         </div>
+        <AddTxnForm account={props.account} debitInc={debitInc} />
         {isTransactionsLoaded ? (
           transactions.map((txn: Transaction) => (
             <CategorizeTxnForm
