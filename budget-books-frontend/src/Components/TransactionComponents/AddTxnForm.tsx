@@ -9,9 +9,12 @@ import Account from '../AccountComponents/accountTSTypes';
 import { useThunkDispatch } from '../../hooks';
 import { addTransaction } from './transactionThunks';
 
+import { AiOutlineCloseCircle, AiOutlinePlusCircle } from 'react-icons/ai';
+
 function AddTxnForm(props: {
   debitInc: boolean;
   account: Account;
+  setShowAddNewTxn: Function;
 }): JSX.Element {
   const id = -1;
   const [formData, setFormData]: [transactionData, Function] = useState({
@@ -57,7 +60,10 @@ function AddTxnForm(props: {
         : undefined;
     }
 
+    newTransactionData.amount = Math.abs(newTransactionData.amount).toFixed(2);
+
     thunkDispatch(addTransaction(props.account, newTransactionData));
+    props.setShowAddNewTxn(false);
   }
 
   return (
@@ -137,9 +143,15 @@ function AddTxnForm(props: {
           excludeAccount={props.account}
         />
       </span>
-      <span className='categorize-txn-item'>
-        <button className='categorize-txn-btn' onClick={postTransaction}>
-          Add Transaction
+      <span className='categorize-txn-item add-txn-controls'>
+        <button className='add-txn-btn' onClick={postTransaction}>
+          <AiOutlinePlusCircle style={{ fontSize: '1.5rem' }} />
+        </button>
+        <button
+          className='add-txn-btn'
+          onClick={() => props.setShowAddNewTxn(false)}
+        >
+          <AiOutlineCloseCircle style={{ fontSize: '1.5rem' }} />
         </button>
       </span>
     </div>

@@ -7,7 +7,11 @@ import CategorizeTxnForm from './CategorizeTxnForm';
 import { selectUncategorizedTransactions } from './transactionSelectors';
 import Transaction from './transactionTSTypes';
 
-function CategorizeList(props: { account: Account }): JSX.Element {
+function CategorizeList(props: {
+  account: Account;
+  showAddNewTxn?: Boolean;
+  setShowAddNewTxn: Function;
+}): JSX.Element {
   const transactions: Transaction[] = useSelector((state: RootState) =>
     props.account.id
       ? selectUncategorizedTransactions(state, props.account.id)
@@ -33,7 +37,15 @@ function CategorizeList(props: { account: Account }): JSX.Element {
           <span className='categorize-txn-item txn-form-header'>Account</span>
           <span className='categorize-txn-item txn-form-header'></span>
         </div>
-        <AddTxnForm account={props.account} debitInc={debitInc} />
+        {props.showAddNewTxn ? (
+          <AddTxnForm
+            account={props.account}
+            debitInc={debitInc}
+            setShowAddNewTxn={props.setShowAddNewTxn}
+          />
+        ) : (
+          ''
+        )}
         {isTransactionsLoaded ? (
           transactions.map((txn: Transaction) => (
             <CategorizeTxnForm

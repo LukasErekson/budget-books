@@ -24,8 +24,18 @@ function CategorizeTransactionsPage() {
   const possibleAccounts: Account[] = useSelector(
     (state: RootState) => state.accounts.accounts
   );
+
+  const [showaddNewTxn, setShowAddNewTxn]: [Boolean, Function] =
+    useState(false);
+
   const [accountTransactions, setAccountTransactions]: [JSX.Element, Function] =
-    useState(<CategorizeList account={activeAccount} />);
+    useState(
+      <CategorizeList
+        account={activeAccount}
+        showAddNewTxn={showaddNewTxn}
+        setShowAddNewTxn={setShowAddNewTxn}
+      />
+    );
 
   const dispatch = useAppDispatch();
 
@@ -40,8 +50,14 @@ function CategorizeTransactionsPage() {
   }, [dispatch, activeAccount, possibleAccounts]);
 
   useEffect(() => {
-    setAccountTransactions(<CategorizeList account={activeAccount} />);
-  }, [activeAccount]);
+    setAccountTransactions(
+      <CategorizeList
+        account={activeAccount}
+        showAddNewTxn={showaddNewTxn}
+        setShowAddNewTxn={setShowAddNewTxn}
+      />
+    );
+  }, [activeAccount, showaddNewTxn]);
 
   function refreshTransactions(): void {
     let refreshIcon: Element =
@@ -91,6 +107,7 @@ function CategorizeTransactionsPage() {
         </div>
         <button
           className='add-trxns-btn categorize-transaction-control'
+          onClick={() => setShowAddNewTxn(true)}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMoustOut}
         >
