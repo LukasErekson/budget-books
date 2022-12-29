@@ -37,6 +37,19 @@ code {
   color: var(--positive-num);
 }
 
+.hide {
+  opacity: 0;
+  display: none;
+  transform: scale(0);
+  transition: transform 0.25s, opacity 0.25s;
+}
+
+.unhide {
+  opacity: 1;
+  transform: scale(1);
+  transition: transform 0.25s, opacity 0.25s;
+}
+
 /* Accounts */
 .accounts-container {
   height: 12rem;
@@ -224,6 +237,7 @@ code {
   justify-content: center;
 }
 
+/* Categorize Transactions */
 .txn-form-container {
   display: flex;
   flex-direction: column;
@@ -236,13 +250,53 @@ code {
   display: grid;
   grid-template-columns: 12ch 1fr 2fr 0.5fr 1fr 0.5fr;
   gap: 2rem;
+  row-gap: 0.5rem;
   padding: 0rem 1rem;
   align-items: center;
   border-bottom: 1px solid var(--quarter-shadow);
 }
 
+.categorize-txn-form:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
 .categorize-txn-form:nth-child(2n + 1) {
   background-color: rgba(0, 0, 0, 0.075);
+}
+
+.categorize-txn-form:nth-child(2n + 1):hover {
+  background-color: rgba(0, 0, 0, 0.175);
+}
+
+.categorize-txn-form .transaction-details {
+  grid-column: 1/-1;
+
+  display: flex;
+
+  gap: 2rem;
+
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.categorize-txn-form .transaction-details.hide {
+  height: 0;
+  overflow: hidden;
+}
+
+.categorize-txn-form .transaction-details button {
+  font-size: 1rem;
+}
+
+.transaction-description h5 {
+  position: relative;
+  left: -5.75rem;
+  margin: -0.5rem;
+}
+
+.transaction-description p {
+  font-size: 0.75rem;
 }
 
 .txn-form-header {
@@ -289,19 +343,6 @@ code {
   background-color: var(--primary);
 
   transition: 0.1s;
-}
-
-.hide {
-  opacity: 0;
-  display: none;
-  transform: scale(0);
-  transition: transform 0.25s, opacity 0.25s;
-}
-
-.unhide {
-  opacity: 1;
-  transform: scale(1);
-  transition: transform 0.25s, opacity 0.25s;
 }
 
 .categorize-transaction-control-text {

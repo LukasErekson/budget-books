@@ -87,7 +87,7 @@ function CategorizeTransactionsPage() {
     return;
   }
 
-  function handleMoustOut(event: any): void {
+  function handleMouseOut(event: any): void {
     if (event.target.tagName !== 'BUTTON') {
       return;
     }
@@ -109,7 +109,7 @@ function CategorizeTransactionsPage() {
           className='add-trxns-btn categorize-transaction-control'
           onClick={() => setShowAddNewTxn(true)}
           onMouseOver={handleMouseOver}
-          onMouseOut={handleMoustOut}
+          onMouseOut={handleMouseOut}
         >
           <FiPlusCircle />
           <span className='categorize-transaction-control-text hide'>
@@ -119,7 +119,7 @@ function CategorizeTransactionsPage() {
         <button
           className='upload-trxns-btn categorize-transaction-control'
           onMouseOver={handleMouseOver}
-          onMouseOut={handleMoustOut}
+          onMouseOut={handleMouseOut}
         >
           <BiUpload />
           <span className='categorize-transaction-control-text hide'>
@@ -130,7 +130,7 @@ function CategorizeTransactionsPage() {
           className='resfresh-trxns-btn categorize-transaction-control'
           onClick={refreshTransactions}
           onMouseOver={handleMouseOver}
-          onMouseOut={handleMoustOut}
+          onMouseOut={handleMouseOut}
         >
           <IoMdRefresh className='refresh-icon' />
           <span className='categorize-transaction-control-text refresh-text hide'>

@@ -9,6 +9,7 @@ import { addTransactionCategory } from './transactionThunks';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { selectAccounts } from '../AccountComponents/accountSelectors';
+import { FiTrash2 } from 'react-icons/fi';
 
 function CategorizeTxnForm(props: {
   transacitonData: Transaction;
@@ -62,13 +63,46 @@ function CategorizeTxnForm(props: {
     );
   }
 
+  function toggleDetailVisibility(event: any): void {
+    let transactionDetails;
+    let formDiv;
+
+    switch (event.target.tagName) {
+      case 'BUTTON':
+        return;
+      case 'DIV':
+        formDiv = event.target;
+        console.log(event.target);
+        if (formDiv.classList.contains('unhide')) {
+          transactionDetails = formDiv;
+          console.log(formDiv);
+        } else {
+          transactionDetails = formDiv.lastElementChild;
+        }
+        break;
+      case 'SPAN':
+        formDiv = event.target.parentNode;
+        transactionDetails = formDiv.lastElementChild;
+    }
+
+    transactionDetails?.classList.toggle('hide');
+    transactionDetails?.classList.toggle('unhide');
+    return;
+  }
+
   return (
-    <div className='categorize-txn-form' key={id}>
+    <div
+      className='categorize-txn-form'
+      key={id}
+      onClick={toggleDetailVisibility}
+    >
       <span className='categorize-txn-item'>
         {pyToJsDate(transaction_date)}
       </span>{' '}
       <span className='categorize-txn-item'>{name}</span>{' '}
-      <span className='categorize-txn-item'>{description}</span>{' '}
+      <span className='categorize-txn-item'>
+        {description.slice(0, 32) + (description.length > 35 ? '...' : '')}
+      </span>{' '}
       <span
         className={
           'categorize-txn-item' + (amountIsNegative ? ' negative' : ' positive')
@@ -93,6 +127,15 @@ function CategorizeTxnForm(props: {
           Add
         </button>
       </span>
+      <div className='transaction-details hide'>
+        <div className='transaction-description'>
+          <h5>Description:</h5>
+          <p>{description}</p>
+        </div>
+        <button className='categorize-transaction-control'>
+          <FiTrash2 />
+        </button>
+      </div>
     </div>
   );
 }
