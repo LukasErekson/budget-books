@@ -69,6 +69,12 @@ class Account(DbSetup.Base):
                 (float) : The amount of the transaction. If not within
                     the given dates, returns 0.
             """
+
+            if not (
+                transaction.credit_account_id and transaction.debit_account_id
+            ):
+                return 0.0
+
             t_date = transaction.transaction_date
             if t_date >= start_date and t_date <= end_date:
                 return transaction.amount
