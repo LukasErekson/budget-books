@@ -7,7 +7,10 @@ import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
 import Transaction, { transactionData } from './transactionTSTypes';
 import Account from '../AccountComponents/accountTSTypes';
-import { fetchAccounts } from '../AccountComponents/accountThunks';
+import {
+  fetchAccounts,
+  fetchAccountBalances,
+} from '../AccountComponents/accountThunks';
 import { AppDispatch } from '../../store';
 
 export const fetchAccountTransactions =
@@ -124,7 +127,7 @@ export const addTransactionCategory =
           })
         );
 
-        dispatch(fetchAccounts());
+        dispatch(fetchAccountBalances([account.id, category_id]));
       }
     } catch (error: any) {
       if (error.name === 'AbortError') {
@@ -183,7 +186,17 @@ export const addTransaction =
         dispatch(setTransactionsIsLoaded({ loaded: false }));
         dispatch(fetchAccountTransactions(account));
 
-        dispatch(fetchAccounts());
+        let changedAccountIds: number[] = [];
+
+        if (debit_account_id) {
+          changedAccountIds.push(debit_account_id);
+        }
+
+        if (credit_account_id) {
+          changedAccountIds.push(credit_account_id);
+        }
+
+        dispatch(fetchAccountBalances(changedAccountIds));
       }
     } catch (error: any) {
       if (error.name === 'AbortError') {

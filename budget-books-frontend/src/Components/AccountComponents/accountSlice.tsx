@@ -17,9 +17,23 @@ export const accountSlice = createSlice({
         accounts: accounts,
       };
     },
+
+    updateAccountBalances: (state, action) => {
+      const accountIDToBalances: { [id: number]: number } = action.payload;
+
+      return {
+        state,
+        accounts: state.accounts.map((account: Account) => {
+          if (account.id in accountIDToBalances) {
+            return { ...account, balance: accountIDToBalances[account.id] };
+          }
+          return account;
+        }),
+      };
+    },
   },
 });
 
-export const { loadAccounts } = accountSlice.actions;
+export const { loadAccounts, updateAccountBalances } = accountSlice.actions;
 
 export default accountSlice.reducer;
