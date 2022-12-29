@@ -3,10 +3,11 @@ import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
 import { fetchAccountTypes } from '../AccountTypeComponents/accountTypeThunks';
 import Account from './accountTSTypes';
+import { AppDispatch } from '../../store';
 
 export const fetchAccounts =
   (accountType: string = 'all') =>
-  async (dispatch: Function) => {
+  async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,
@@ -28,7 +29,7 @@ export const fetchAccounts =
 
 export const addNewAccount =
   (name: string, account_type: any, debit_inc: boolean) =>
-  async (dispatch: Function) => {
+  async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,

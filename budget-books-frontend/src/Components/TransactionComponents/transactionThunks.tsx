@@ -7,9 +7,11 @@ import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
 import Transaction, { transactionData } from './transactionTSTypes';
 import Account from '../AccountComponents/accountTSTypes';
+import { fetchAccounts } from '../AccountComponents/accountThunks';
+import { AppDispatch } from '../../store';
 
 export const fetchAccountTransactions =
-  (account: Account) => async (dispatch: Function) => {
+  (account: Account) => async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,
@@ -40,7 +42,7 @@ export const fetchAccountTransactions =
   };
 
 export const fetchBankAccountTransactions =
-  (bankAccounts: Account[]) => async (dispatch: Function) => {
+  (bankAccounts: Account[]) => async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,
@@ -79,7 +81,7 @@ export const addTransactionCategory =
     category_id: number,
     debit_or_credit: string
   ) =>
-  async (dispatch: Function) => {
+  async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,
@@ -121,6 +123,8 @@ export const addTransactionCategory =
             debitOrCredit: debit_or_credit,
           })
         );
+
+        dispatch(fetchAccounts());
       }
     } catch (error: any) {
       if (error.name === 'AbortError') {
@@ -132,7 +136,7 @@ export const addTransactionCategory =
 
 export const addTransaction =
   (account: Account, transactionData: transactionData) =>
-  async (dispatch: Function) => {
+  async (dispatch: AppDispatch) => {
     try {
       const {
         name,
@@ -178,6 +182,8 @@ export const addTransaction =
 
         dispatch(setTransactionsIsLoaded({ loaded: false }));
         dispatch(fetchAccountTransactions(account));
+
+        dispatch(fetchAccounts());
       }
     } catch (error: any) {
       if (error.name === 'AbortError') {
