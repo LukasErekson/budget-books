@@ -72,17 +72,22 @@ function CategorizeTxnForm(props: {
         return;
       case 'DIV':
         formDiv = event.target;
-        console.log(event.target);
-        if (formDiv.classList.contains('unhide')) {
+        if (formDiv.classList.contains('hide')) {
           transactionDetails = formDiv;
-          console.log(formDiv);
-        } else {
+        } else if (
+          formDiv.lastElementChild.classList.contains('transaction-details')
+        ) {
           transactionDetails = formDiv.lastElementChild;
+        } else {
+          return;
         }
         break;
       case 'SPAN':
         formDiv = event.target.parentNode;
         transactionDetails = formDiv.lastElementChild;
+        break;
+      default:
+        return;
     }
 
     transactionDetails?.classList.toggle('hide');
@@ -132,7 +137,7 @@ function CategorizeTxnForm(props: {
           <h5>Description:</h5>
           <p>{description}</p>
         </div>
-        <button className='categorize-transaction-control'>
+        <button className='categorize-transaction-control delete-transaction'>
           <FiTrash2 />
         </button>
       </div>
