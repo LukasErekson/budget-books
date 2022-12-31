@@ -299,9 +299,7 @@ class TransactionsResource(Resource):
         # to the user
         user_id: int = request_json.get("user_id", None)
 
-        transaction_ids: list[int] = json.loads(
-            request_json.get("transaction_ids", "[]")
-        )
+        transaction_ids: list[int] = request_json.get("transaction_ids", [])
 
         problem_transactions: list[tuple] = []
 
