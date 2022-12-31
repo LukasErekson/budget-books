@@ -85,24 +85,27 @@ function CategorizeTransactionsPage() {
 
         <ButtonWithToolTip
           onClick={() => setShowAddNewTxn(true)}
-          buttonContent={<FiPlusCircle />}
           toolTipContent='Add Transaction'
           className='add-trxns-btn'
-        />
+        >
+          <FiPlusCircle />
+        </ButtonWithToolTip>
 
         <ButtonWithToolTip
           onClick={() => {}}
-          buttonContent={<BiUpload />}
           toolTipContent='Upload Transactions'
           className='upload-trxns-btn'
-        />
+        >
+          <BiUpload />
+        </ButtonWithToolTip>
 
         <ButtonWithToolTip
           onClick={refreshTransactions}
-          buttonContent={<IoMdRefresh className='refresh-icon' />}
           toolTipContent='Refresh'
           className='resfresh-trxns-btn'
-        />
+        >
+          <IoMdRefresh className='refresh-icon' />
+        </ButtonWithToolTip>
       </div>
       {accountTransactions}
     </>

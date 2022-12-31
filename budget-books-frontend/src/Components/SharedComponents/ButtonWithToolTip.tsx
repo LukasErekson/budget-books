@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-function ButtonWithToolTip(props: {
-  buttonContent: string | JSX.Element;
+interface buttonWithToolTipProps {
+  children?: string | JSX.Element;
   toolTipContent: string | JSX.Element;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   className?: string;
-}): JSX.Element {
+}
+
+const ButtonWithToolTip: FC<buttonWithToolTipProps> = (props): JSX.Element => {
   function handleMouseEnter(event: any): void {
     let controlText: HTMLSpanElement;
 
@@ -37,12 +39,12 @@ function ButtonWithToolTip(props: {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMoustLeave}
     >
-      <span>{props.buttonContent}</span>
+      <span>{props.children}</span>
       <span className='btn-with-tooltip-tooltip hide'>
         {props.toolTipContent}
       </span>
     </button>
   );
-}
+};
 
 export default ButtonWithToolTip;

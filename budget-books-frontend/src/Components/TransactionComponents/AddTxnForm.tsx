@@ -148,19 +148,21 @@ function AddTxnForm(props: {
       <span className='categorize-txn-item add-txn-controls'>
         <ButtonWithToolTip
           onClick={postTransaction}
-          buttonContent={<AiOutlinePlus style={{ fontSize: '1.25rem' }} />}
           toolTipContent='Post Transaction'
           className='add-txn-btn'
-        />
+        >
+          <AiOutlinePlus style={{ fontSize: '1.25rem' }} />
+        </ButtonWithToolTip>
 
         <ButtonWithToolTip
           onClick={() => {
             props.setShowAddNewTxn(false);
           }}
-          buttonContent={<AiOutlineStop style={{ fontSize: '1.25rem' }} />}
           toolTipContent='Close'
           className='add-txn-btn'
-        />
+        >
+          <AiOutlineStop style={{ fontSize: '1.25rem' }} />
+        </ButtonWithToolTip>
       </span>
     </div>
   );

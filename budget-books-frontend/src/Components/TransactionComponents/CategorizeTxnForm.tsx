@@ -140,10 +140,11 @@ function CategorizeTxnForm(props: {
         </div>
         <ButtonWithToolTip
           onClick={() => {}}
-          buttonContent={<FiTrash2 />}
           toolTipContent={'Delete Transaction'}
           className='delete-transaction'
-        />
+        >
+          <FiTrash2 />
+        </ButtonWithToolTip>
       </div>
     </div>
   );
