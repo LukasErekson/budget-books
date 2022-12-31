@@ -16,6 +16,7 @@ import CategorizeList from '../Components/TransactionComponents/CategorizeList';
 import { IoMdRefresh } from 'react-icons/io';
 import { FiPlusCircle } from 'react-icons/fi';
 import { BiUpload } from 'react-icons/bi';
+import ButtonWithToolTip from '../Components/SharedComponents/ButtonWithToolTip';
 
 function CategorizeTransactionsPage() {
   const activeAccount: Account = useSelector(
@@ -73,30 +74,6 @@ function CategorizeTransactionsPage() {
     }, 750);
   }
 
-  function handleMouseOver(event: any): void {
-    let controlText: HTMLSpanElement;
-
-    if (event.target.tagName !== 'BUTTON') {
-      controlText = event.target.nextSibling;
-    } else {
-      controlText = event.target.children[1];
-    }
-
-    controlText?.classList.remove('hide');
-    controlText?.classList.add('unhide');
-    return;
-  }
-
-  function handleMouseOut(event: any): void {
-    if (event.target.tagName !== 'BUTTON') {
-      return;
-    }
-    let controlText: HTMLSpanElement = event.target.children[1];
-    controlText?.classList.toggle('hide');
-    controlText?.classList.toggle('unhide');
-    return;
-  }
-
   return (
     <>
       <AccountContainer />
@@ -105,38 +82,27 @@ function CategorizeTransactionsPage() {
           <label htmlFor='search-cat-txns'>Search Transactions: </label>
           <input type='text' className='search-categorize-txns' />
         </div>
-        <button
-          className='add-trxns-btn categorize-transaction-control'
+
+        <ButtonWithToolTip
           onClick={() => setShowAddNewTxn(true)}
-          onMouseOver={handleMouseOver}
-          onMouseOut={handleMouseOut}
-        >
-          <FiPlusCircle />
-          <span className='categorize-transaction-control-text hide'>
-            Add Transaction
-          </span>
-        </button>
-        <button
-          className='upload-trxns-btn categorize-transaction-control'
-          onMouseOver={handleMouseOver}
-          onMouseOut={handleMouseOut}
-        >
-          <BiUpload />
-          <span className='categorize-transaction-control-text hide'>
-            Upload Transactions
-          </span>
-        </button>
-        <button
-          className='resfresh-trxns-btn categorize-transaction-control'
+          buttonContent={<FiPlusCircle />}
+          toolTipContent='Add Transaction'
+          className='add-trxns-btn'
+        />
+
+        <ButtonWithToolTip
+          onClick={() => {}}
+          buttonContent={<BiUpload />}
+          toolTipContent='Upload Transactions'
+          className='upload-trxns-btn'
+        />
+
+        <ButtonWithToolTip
           onClick={refreshTransactions}
-          onMouseOver={handleMouseOver}
-          onMouseOut={handleMouseOut}
-        >
-          <IoMdRefresh className='refresh-icon' />
-          <span className='categorize-transaction-control-text refresh-text hide'>
-            Refresh
-          </span>
-        </button>
+          buttonContent={<IoMdRefresh className='refresh-icon' />}
+          toolTipContent='Refresh'
+          className='resfresh-trxns-btn'
+        />
       </div>
       {accountTransactions}
     </>
