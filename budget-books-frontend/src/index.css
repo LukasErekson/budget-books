@@ -50,6 +50,52 @@ code {
   transition: transform 0.25s, opacity 0.25s;
 }
 
+/* ButtonWithToolTip Component */
+.btn-with-tooltip {
+  cursor: pointer;
+  background: none;
+
+  padding: 0.4rem;
+  gap: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+
+  font-size: 1rem;
+  color: var(--primary);
+
+  border-radius: 10px;
+  border: none;
+  box-shadow: 1px 1px 5px var(--quarter-shadow);
+}
+
+.btn-with-tooltip:hover {
+  color: white;
+  background-color: var(--primary);
+
+  transition: 0.1s;
+}
+
+.btn-with-tooltip-tooltip {
+  font-size: 0.75rem;
+  position: relative;
+  top: -400%;
+  left: -150%;
+  color: white;
+
+  display: block;
+  width: fit-content;
+  word-wrap: none;
+  padding: 0.25rem;
+
+  background-color: var(--tooltip-bg);
+  border: 1px solid var(--quarter-shadow);
+  border-radius: 5px;
+}
+
+.btn-with-tooltip-tooltip:hover {
+  color: white;
+}
+
 /* Accounts */
 .accounts-container {
   height: 12rem;

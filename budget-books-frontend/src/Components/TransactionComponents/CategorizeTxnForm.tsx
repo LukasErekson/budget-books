@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { selectAccounts } from '../AccountComponents/accountSelectors';
 import { FiTrash2 } from 'react-icons/fi';
+import ButtonWithToolTip from '../SharedComponents/ButtonWithToolTip';
 
 function CategorizeTxnForm(props: {
   transacitonData: Transaction;
@@ -137,9 +138,12 @@ function CategorizeTxnForm(props: {
           <h5>Description:</h5>
           <p>{description}</p>
         </div>
-        <button className='categorize-transaction-control delete-transaction'>
-          <FiTrash2 />
-        </button>
+        <ButtonWithToolTip
+          onClick={() => {}}
+          buttonContent={<FiTrash2 />}
+          toolTipContent={'Delete Transaction'}
+          className='delete-transaction'
+        />
       </div>
     </div>
   );
