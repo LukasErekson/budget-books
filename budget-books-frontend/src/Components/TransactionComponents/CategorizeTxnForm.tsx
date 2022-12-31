@@ -18,8 +18,15 @@ function CategorizeTxnForm(props: {
   debitInc: boolean;
   account: Account;
 }): JSX.Element {
-  const { id, transaction_date, name, description, amount, debit_account_id } =
-    props.transacitonData;
+  const {
+    id,
+    date_entered,
+    transaction_date,
+    name,
+    description,
+    amount,
+    debit_account_id,
+  } = props.transacitonData;
 
   const isDebitTransaction: boolean = debit_account_id !== 'undefined';
 
@@ -142,9 +149,13 @@ function CategorizeTxnForm(props: {
       </span>
       <div className='transaction-details hide'>
         <div className='transaction-description'>
-          <h4>{name}</h4>
+          <h4 className='muted'>{name}</h4>
           <h5>Description:</h5>
           <p>{description}</p>
+
+          <p className='muted'>
+            Transaction entered on {pyToJsDate(date_entered)}
+          </p>
         </div>
         <ButtonWithToolTip
           onClick={() => {
