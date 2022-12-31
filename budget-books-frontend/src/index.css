@@ -508,3 +508,31 @@ code {
 
   gap: 2rem;
 }
+
+.delete-modal-options button {
+  cursor: pointer;
+  border: 1px solid var(--dark-primary);
+
+  background-color: white;
+  color: var(--primary);
+
+  padding: 0.25rem;
+
+  border-radius: 10px;
+
+  width: 8ch;
+}
+
+.delete-modal-options button:hover {
+  border: 1px solid var(--dark-primary);
+  background-color: var(--primary);
+  color: white;
+
+  transition: 0.25s;
+}
+
+button.delete-modal-yes:hover {
+  background-color: var(--alert-color);
+  color: white;
+  transition: 0.25s;
+}

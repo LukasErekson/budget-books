@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
+import { IoMdWarning } from 'react-icons/io';
 
 import Modal from 'react-modal';
 import { pyToJsDate } from '../../Common/TextFilters';
@@ -56,6 +57,9 @@ const DeleteTxnModal: FC<deleteTxnModalProps> = (
         </p>
       </div>
 
+      <p className='alert center'>
+        <IoMdWarning style={{ fontSize: '2rem', margin: '-.5rem' }} />
+      </p>
       <p className='alert center'>There is no undoing this action.</p>
 
       <div className='delete-modal-options'>
@@ -64,10 +68,13 @@ const DeleteTxnModal: FC<deleteTxnModalProps> = (
             deleteTransaction();
             props.onRequestClose();
           }}
+          className='delete-modal-yes'
         >
           Yes
         </button>
-        <button onClick={props.onRequestClose}>No</button>
+        <button onClick={props.onRequestClose} className='delete-modal-no'>
+          No
+        </button>
       </div>
     </Modal>
   );
