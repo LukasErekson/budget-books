@@ -2,6 +2,7 @@ import {
   setTransactions,
   setTransactionsIsLoaded,
   categorizeTransaction,
+  deleteTransaction,
 } from './transactionSlice';
 import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
@@ -196,6 +197,68 @@ export const addTransaction =
           changedAccountIds.push(credit_account_id);
         }
 
+        dispatch(fetchAccountBalances(changedAccountIds));
+      }
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.log('Aborted');
+      }
+      console.log(error.status, error.message, error.serverError);
+    }
+  };
+
+export const deleteTransactions =
+  (transactionsToDelete: Transaction[]) => async (dispatch: AppDispatch) => {
+    try {
+      const idsToDelete: number[] = transactionsToDelete.map(
+        (txn: Transaction) => txn.id
+      );
+
+      const {
+        responsePromise,
+      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+        'DELETE',
+        `/api/transactions`,
+        {
+          transaction_ids: idsToDelete,
+        }
+      );
+
+      const response: Response = await responsePromise;
+
+      if (response.ok) {
+        const responseData: any = await response.json();
+
+        const responseDataParsed: any = JSON.parse(responseData);
+
+        if (!(responseDataParsed.message === 'SUCCESS')) {
+          throw new BadResponseError(
+            response.status,
+            responseDataParsed.message,
+            responseDataParsed.serverError
+          );
+        }
+
+        let changedAccountIds: number[] = [];
+
+        transactionsToDelete.forEach((transaction: Transaction) => {
+          if (
+            +transaction.credit_account_id &&
+            !changedAccountIds.includes(+transaction.credit_account_id)
+          ) {
+            changedAccountIds.push(+transaction.credit_account_id);
+          }
+
+          if (
+            +transaction.debit_account_id &&
+            !changedAccountIds.includes(+transaction.debit_account_id)
+          ) {
+            changedAccountIds.push(+transaction.debit_account_id);
+          }
+        });
+
+        dispatch(setTransactionsIsLoaded({ loaded: false }));
+        dispatch(deleteTransaction({ idsToDelete, changedAccountIds }));
         dispatch(fetchAccountBalances(changedAccountIds));
       }
     } catch (error: any) {

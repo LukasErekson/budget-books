@@ -11,6 +11,7 @@ import { RootState } from '../../store';
 import { selectAccounts } from '../AccountComponents/accountSelectors';
 import { FiTrash2 } from 'react-icons/fi';
 import ButtonWithToolTip from '../SharedComponents/ButtonWithToolTip';
+import DeleteTxnModal from './DeleteTxnModal';
 
 function CategorizeTxnForm(props: {
   transacitonData: Transaction;
@@ -43,6 +44,9 @@ function CategorizeTxnForm(props: {
     });
 
   const [inputCategory, setInputCategory]: [string, Function] = useState('');
+
+  const [displayDeleteModal, setDisplayDeleteModal]: [boolean, Function] =
+    useState(false);
 
   const thunkDispatch = useThunkDispatch();
 
@@ -139,12 +143,23 @@ function CategorizeTxnForm(props: {
           <p>{description}</p>
         </div>
         <ButtonWithToolTip
-          onClick={() => {}}
+          onClick={() => {
+            setDisplayDeleteModal(true);
+          }}
           toolTipContent={'Delete Transaction'}
           className='delete-transaction'
         >
           <FiTrash2 />
         </ButtonWithToolTip>
+
+        <DeleteTxnModal
+          isOpen={displayDeleteModal}
+          onRequestClose={() => {
+            setDisplayDeleteModal(false);
+          }}
+          transactionData={props.transacitonData}
+          amountIsNegative={amountIsNegative}
+        />
       </div>
     </div>
   );

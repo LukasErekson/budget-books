@@ -37,6 +37,14 @@ code {
   color: var(--positive-num);
 }
 
+.alert {
+  color: var(--alert-color);
+}
+
+.center {
+  text-align: center;
+}
+
 .hide {
   opacity: 0;
   display: none;
@@ -473,4 +481,30 @@ code {
   justify-content: center;
 
   gap: 1rem;
+}
+
+/* Delete Txn Modal */
+
+.close-modal-x {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+
+  font-size: 1.25rem;
+
+  cursor: pointer;
+}
+
+.delete-txn-modal .delete-txn-txn-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0rem 2rem;
+}
+
+.delete-txn-modal .delete-modal-options {
+  display: flex;
+  justify-content: center;
+
+  gap: 2rem;
 }

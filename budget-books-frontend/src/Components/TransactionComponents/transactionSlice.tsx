@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Transaction from './transactionTSTypes';
 
-const initialTransactionList: { [id: number]: Transaction[] } = {};
+const initialTransactionList: { [accountID: number]: Transaction[] } = {};
 
 export const transactionSlice = createSlice({
   name: 'transactions',
@@ -81,6 +81,29 @@ export const transactionSlice = createSlice({
         isTransactionsLoaded: true,
       };
     },
+    deleteTransaction: (state, action) => {
+      const {
+        idsToDelete,
+        changedAccountIds,
+      }: { idsToDelete: number[]; changedAccountIds: number[] } =
+        action.payload;
+
+      // Deep copy of the state's transactions
+      let stateTransactions: { [id: number | string]: Transaction[] } =
+        JSON.parse(JSON.stringify(state.transactionList));
+
+      for (let accountID of changedAccountIds) {
+        stateTransactions[accountID] = stateTransactions[accountID].filter(
+          (txn: Transaction) => !idsToDelete.includes(txn.id)
+        );
+      }
+
+      return {
+        ...state,
+        transactionList: stateTransactions,
+        isTransactionsLoaded: true,
+      };
+    },
   },
 });
 
@@ -88,6 +111,7 @@ export const {
   setTransactions,
   setTransactionsIsLoaded,
   categorizeTransaction,
+  deleteTransaction,
 } = transactionSlice.actions;
 
 export default transactionSlice.reducer;
