@@ -109,9 +109,12 @@ function CategorizeTxnForm(props: {
       <span className='categorize-txn-item'>
         {pyToJsDate(transaction_date)}
       </span>{' '}
-      <span className='categorize-txn-item'>{name}</span>{' '}
       <span className='categorize-txn-item'>
-        {description.slice(0, 32) + (description.length > 35 ? '...' : '')}
+        {name.slice(0, 16) + (name.length > 19 ? '...' : name.slice(16, 19))}
+      </span>{' '}
+      <span className='categorize-txn-item'>
+        {description.slice(0, 32) +
+          (description.length > 35 ? '...' : description.slice(32, 35))}
       </span>{' '}
       <span
         className={
@@ -139,6 +142,7 @@ function CategorizeTxnForm(props: {
       </span>
       <div className='transaction-details hide'>
         <div className='transaction-description'>
+          <h4>{name}</h4>
           <h5>Description:</h5>
           <p>{description}</p>
         </div>

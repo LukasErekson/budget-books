@@ -360,6 +360,11 @@ code {
   justify-self: right;
 }
 
+.transaction-description h4 {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
 .transaction-description h5 {
   margin-top: 0.5rem;
   margin-bottom: 0;

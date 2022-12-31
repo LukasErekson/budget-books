@@ -51,7 +51,12 @@ const DeleteTxnModal: FC<deleteTxnModalProps> = (
 
       <div className='delete-txn-txn-container muted'>
         <p>{pyToJsDate(props.transactionData.transaction_date)}</p>
-        <p>{props.transactionData.name}</p>
+        <p>
+          {props.transactionData.name.slice(0, 16) +
+            (props.transactionData.name.length > 19
+              ? '...'
+              : props.transactionData.name.slice(16, 19))}
+        </p>
         <p className={props.amountIsNegative ? 'negative' : 'positive'}>
           ${props.transactionData.amount}
         </p>
