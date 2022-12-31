@@ -4,7 +4,7 @@ function ButtonWithToolTip(props: {
   buttonContent: string | JSX.Element;
   toolTipContent: string | JSX.Element;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
-  className: string;
+  className?: string;
 }): JSX.Element {
   function handleMouseEnter(event: any): void {
     let controlText: HTMLSpanElement;

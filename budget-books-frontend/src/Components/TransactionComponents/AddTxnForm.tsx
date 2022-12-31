@@ -9,7 +9,9 @@ import Account from '../AccountComponents/accountTSTypes';
 import { useThunkDispatch } from '../../hooks';
 import { addTransaction } from './transactionThunks';
 
-import { AiOutlineCloseCircle, AiOutlinePlusCircle } from 'react-icons/ai';
+import { AiOutlineStop, AiOutlinePlus } from 'react-icons/ai';
+
+import ButtonWithToolTip from '../SharedComponents/ButtonWithToolTip';
 
 function AddTxnForm(props: {
   debitInc: boolean;
@@ -144,15 +146,21 @@ function AddTxnForm(props: {
         />
       </span>
       <span className='categorize-txn-item add-txn-controls'>
-        <button className='add-txn-btn' onClick={postTransaction}>
-          <AiOutlinePlusCircle style={{ fontSize: '1.5rem' }} />
-        </button>
-        <button
+        <ButtonWithToolTip
+          onClick={postTransaction}
+          buttonContent={<AiOutlinePlus style={{ fontSize: '1.25rem' }} />}
+          toolTipContent='Post Transaction'
           className='add-txn-btn'
-          onClick={() => props.setShowAddNewTxn(false)}
-        >
-          <AiOutlineCloseCircle style={{ fontSize: '1.5rem' }} />
-        </button>
+        />
+
+        <ButtonWithToolTip
+          onClick={() => {
+            props.setShowAddNewTxn(false);
+          }}
+          buttonContent={<AiOutlineStop style={{ fontSize: '1.25rem' }} />}
+          toolTipContent='Close'
+          className='add-txn-btn'
+        />
       </span>
     </div>
   );

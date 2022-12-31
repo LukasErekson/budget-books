@@ -452,21 +452,23 @@ code {
 }
 
 .add-txn-btn {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-
   background: none;
   border: 0px;
 
   cursor: pointer;
 
   color: var(--primary);
+
+  width: 1.75rem;
+  height: 1.75rem;
+
+  padding: 0.25rem;
 }
 
 .add-txn-controls {
   display: flex;
   align-items: center;
   justify-content: center;
+
+  gap: 1rem;
 }
