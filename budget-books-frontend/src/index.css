@@ -328,6 +328,8 @@ code {
 
   align-items: center;
   border-top: 2px solid rgba(0, 0, 0, 0.1);
+
+  padding: 0rem 2rem;
 }
 
 .categorize-txn-form .transaction-details.hide {
