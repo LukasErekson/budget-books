@@ -8,10 +8,7 @@ import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
 import Transaction, { transactionData } from './transactionTSTypes';
 import Account from '../AccountComponents/accountTSTypes';
-import {
-  fetchAccounts,
-  fetchAccountBalances,
-} from '../AccountComponents/accountThunks';
+import { fetchAccountBalances } from '../AccountComponents/accountThunks';
 import { AppDispatch } from '../../store';
 
 export const fetchAccountTransactions =

@@ -295,8 +295,6 @@ code {
 .txn-form-container {
   display: flex;
   flex-direction: column;
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
   border-top: 1px solid var(--half-shadow);
 }
 
@@ -305,7 +303,7 @@ code {
   grid-template-columns: 12ch 1fr 2fr 0.5fr 1fr 0.5fr;
   gap: 2rem;
   row-gap: 0.5rem;
-  padding: 0rem 1rem;
+  padding: 0.5rem 1rem 0rem 1rem;
   align-items: center;
   border-bottom: 1px solid var(--quarter-shadow);
 }
