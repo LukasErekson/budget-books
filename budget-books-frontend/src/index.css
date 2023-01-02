@@ -299,8 +299,9 @@ code {
 }
 
 .categorize-txn-form {
+  cursor: pointer;
   display: grid;
-  grid-template-columns: 12ch 1fr 2fr 0.5fr 1fr 0.5fr;
+  grid-template-columns: 10ch 1fr 2fr 12ch 1fr 0.5fr;
   gap: 2rem;
   row-gap: 0.5rem;
   padding: 0.5rem 1rem 0rem 1rem;
@@ -309,7 +310,6 @@ code {
 }
 
 .categorize-txn-form:hover {
-  cursor: pointer;
   background-color: rgba(0, 0, 0, 0.15);
   transition: background-color 0.25s;
 }
@@ -373,8 +373,13 @@ code {
   text-indent: 2ch;
 }
 
-.txn-form-header {
+.txn-form-header-row {
   cursor: default;
+  background-color: rgba(0, 0, 0, 0.075);
+}
+
+.txn-form-header {
+  cursor: pointer;
   padding: 0.25rem;
   font-size: 1.2rem;
   color: rgb(46, 46, 46);
