@@ -70,8 +70,9 @@ class Account(DbSetup.Base):
                     the given dates, returns 0.
             """
 
-            if not (
-                transaction.credit_account_id and transaction.debit_account_id
+            if (
+                transaction.credit_account_id is None
+                or transaction.debit_account_id is None
             ):
                 return 0.0
 
