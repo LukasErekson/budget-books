@@ -85,7 +85,7 @@ function CategorizeTxnForm(props: {
         if (formDiv.classList.contains('hide')) {
           transactionDetails = formDiv;
         } else if (
-          formDiv.lastElementChild.classList.contains('transaction-details')
+          formDiv.lastElementChild?.classList.contains('transaction-details')
         ) {
           transactionDetails = formDiv.lastElementChild;
         } else {
