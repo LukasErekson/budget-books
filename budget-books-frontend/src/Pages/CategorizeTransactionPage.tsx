@@ -11,12 +11,13 @@ import { changeActiveAccount } from '../Components/PageComponents/PageSlice';
 import { useSelector } from 'react-redux';
 
 import AccountContainer from '../Components/AccountComponents/AccountContainer';
-import CategorizeList from '../Components/TransactionComponents/CategorizeList';
+import CategorizeList from '../Components/TransactionComponents/CategorizeTransactions/CategorizeList';
 
 import { IoMdRefresh } from 'react-icons/io';
 import { FiPlusCircle } from 'react-icons/fi';
 import { BiUpload } from 'react-icons/bi';
 import ButtonWithToolTip from '../Components/SharedComponents/ButtonWithToolTip';
+import UploadTxnModal from '../Components/TransactionComponents/UploadTxnModal';
 
 function CategorizeTransactionsPage() {
   const activeAccount: Account = useSelector(
@@ -26,7 +27,10 @@ function CategorizeTransactionsPage() {
     (state: RootState) => state.accounts.accounts
   );
 
-  const [showaddNewTxn, setShowAddNewTxn]: [Boolean, Function] =
+  const [showaddNewTxn, setShowAddNewTxn]: [boolean, Function] =
+    useState(false);
+
+  const [showUploadTxnModal, setShowUploadTxnModal]: [boolean, Function] =
     useState(false);
 
   const [accountTransactions, setAccountTransactions]: [JSX.Element, Function] =
@@ -77,6 +81,7 @@ function CategorizeTransactionsPage() {
   return (
     <>
       <AccountContainer />
+
       <div className='categorize-table-controls'>
         <div className='search-categorize-txns-container'>
           <label htmlFor='search-cat-txns'>Search Transactions: </label>
@@ -92,7 +97,7 @@ function CategorizeTransactionsPage() {
         </ButtonWithToolTip>
 
         <ButtonWithToolTip
-          onClick={() => {}}
+          onClick={() => setShowUploadTxnModal(true)}
           toolTipContent='Upload Transactions'
           className='upload-trxns-btn'
         >
@@ -108,6 +113,13 @@ function CategorizeTransactionsPage() {
         </ButtonWithToolTip>
       </div>
       {accountTransactions}
+
+      <UploadTxnModal
+        isOpen={showUploadTxnModal}
+        onRequestClose={() => {
+          setShowUploadTxnModal(false);
+        }}
+      />
     </>
   );
 }

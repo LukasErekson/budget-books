@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { pyToJsDate } from '../../Common/TextFilters';
-import AccountSelect from '../AccountComponents/AccountSelect';
-import Account from '../AccountComponents/accountTSTypes';
-import { addNewAccount } from '../AccountComponents/accountThunks';
-import Transaction from './transactionTSTypes';
-import { useThunkDispatch } from '../../hooks';
-import { addTransactionCategory } from './transactionThunks';
+import { pyToJsDate } from '../../../Common/TextFilters';
+import AccountSelect from '../../AccountComponents/AccountSelect';
+import Account from '../../AccountComponents/accountTSTypes';
+import { addNewAccount } from '../../AccountComponents/accountThunks';
+import Transaction from '../transactionTSTypes';
+import { useThunkDispatch } from '../../../hooks';
+import { addTransactionCategory } from '../transactionThunks';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import { selectAccounts } from '../AccountComponents/accountSelectors';
+import { RootState } from '../../../store';
+import { selectAccounts } from '../../AccountComponents/accountSelectors';
 import { FiTrash2 } from 'react-icons/fi';
-import ButtonWithToolTip from '../SharedComponents/ButtonWithToolTip';
-import DeleteTxnModal from './DeleteTxnModal';
+import ButtonWithToolTip from '../../SharedComponents/ButtonWithToolTip';
+import DeleteTxnModal from '../DeleteTxnModal';
 
 function CategorizeTxnForm(props: {
   transacitonData: Transaction;
@@ -30,9 +30,7 @@ function CategorizeTxnForm(props: {
 
   const isDebitTransaction: boolean = debit_account_id !== 'undefined';
 
-  const amountIsNegative: boolean =
-    (isDebitTransaction && props.debitInc) ||
-    (!isDebitTransaction && !props.debitInc);
+  const amountIsNegative: boolean = !isDebitTransaction;
 
   const accounts: Account[] = useSelector((state: RootState) =>
     selectAccounts(state)

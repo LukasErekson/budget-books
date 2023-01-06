@@ -6,7 +6,10 @@ import {
 } from './transactionSlice';
 import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
-import Transaction, { transactionData } from './transactionTSTypes';
+import Transaction, {
+  transactionData,
+  UploadableTransaction,
+} from './transactionTSTypes';
 import Account from '../AccountComponents/accountTSTypes';
 import { fetchAccountBalances } from '../AccountComponents/accountThunks';
 import { AppDispatch } from '../../store';
@@ -257,6 +260,46 @@ export const deleteTransactions =
         dispatch(setTransactionsIsLoaded({ loaded: false }));
         dispatch(deleteTransaction({ idsToDelete, changedAccountIds }));
         dispatch(fetchAccountBalances(changedAccountIds));
+      }
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.log('Aborted');
+      }
+      console.log(error.status, error.message, error.serverError);
+    }
+  };
+
+export const uploadTransactions =
+  (account: Account, transactionsToUpload: UploadableTransaction[]) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      const {
+        responsePromise,
+      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+        'POST',
+        `/api/transactions`,
+        {
+          transactions: transactionsToUpload,
+        }
+      );
+
+      const response: Response = await responsePromise;
+
+      if (response.ok) {
+        const responseData: any = await response.json();
+
+        const responseDataParsed: any = JSON.parse(responseData);
+
+        if (!(responseDataParsed.message === 'SUCCESS')) {
+          throw new BadResponseError(
+            response.status,
+            responseDataParsed.message,
+            responseDataParsed.serverError
+          );
+        }
+
+        dispatch(setTransactionsIsLoaded({ loaded: false }));
+        dispatch(fetchAccountTransactions(account));
       }
     } catch (error: any) {
       if (error.name === 'AbortError') {

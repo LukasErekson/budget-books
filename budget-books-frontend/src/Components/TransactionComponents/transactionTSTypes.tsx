@@ -19,6 +19,15 @@ type transactionData = {
   category?: any;
 };
 
-export { transactionData };
+type UploadableTransaction = {
+  name: string;
+  description: string;
+  amount: number;
+  debit_account_id?: number;
+  credit_account_id?: number;
+  transaction_date: string;
+};
+
+export { transactionData, UploadableTransaction };
 
 export default Transaction;

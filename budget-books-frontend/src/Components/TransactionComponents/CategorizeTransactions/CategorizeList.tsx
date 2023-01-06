@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
-import Account from '../AccountComponents/accountTSTypes';
-import AddTxnForm from './AddTxnForm';
+import { RootState } from '../../../store';
+import Account from '../../AccountComponents/accountTSTypes';
+import AddTxnForm from '../AddTxnForm';
 import CategorizeTxnForm from './CategorizeTxnForm';
-import { selectUncategorizedTransactions } from './transactionSelectors';
-import Transaction from './transactionTSTypes';
+import { selectUncategorizedTransactions } from '../transactionSelectors';
+import Transaction from '../transactionTSTypes';
 
 import { TbSortAscending, TbSortDescending } from 'react-icons/tb';
 
