@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import pandas as pd
+import numpy as np
 from typing import Mapping
 from flask_restful import Resource
 from models.db_setup import DbSetup
@@ -23,6 +24,7 @@ class TransactionsResource(Resource):
             ?account_ids=1,2
         """
         account_ids: list[int] = request.args["account_ids"].split(",")
+        categorize_type: str = request.args.get("categorize_type", "all")
 
         if len(account_ids) == 0:
             return (
@@ -34,7 +36,7 @@ class TransactionsResource(Resource):
                 500,
             )
 
-        elif len(account_ids) == 1:
+        if len(account_ids) == 1:
             df: pd.DataFrame = pd.read_sql_query(
                 f"""SELECT * FROM transactions
                 WHERE debit_account_id = {account_ids[0]}
@@ -49,6 +51,26 @@ class TransactionsResource(Resource):
                         OR credit_account_id IN {tuple(account_ids)}""",
                 DbSetup.engine,
             )
+
+        if categorize_type == "uncategorized":
+            # Only accept those that are uncategorized
+            df = df[
+                (
+                    pd.isna(df["debit_account_id"])
+                    | (pd.isna(df["credit_account_id"]))
+                )
+            ]
+
+        elif categorize_type == "categorized":
+            # Only accept those that are categorized
+            df = df[
+                (
+                    pd.notna(df["debit_account_id"])
+                    & (pd.notna(df["credit_account_id"]))
+                )
+            ]
+
+        # Else, assume all the transactions are wanted.
 
         df.fillna("undefined", inplace=True)
 
