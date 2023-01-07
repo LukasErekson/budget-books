@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { pyToJsDate } from '../../../Common/TextFilters';
 import AccountSelect from '../../AccountComponents/AccountSelect';
 import Account from '../../AccountComponents/accountTSTypes';
@@ -52,6 +52,32 @@ function CategorizeTxnForm(props: {
 
   const [displayDeleteModal, setDisplayDeleteModal]: [boolean, Function] =
     useState(false);
+
+  const nameCell = useRef<HTMLSpanElement>(null);
+  const [nameCharWidth, setNameCharWidth]: [number, Function] = useState(16);
+
+  const descriptionCell = useRef<HTMLSpanElement>(null);
+  const [descriptionCellWidth, setDescriptionCellWidth]: [number, Function] =
+    useState(32);
+
+  const getCellWidths = () => {
+    let newNameWidth: number | undefined = nameCell.current?.offsetWidth;
+    setNameCharWidth(newNameWidth ? Math.floor(newNameWidth / 10) : 16);
+
+    let newDescriptionCellWidth: number | undefined =
+      descriptionCell.current?.offsetWidth;
+    setDescriptionCellWidth(
+      newDescriptionCellWidth ? Math.floor(newDescriptionCellWidth / 10) : 32
+    );
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', getCellWidths);
+
+    return () => {
+      window.removeEventListener('resize', getCellWidths);
+    };
+  }, []);
 
   const thunkDispatch = useThunkDispatch();
 
@@ -114,12 +140,17 @@ function CategorizeTxnForm(props: {
       <span className='categorize-txn-item'>
         {pyToJsDate(transaction_date)}
       </span>{' '}
-      <span className='categorize-txn-item'>
-        {name.slice(0, 16) + (name.length > 19 ? '...' : name.slice(16, 19))}
+      <span className='categorize-txn-item' ref={nameCell}>
+        {name.slice(0, nameCharWidth) +
+          (name.length > nameCharWidth + 3
+            ? '...'
+            : name.slice(nameCharWidth, nameCharWidth + 3))}
       </span>{' '}
-      <span className='categorize-txn-item'>
-        {description.slice(0, 32) +
-          (description.length > 35 ? '...' : description.slice(32, 35))}
+      <span className='categorize-txn-item' ref={descriptionCell}>
+        {description.slice(0, descriptionCellWidth) +
+          (description.length > descriptionCellWidth + 3
+            ? '...'
+            : description.slice(descriptionCellWidth))}
       </span>{' '}
       <span
         className={
