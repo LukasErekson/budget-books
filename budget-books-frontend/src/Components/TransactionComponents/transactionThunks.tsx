@@ -15,13 +15,14 @@ import { fetchAccountBalances } from '../AccountComponents/accountThunks';
 import { AppDispatch } from '../../store';
 
 export const fetchAccountTransactions =
-  (account: Account) => async (dispatch: AppDispatch) => {
+  (account: Account, categorized_status: string = 'all') =>
+  async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,
       }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
         'GET',
-        `/api/transactions?account_ids=${account.id}`
+        `/api/transactions?account_ids=${account.id}&categorize_type=${categorized_status}`
       );
 
       const response: Response = await responsePromise;
@@ -46,7 +47,8 @@ export const fetchAccountTransactions =
   };
 
 export const fetchBankAccountTransactions =
-  (bankAccounts: Account[]) => async (dispatch: AppDispatch) => {
+  (bankAccounts: Account[], categorized_status: string = 'all') =>
+  async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,
@@ -54,7 +56,7 @@ export const fetchBankAccountTransactions =
         'GET',
         `/api/transactions?account_ids=${bankAccounts.map(
           (account: Account) => account.id
-        )}`
+        )}&categorize_type=${categorized_status}`
       );
 
       const response: Response = await responsePromise;

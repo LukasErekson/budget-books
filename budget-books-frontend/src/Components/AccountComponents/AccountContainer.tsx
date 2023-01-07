@@ -42,7 +42,9 @@ function AccountContainer(): JSX.Element {
         setIsTypesFetched(true);
       }
       if (bankAccounts.length) {
-        thunkDispatch(fetchBankAccountTransactions(bankAccounts));
+        thunkDispatch(
+          fetchBankAccountTransactions(bankAccounts, 'uncategorized')
+        );
       }
       // Only set loaded to true when all transactions have been fetched.
       if (isAccountsFetched && isTypesFetched && bankAccounts.length) {

@@ -71,7 +71,7 @@ function CategorizeTransactionsPage() {
     refreshIcon.classList.toggle('rotate');
 
     dispatch(setTransactionsIsLoaded({ loaded: false }));
-    thunkDispatch(fetchAccountTransactions(activeAccount));
+    thunkDispatch(fetchAccountTransactions(activeAccount, 'uncategorized'));
 
     setTimeout(() => {
       refreshIcon.classList.toggle('rotate');
