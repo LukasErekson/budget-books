@@ -65,8 +65,8 @@ function AccountContainer(): JSX.Element {
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
       />
+      <h3 className={'accounts-header-title'}>Accounts</h3>
       <div className='accounts-container'>
-        <p className={'accounts-header-title'}>Accounts</p>
         {isAccountsLoaded ? (
           bankAccounts.map((acct: Account) => (
             <AccountCard
