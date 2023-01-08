@@ -104,6 +104,37 @@ code {
   color: white;
 }
 
+/* Navbar Styles */
+nav {
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--primary);
+  padding: 0.5rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: white;
+
+  display: flex;
+  gap: 0.25rem;
+  height: 1.5rem;
+
+  align-items: center;
+
+  text-shadow: 1px 1px 0px var(--dark-primary);
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: flex;
+  gap: 1.5rem;
+}
+
 /* Accounts */
 .accounts-container {
   height: 12rem;
