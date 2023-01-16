@@ -21,7 +21,7 @@ import UploadTxnModal from '../Components/TransactionComponents/UploadTxnModal';
 
 function CategorizeTransactionsPage() {
   const activeAccount: Account = useSelector(
-    (state: RootState) => state.pageSlice.activeAccount
+    (state: RootState) => state.pageSlice.categorizationPage.activeAccount
   );
   const possibleAccounts: Account[] = useSelector(
     (state: RootState) => state.accounts.accounts

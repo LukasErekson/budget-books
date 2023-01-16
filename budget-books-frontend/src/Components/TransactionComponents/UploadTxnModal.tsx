@@ -37,7 +37,7 @@ const UploadTxnModal: FC<addTxnModalProps> = (
 ): JSX.Element => {
   const thunkDispatch = useThunkDispatch();
   const activeAccount: Account = useSelector(
-    (state: RootState) => state.pageSlice.activeAccount
+    (state: RootState) => state.pageSlice.categorizationPage.activeAccount
   );
 
   const [oneColumnAmounts, setOneColumnAmounts]: [number, Function] =

@@ -1,28 +1,34 @@
 import { createSlice } from '@reduxjs/toolkit';
 import Account from '../AccountComponents/accountTSTypes';
 
-const homePage: string = 'Categorize Transactions';
 const initialActiveAccount: Account | any = {};
 
+/**
+ * Redux slice for general page state management that doesn't fit
+ * logically into the other slices. e.g - Active Account for the
+ * Categorize Transactions page.
+ */
 export const pageSlice = createSlice({
   name: 'pageSlice',
   initialState: {
-    activePage: homePage,
-    activeAccount: initialActiveAccount,
+    categorizationPage: {
+      activeAccount: initialActiveAccount,
+    },
   },
   reducers: {
-    changeActivePage: (state, action) => {
-      const newPage: string = action.payload.activePage;
-
-      return { ...state, activePage: newPage };
-    },
     changeActiveAccount: (state, action) => {
       const newActiveAccount: Account = action.payload;
-      return { ...state, activeAccount: newActiveAccount };
+      return {
+        ...state,
+        categorizationPage: {
+          ...state.categorizationPage,
+          activeAccount: newActiveAccount,
+        },
+      };
     },
   },
 });
 
-export const { changeActivePage, changeActiveAccount } = pageSlice.actions;
+export const { changeActiveAccount } = pageSlice.actions;
 
 export default pageSlice.reducer;

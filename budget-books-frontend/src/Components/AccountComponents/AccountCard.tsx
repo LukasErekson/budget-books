@@ -16,7 +16,7 @@ function AccountCard(props: {
     (balance > 0.0 && props.accountData.debit_inc === 0);
 
   const activeAccountID: Number = useSelector(
-    (state: RootState) => state.pageSlice.activeAccount.id
+    (state: RootState) => state.pageSlice.categorizationPage.activeAccount.id
   );
 
   const uncategorizedTransactionsList: any[] = useSelector((state: any) =>

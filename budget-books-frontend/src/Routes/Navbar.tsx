@@ -1,27 +1,28 @@
 import React from 'react';
 import { GiWhiteBook } from 'react-icons/gi';
+import { Link } from 'react-router-dom';
 
 function Navbar(): JSX.Element {
   return (
     <nav>
       <ul className='nav-list'>
         <li className='nav-list-item'>
-          <a href='/'>
+          <Link to='/'>
             <GiWhiteBook style={{ width: '1.5rem', height: '1.5rem' }} /> Budget
             Books
-          </a>
+          </Link>
         </li>
         <li className='nav-list-item'>
-          <a href='/'>Categorize Transactions</a>
+          <Link to='/categorize-transactions'>Categorize Transactions</Link>
         </li>
         <li className='nav-list-item'>
-          <a href='/'>Balance Sheet</a>
+          <Link to='/balance-sheet'>Balance Sheet</Link>
         </li>
         <li className='nav-list-item'>
-          <a href='/'>Expense Report</a>
+          <Link to='/expense-report'>Expense Report</Link>
         </li>
         <li className='nav-list-item'>
-          <a href='/'>Account Settings</a>
+          <Link to='/account/settings'>Account Settings</Link>
         </li>
       </ul>
     </nav>
