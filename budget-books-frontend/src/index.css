@@ -341,7 +341,7 @@ nav a:hover {
 .categorize-txn-form {
   cursor: pointer;
   display: grid;
-  grid-template-columns: 10ch 1fr 2fr 12ch 1fr 0.5fr;
+  grid-template-columns: 7ch 10ch 1fr 2fr 12ch 1fr 0.5fr;
   gap: 2rem;
   row-gap: 0.5rem;
   padding: 0.5rem 1rem 0rem 1rem;

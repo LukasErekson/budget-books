@@ -17,6 +17,9 @@ function CategorizeTxnForm(props: {
   transacitonData: Transaction;
   debitInc: boolean;
   account: Account;
+  isSelected: number;
+  selectTransaction: Function;
+  unSelectTransaction: Function;
 }): JSX.Element {
   const {
     id,
@@ -41,6 +44,10 @@ function CategorizeTxnForm(props: {
   if (accounts.indexOf(props.account) === 0) {
     firstAccountIdx = 1;
   }
+
+  const [isSelected, setIsSelected]: [number, Function] = useState(
+    props.isSelected
+  );
 
   const [category, setCategory]: [{ label: string; value: number }, Function] =
     useState({
@@ -137,6 +144,23 @@ function CategorizeTxnForm(props: {
       key={id}
       onClick={toggleDetailVisibility}
     >
+      <span className='categorize-txn-item'>
+        <input
+          type='checkbox'
+          name='selected'
+          id={`$checkbox-{id}`}
+          value={isSelected}
+          checked={isSelected === 1}
+          onChange={() => {
+            setIsSelected((prev: number) => (prev + 1) % 2);
+            if (isSelected) {
+              props.unSelectTransaction(props.transacitonData);
+              return;
+            }
+            props.selectTransaction(props.transacitonData);
+          }}
+        />
+      </span>{' '}
       <span className='categorize-txn-item'>
         {pyToJsDate(transaction_date)}
       </span>{' '}

@@ -36,6 +36,30 @@ function CategorizeList(props: {
 
   const debitInc = props.account.debit_inc === 1;
 
+  const [selectedTransactions, setSelectedTransactions]: [
+    Transaction[],
+    Function
+  ] = useState([]);
+
+  function addSelectedTransaction(newTransaction: Transaction): void {
+    if (
+      !selectedTransactions
+        .map((txn: Transaction) => txn.id)
+        .includes(newTransaction.id)
+    ) {
+      setSelectedTransactions((prev: Transaction[]) => {
+        prev.push(newTransaction);
+        return prev;
+      });
+    }
+  }
+
+  function removeSelectedTransaction(removeTransaction: Transaction): void {
+    setSelectedTransactions((prev: Transaction[]) =>
+      prev.filter((txn: Transaction) => txn.id !== removeTransaction.id)
+    );
+  }
+
   function sortTransactionsFunc(
     mode: string,
     ascending: boolean = true
@@ -119,6 +143,7 @@ function CategorizeList(props: {
     <>
       <div className='txn-form-container'>
         <div className='categorize-txn-form txn-form-header-row'>
+          <span></span>
           <span
             className='categorize-txn-item txn-form-header'
             onClick={() => sortBy('date')}
@@ -208,6 +233,9 @@ function CategorizeList(props: {
                 transacitonData={txn}
                 debitInc={debitInc}
                 account={props.account}
+                isSelected={selectedTransactions.includes(txn) ? 1 : 0}
+                selectTransaction={addSelectedTransaction}
+                unSelectTransaction={removeSelectedTransaction}
               />
             ))
         ) : (
