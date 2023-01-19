@@ -162,7 +162,6 @@ nav a:hover {
 .accounts-header-title {
   width: 0;
   height: 0;
-  z-index: 5;
   position: relative;
   left: 0.5rem;
 

@@ -16,8 +16,11 @@ import CategorizeList from '../Components/TransactionComponents/CategorizeTransa
 import { IoMdRefresh } from 'react-icons/io';
 import { FiPlusCircle } from 'react-icons/fi';
 import { BiUpload } from 'react-icons/bi';
+import { RiCheckboxMultipleFill } from 'react-icons/ri';
 import ButtonWithToolTip from '../Components/SharedComponents/ButtonWithToolTip';
 import UploadTxnModal from '../Components/TransactionComponents/UploadTxnModal';
+import BulkActionModal from '../Components/TransactionComponents/BulkActionModal';
+import Transaction from '../Components/TransactionComponents/transactionTSTypes';
 
 function CategorizeTransactionsPage() {
   const activeAccount: Account = useSelector(
@@ -33,12 +36,43 @@ function CategorizeTransactionsPage() {
   const [showUploadTxnModal, setShowUploadTxnModal]: [boolean, Function] =
     useState(false);
 
+  const [showBulkActionModal, setShowBulkActionModal]: [boolean, Function] =
+    useState(false);
+
+  const [selectedTransactions, setSelectedTransactions]: [
+    Transaction[],
+    Function
+  ] = useState([]);
+
+  function addSelectedTransaction(newTransaction: Transaction): void {
+    if (
+      !selectedTransactions
+        .map((txn: Transaction) => txn.id)
+        .includes(newTransaction.id)
+    ) {
+      setSelectedTransactions((prev: Transaction[]) => {
+        prev.push(newTransaction);
+        return prev;
+      });
+    }
+  }
+
+  function removeSelectedTransaction(removeTransaction: Transaction): void {
+    setSelectedTransactions((prev: Transaction[]) =>
+      prev.filter((txn: Transaction) => txn.id !== removeTransaction.id)
+    );
+  }
+
   const [accountTransactions, setAccountTransactions]: [JSX.Element, Function] =
     useState(
       <CategorizeList
         account={activeAccount}
         showAddNewTxn={showaddNewTxn}
         setShowAddNewTxn={setShowAddNewTxn}
+        selectedTransactions={selectedTransactions}
+        setSelectedTransactions={setSelectedTransactions}
+        addSelectedTransaction={addSelectedTransaction}
+        removeSelectedTransaction={removeSelectedTransaction}
       />
     );
 
@@ -60,6 +94,10 @@ function CategorizeTransactionsPage() {
         account={activeAccount}
         showAddNewTxn={showaddNewTxn}
         setShowAddNewTxn={setShowAddNewTxn}
+        selectedTransactions={selectedTransactions}
+        setSelectedTransactions={setSelectedTransactions}
+        addSelectedTransaction={addSelectedTransaction}
+        removeSelectedTransaction={removeSelectedTransaction}
       />
     );
   }, [activeAccount, showaddNewTxn]);
@@ -87,6 +125,14 @@ function CategorizeTransactionsPage() {
           <label htmlFor='search-cat-txns'>Search Transactions: </label>
           <input type='text' className='search-categorize-txns' />
         </div>
+
+        <ButtonWithToolTip
+          onClick={() => setShowBulkActionModal(true)}
+          toolTipContent='Bulk Actions'
+          className='bulk-actions-btn'
+        >
+          <RiCheckboxMultipleFill />
+        </ButtonWithToolTip>
 
         <ButtonWithToolTip
           onClick={() => setShowAddNewTxn(true)}
@@ -119,6 +165,14 @@ function CategorizeTransactionsPage() {
         onRequestClose={() => {
           setShowUploadTxnModal(false);
         }}
+      />
+
+      <BulkActionModal
+        isOpen={showBulkActionModal}
+        onRequestClose={() => {
+          setShowBulkActionModal(false);
+        }}
+        selectedTransactions={selectedTransactions}
       />
     </>
   );
