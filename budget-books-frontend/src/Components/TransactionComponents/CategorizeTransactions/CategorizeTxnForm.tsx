@@ -140,7 +140,10 @@ function CategorizeTxnForm(props: {
 
   return (
     <div
-      className='categorize-txn-form'
+      className={
+        'categorize-txn-form ' +
+        (isSelected === 1 ? 'categorize-txn-form-selected' : '')
+      }
       key={id}
       onClick={toggleDetailVisibility}
     >

@@ -7,6 +7,8 @@
   --primary: rgb(0, 140, 255);
   --dark-primary: rgb(0, 100, 182);
   --dark-primary-alpha: rgba(0, 100, 182, 0.5);
+  --selected: rgba(0, 0, 0, 0.2);
+  --selected-dark: rgba(0, 0, 0, 0.25);
   --tooltip-bg: rgb(80, 80, 80);
 }
 
@@ -361,6 +363,22 @@ nav a:hover {
 .categorize-txn-form:nth-child(2n + 1):hover {
   background-color: rgba(0, 0, 0, 0.175);
   transition: background-color 0.25s;
+}
+
+.categorize-txn-form-selected {
+  background-color: var(--selected);
+}
+
+.categorize-txn-form-selected:hover {
+  background-color: var(--selected-dark);
+}
+
+.categorize-txn-form-selected:nth-child(2n + 1) {
+  background-color: var(--selected);
+}
+
+.categorize-txn-form-selected:nth-child(2n + 1):hover {
+  background-color: var(--selected-dark);
 }
 
 .categorize-txn-form .transaction-details {
