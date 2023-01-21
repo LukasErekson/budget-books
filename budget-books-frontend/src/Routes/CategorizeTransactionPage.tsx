@@ -173,6 +173,7 @@ function CategorizeTransactionsPage() {
           setShowBulkActionModal(false);
         }}
         selectedTransactions={selectedTransactions}
+        removeSelectedTransactions={removeSelectedTransaction}
       />
     </>
   );

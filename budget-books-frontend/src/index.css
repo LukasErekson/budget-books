@@ -526,6 +526,22 @@ nav a:hover {
     sans-serif;
 }
 
+.bulk-categorize-form {
+  display: grid;
+  grid-template-columns: 1fr 20ch;
+  align-items: center;
+}
+
+.bulk-action-header {
+  margin: 0;
+}
+
+.bulk-action-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .add-txn-btn {
   background: none;
   border: 0px;
@@ -534,10 +550,9 @@ nav a:hover {
 
   color: var(--primary);
 
-  width: 1.75rem;
-  height: 1.75rem;
-
   padding: 0.25rem;
+
+  justify-self: center;
 }
 
 .add-txn-controls {

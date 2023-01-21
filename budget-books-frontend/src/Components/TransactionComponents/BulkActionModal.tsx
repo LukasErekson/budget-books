@@ -7,7 +7,9 @@ import { useSelector } from 'react-redux';
 import { useThunkDispatch } from '../../hooks';
 import { RootState } from '../../store';
 import AccountSelect from '../AccountComponents/AccountSelect';
+import { addNewAccount } from '../AccountComponents/accountThunks';
 import Account from '../AccountComponents/accountTSTypes';
+import { addManyTransactionCategories } from './transactionThunks';
 import Transaction from './transactionTSTypes';
 
 type BulkActionModalProps = {
@@ -17,6 +19,7 @@ type BulkActionModalProps = {
     | React.KeyboardEvent<Element>
     | any;
   selectedTransactions: Transaction[];
+  removeSelectedTransactions: Function; // For cleaning up upon submit.
 };
 
 const BulkActionModal: FC<BulkActionModalProps> = (
@@ -40,6 +43,33 @@ const BulkActionModal: FC<BulkActionModalProps> = (
 
   const [inputCategory, setInputCategory]: [string, Function] = useState('');
 
+  // Clean up selected Transactions/close the modal on compelted
+  // action.
+  function bulkActionComplete() {
+    // Remove transactions that have been posted
+    relevantSelectedTransactions.forEach((transaction: Transaction) => {
+      props.removeSelectedTransactions(transaction);
+    });
+
+    props.onRequestClose();
+  }
+
+  function postCategorizeTransactions() {
+    if (category.value === -1) {
+      thunkDispatch(addNewAccount(category.label, category, true));
+    }
+
+    thunkDispatch(
+      addManyTransactionCategories(
+        activeAccount,
+        relevantSelectedTransactions,
+        category.value
+      )
+    );
+
+    bulkActionComplete();
+  }
+
   return (
     <Modal
       isOpen={props.isOpen}
@@ -61,22 +91,30 @@ const BulkActionModal: FC<BulkActionModalProps> = (
       />
       <h3>Bulk Actions</h3>
       <h4>
-        {relevantSelectedTransactions.length} Selected Transactions for{' '}
-        {activeAccount.name}
+        The following will apply the action to{' '}
+        <span className='alert'>{relevantSelectedTransactions.length}</span>{' '}
+        selected transaction
+        {relevantSelectedTransactions.length === 1 ? '' : 's'} for{' '}
+        <span className='alert'>{activeAccount.name}</span>
       </h4>
 
-      <div className='bulk-categorize-form'>
-        <AccountSelect
-          setCategory={setCategory}
-          category={category}
-          setInputCategory={setInputCategory}
-          inputCategory={inputCategory}
-          excludeAccount={activeAccount}
-        />
-        <button>Categorize</button>
+      <div className='bulk-action-form'>
+        <h5 className='bulk-action-header'>Categorize</h5>
+        <div className='bulk-categorize-form'>
+          <AccountSelect
+            setCategory={setCategory}
+            category={category}
+            setInputCategory={setInputCategory}
+            inputCategory={inputCategory}
+            excludeAccount={activeAccount}
+          />
+          <button className='add-txn-btn' onClick={postCategorizeTransactions}>
+            Categorize
+          </button>
+        </div>
+        <h5 className='bulk-action-header'>Delete</h5>
+        <button>Delete</button>
       </div>
-
-      <button>Delete</button>
     </Modal>
   );
 };

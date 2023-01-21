@@ -81,6 +81,34 @@ export const transactionSlice = createSlice({
         isTransactionsLoaded: true,
       };
     },
+    categorizeManyTransactions: (state, action) => {
+      const accountID: number = action.payload.accountID;
+      const transactionInfo: { id: number; debitOrCredit: string }[] =
+        action.payload.transactionInfo;
+      const categoryID: number = action.payload.categoryID;
+
+      // Deep copy of the state's transactions
+      let stateTransactions: { [id: number | string]: Transaction[] } =
+        JSON.parse(JSON.stringify(state.transactionList));
+
+      transactionInfo.forEach((tInfo) => {
+        let indexOfTransaction = stateTransactions[accountID]
+          .map((trxn: Transaction) => trxn.id)
+          .indexOf(tInfo.id);
+
+        stateTransactions[accountID][indexOfTransaction][
+          tInfo.debitOrCredit === 'credit'
+            ? 'credit_account_id'
+            : 'debit_account_id'
+        ] = categoryID;
+      });
+
+      return {
+        ...state,
+        transactionList: stateTransactions,
+        isTransactionsLoaded: true,
+      };
+    },
     deleteTransaction: (state, action) => {
       const {
         idsToDelete,
@@ -111,6 +139,7 @@ export const {
   setTransactions,
   setTransactionsIsLoaded,
   categorizeTransaction,
+  categorizeManyTransactions,
   deleteTransaction,
 } = transactionSlice.actions;
 
