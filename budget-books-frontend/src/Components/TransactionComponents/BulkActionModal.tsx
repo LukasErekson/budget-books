@@ -9,7 +9,10 @@ import { RootState } from '../../store';
 import AccountSelect from '../AccountComponents/AccountSelect';
 import { addNewAccount } from '../AccountComponents/accountThunks';
 import Account from '../AccountComponents/accountTSTypes';
-import { addManyTransactionCategories } from './transactionThunks';
+import {
+  addManyTransactionCategories,
+  deleteTransactions,
+} from './transactionThunks';
 import Transaction from './transactionTSTypes';
 
 type BulkActionModalProps = {
@@ -70,6 +73,12 @@ const BulkActionModal: FC<BulkActionModalProps> = (
     bulkActionComplete();
   }
 
+  function deleteAllTransactions() {
+    thunkDispatch(deleteTransactions(relevantSelectedTransactions));
+
+    bulkActionComplete();
+  }
+
   return (
     <Modal
       isOpen={props.isOpen}
@@ -113,7 +122,28 @@ const BulkActionModal: FC<BulkActionModalProps> = (
           </button>
         </div>
         <h5 className='bulk-action-header'>Delete</h5>
-        <button>Delete</button>
+        <div className='bulk-delete-form'>
+          <p className='warn center'>
+            <IoMdWarning style={{ fontSize: '2rem', margin: '-.5rem' }} />
+          </p>
+          <p className='warn center'>
+            By hitting "Delete All" below, you are deleting all of the selected
+            transactions. There is no undoing this action.
+          </p>
+          <div className='delete-modal-options'>
+            <button
+              onClick={() => {
+                deleteAllTransactions();
+              }}
+              className='delete-modal-yes'
+            >
+              Delete All
+            </button>
+            <button onClick={props.onRequestClose} className='delete-modal-no'>
+              Cancel
+            </button>
+          </div>
+        </div>
       </div>
     </Modal>
   );

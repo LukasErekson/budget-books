@@ -62,10 +62,10 @@ const DeleteTxnModal: FC<deleteTxnModalProps> = (
         </p>
       </div>
 
-      <p className='alert center'>
+      <p className='warn center'>
         <IoMdWarning style={{ fontSize: '2rem', margin: '-.5rem' }} />
       </p>
-      <p className='alert center'>There is no undoing this action.</p>
+      <p className='warn center'>There is no undoing this action.</p>
 
       <div className='delete-modal-options'>
         <button
