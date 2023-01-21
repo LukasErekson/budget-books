@@ -117,7 +117,10 @@ const BulkActionModal: FC<BulkActionModalProps> = (
             inputCategory={inputCategory}
             excludeAccount={activeAccount}
           />
-          <button className='add-txn-btn' onClick={postCategorizeTransactions}>
+          <button
+            className='add-txn-btn bulk-add-txn-btn'
+            onClick={postCategorizeTransactions}
+          >
             Categorize
           </button>
         </div>

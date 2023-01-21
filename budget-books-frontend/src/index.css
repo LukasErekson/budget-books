@@ -547,7 +547,8 @@ nav a:hover {
   align-items: center;
 }
 
-.bulk-action-delete {
+.bulk-add-txn-btn {
+  text-decoration: underline;
 }
 
 .add-txn-btn {
