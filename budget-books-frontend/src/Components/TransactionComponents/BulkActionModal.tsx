@@ -28,6 +28,13 @@ const BulkActionModal: FC<BulkActionModalProps> = (
     (state: RootState) => state.pageSlice.categorizationPage.activeAccount
   );
 
+  const relevantSelectedTransactions: Transaction[] =
+    props.selectedTransactions.filter(
+      (transaction) =>
+        transaction.debit_account_id === activeAccount.id ||
+        transaction.credit_account_id === activeAccount.id
+    );
+
   const [category, setCategory]: [{ label: string; value: number }, Function] =
     useState({ label: '', value: -2 });
 
@@ -53,7 +60,10 @@ const BulkActionModal: FC<BulkActionModalProps> = (
         className='close-modal-x'
       />
       <h3>Bulk Actions</h3>
-      <h4>{props.selectedTransactions.length} Selected Transactions</h4>
+      <h4>
+        {relevantSelectedTransactions.length} Selected Transactions for{' '}
+        {activeAccount.name}
+      </h4>
 
       <div className='bulk-categorize-form'>
         <AccountSelect
