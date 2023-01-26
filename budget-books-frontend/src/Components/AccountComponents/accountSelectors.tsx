@@ -25,7 +25,8 @@ export const selectAccountTypesUsed = (state: RootState): string[] =>
 
 // Return an array of objects ordered by group - good for passing into the "options" parameter of <Select />
 export const selectAccountOptions = (
-  state: RootState
+  state: RootState,
+  excludeAccount?: Account
 ): OptionsOrGroups<Number, any> => {
   const groups: string[] = selectAccountTypeGroups(state);
 
@@ -60,10 +61,12 @@ export const selectAccountOptions = (
     if (!(accountGroup in groupings)) {
       groupings[accountGroup] = [];
     }
-    groupings[accountGroup].push({
-      label: row.name,
-      value: row.id,
-    });
+    if (row.id !== excludeAccount?.id) {
+      groupings[accountGroup].push({
+        label: row.name,
+        value: row.id,
+      });
+    }
   });
 
   let optionGroups: OptionsOrGroups<Number, any> = orderedGroups.map(

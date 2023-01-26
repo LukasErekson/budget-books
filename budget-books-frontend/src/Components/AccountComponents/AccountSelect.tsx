@@ -16,7 +16,7 @@ function AccountSelect(props: {
   excludeAccount: Account;
 }): JSX.Element {
   let options: OptionsOrGroups<Number, any> = useSelector((state: any) =>
-    selectAccountOptions(state)
+    selectAccountOptions(state, props.excludeAccount)
   );
 
   const accountNames: string[] = useSelector((state: RootState) =>
