@@ -92,7 +92,7 @@ const BulkActionModal: FC<BulkActionModalProps> = (
           marginRight: 'auto',
         },
       }}
-      portalClassName='delete-txn-modal'
+      portalClassName='bulk-txn-modal'
     >
       <AiOutlineClose
         onClick={props.onRequestClose}
@@ -108,43 +108,50 @@ const BulkActionModal: FC<BulkActionModalProps> = (
       </h4>
 
       <div className='bulk-action-form'>
-        <h5 className='bulk-action-header'>Categorize</h5>
-        <div className='bulk-categorize-form'>
-          <AccountSelect
-            setCategory={setCategory}
-            category={category}
-            setInputCategory={setInputCategory}
-            inputCategory={inputCategory}
-            excludeAccount={activeAccount}
-          />
-          <button
-            className='add-txn-btn bulk-add-txn-btn'
-            onClick={postCategorizeTransactions}
-          >
-            Categorize
-          </button>
-        </div>
-        <h5 className='bulk-action-header'>Delete</h5>
-        <div className='bulk-delete-form'>
-          <p className='warn center'>
-            <IoMdWarning style={{ fontSize: '2rem', margin: '-.5rem' }} />
-          </p>
-          <p className='warn center'>
-            By hitting "Delete All" below, you are deleting all of the selected
-            transactions. There is no undoing this action.
-          </p>
-          <div className='delete-modal-options'>
+        <div className='bulk-action-group'>
+          <h5 className='bulk-action-header'>Categorize</h5>
+          <div className='bulk-categorize-form'>
+            <AccountSelect
+              setCategory={setCategory}
+              category={category}
+              setInputCategory={setInputCategory}
+              inputCategory={inputCategory}
+              excludeAccount={activeAccount}
+            />
             <button
-              onClick={() => {
-                deleteAllTransactions();
-              }}
-              className='delete-modal-yes'
+              className='add-txn-btn bulk-add-txn-btn'
+              onClick={postCategorizeTransactions}
             >
-              Delete All
+              Categorize
             </button>
-            <button onClick={props.onRequestClose} className='delete-modal-no'>
-              Cancel
-            </button>
+          </div>
+        </div>
+        <div className='bulk-action-group'>
+          <h5 className='bulk-action-header'>Delete</h5>
+          <div className='bulk-delete-form'>
+            <p className='warn center'>
+              <IoMdWarning style={{ fontSize: '2rem', margin: '-.5rem' }} />
+            </p>
+            <p className='warn center'>
+              By hitting "Delete All" below, you are deleting all of the
+              selected transactions. There is no undoing this action.
+            </p>
+            <div className='delete-modal-options'>
+              <button
+                onClick={() => {
+                  deleteAllTransactions();
+                }}
+                className='delete-modal-yes'
+              >
+                Delete All
+              </button>
+              <button
+                onClick={props.onRequestClose}
+                className='delete-modal-no'
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>

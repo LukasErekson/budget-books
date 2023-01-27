@@ -537,8 +537,17 @@ nav a:hover {
   gap: 1rem;
 }
 
+.bulk-action-group {
+  box-shadow: 1px 1px 5px var(--quarter-shadow);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+
 .bulk-action-header {
-  margin: 0;
+  margin: -0.5rem 0rem 1rem 0rem;
+  font-size: 0.9rem;
+  text-align: left;
 }
 
 .bulk-categorize-form {
@@ -591,7 +600,7 @@ nav a:hover {
   padding: 0rem 2rem;
 }
 
-.delete-txn-modal .delete-modal-options {
+.delete-modal-options {
   display: flex;
   justify-content: center;
 
