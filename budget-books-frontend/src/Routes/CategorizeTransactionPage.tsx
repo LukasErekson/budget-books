@@ -127,7 +127,13 @@ function CategorizeTransactionsPage() {
         </div>
 
         <ButtonWithToolTip
-          onClick={() => setShowBulkActionModal(true)}
+          onClick={() => {
+            selectedTransactions.filter(
+              (transaction) =>
+                transaction.debit_account_id === activeAccount.id ||
+                transaction.credit_account_id === activeAccount.id
+            ).length !== 0 && setShowBulkActionModal(true);
+          }}
           toolTipContent='Bulk Actions'
           className='bulk-actions-btn'
         >
