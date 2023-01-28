@@ -21,6 +21,8 @@ import ButtonWithToolTip from '../Components/SharedComponents/ButtonWithToolTip'
 import UploadTxnModal from '../Components/TransactionComponents/UploadTxnModal';
 import BulkActionModal from '../Components/TransactionComponents/BulkActionModal';
 import Transaction from '../Components/TransactionComponents/transactionTSTypes';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function CategorizeTransactionsPage() {
   const activeAccount: Account = useSelector(
@@ -125,14 +127,21 @@ function CategorizeTransactionsPage() {
           <label htmlFor='search-cat-txns'>Search Transactions: </label>
           <input type='text' className='search-categorize-txns' />
         </div>
-
         <ButtonWithToolTip
           onClick={() => {
-            selectedTransactions.filter(
-              (transaction) =>
-                transaction.debit_account_id === activeAccount.id ||
-                transaction.credit_account_id === activeAccount.id
-            ).length !== 0 && setShowBulkActionModal(true);
+            if (
+              selectedTransactions.filter(
+                (transaction) =>
+                  transaction.debit_account_id === activeAccount.id ||
+                  transaction.credit_account_id === activeAccount.id
+              ).length !== 0
+            ) {
+              setShowBulkActionModal(true);
+            } else {
+              return toast.warning(
+                'Bulk actions require at least 1 transaction to be selected.'
+              );
+            }
           }}
           toolTipContent='Bulk Actions'
           className='bulk-actions-btn'
