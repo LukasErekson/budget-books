@@ -629,8 +629,14 @@ nav a:hover {
   transition: 0.25s;
 }
 
+button.delete-modal-yes {
+  border-color: var(--warn-color);
+  color: var(--warn-color);
+}
+
 button.delete-modal-yes:hover {
   background-color: var(--warn-color);
   color: white;
+  border-color: var(--warn-color);
   transition: 0.25s;
 }
