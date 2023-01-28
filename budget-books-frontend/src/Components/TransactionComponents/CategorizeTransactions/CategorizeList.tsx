@@ -18,6 +18,10 @@ function CategorizeList(props: {
   account: Account;
   showAddNewTxn?: Boolean;
   setShowAddNewTxn: Function;
+  selectedTransactions: Transaction[];
+  setSelectedTransactions: Function;
+  addSelectedTransaction: Function;
+  removeSelectedTransaction: Function;
 }): JSX.Element {
   const transactions: Transaction[] = useSelector((state: RootState) =>
     props.account.id
@@ -119,6 +123,7 @@ function CategorizeList(props: {
     <>
       <div className='txn-form-container'>
         <div className='categorize-txn-form txn-form-header-row'>
+          <span></span>
           <span
             className='categorize-txn-item txn-form-header'
             onClick={() => sortBy('date')}
@@ -208,6 +213,9 @@ function CategorizeList(props: {
                 transacitonData={txn}
                 debitInc={debitInc}
                 account={props.account}
+                isSelected={props.selectedTransactions.includes(txn) ? 1 : 0}
+                selectTransaction={props.addSelectedTransaction}
+                unSelectTransaction={props.removeSelectedTransaction}
               />
             ))
         ) : (

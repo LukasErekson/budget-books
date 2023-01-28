@@ -4,9 +4,12 @@
   --negative-num: darkred;
   --positive-num: darkgreen;
   --alert-color: rgb(231, 127, 0);
+  --warn-color: rgb(197, 0, 46);
   --primary: rgb(0, 140, 255);
   --dark-primary: rgb(0, 100, 182);
   --dark-primary-alpha: rgba(0, 100, 182, 0.5);
+  --selected: rgba(0, 0, 0, 0.2);
+  --selected-dark: rgba(0, 0, 0, 0.25);
   --tooltip-bg: rgb(80, 80, 80);
 }
 
@@ -39,6 +42,10 @@ code {
 
 .alert {
   color: var(--alert-color);
+}
+
+.warn {
+  color: var(--warn-color);
 }
 
 .center {
@@ -160,7 +167,6 @@ nav a:hover {
 .accounts-header-title {
   width: 0;
   height: 0;
-  z-index: 5;
   position: relative;
   left: 0.5rem;
 
@@ -341,7 +347,7 @@ nav a:hover {
 .categorize-txn-form {
   cursor: pointer;
   display: grid;
-  grid-template-columns: 10ch 1fr 2fr 12ch 1fr 0.5fr;
+  grid-template-columns: 7ch 10ch 1fr 2fr 12ch 1fr 0.5fr;
   gap: 2rem;
   row-gap: 0.5rem;
   padding: 0.5rem 1rem 0rem 1rem;
@@ -361,6 +367,22 @@ nav a:hover {
 .categorize-txn-form:nth-child(2n + 1):hover {
   background-color: rgba(0, 0, 0, 0.175);
   transition: background-color 0.25s;
+}
+
+.categorize-txn-form-selected {
+  background-color: var(--selected);
+}
+
+.categorize-txn-form-selected:hover {
+  background-color: var(--selected-dark);
+}
+
+.categorize-txn-form-selected:nth-child(2n + 1) {
+  background-color: var(--selected);
+}
+
+.categorize-txn-form-selected:nth-child(2n + 1):hover {
+  background-color: var(--selected-dark);
 }
 
 .categorize-txn-form .transaction-details {
@@ -509,6 +531,35 @@ nav a:hover {
     sans-serif;
 }
 
+.bulk-action-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bulk-action-group {
+  box-shadow: 1px 1px 5px var(--quarter-shadow);
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.bulk-action-header {
+  margin: -0.5rem 0rem 1rem 0rem;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.bulk-categorize-form {
+  display: grid;
+  grid-template-columns: 1fr 20ch;
+  align-items: center;
+}
+
+.bulk-add-txn-btn {
+  text-decoration: underline;
+}
+
 .add-txn-btn {
   background: none;
   border: 0px;
@@ -517,10 +568,9 @@ nav a:hover {
 
   color: var(--primary);
 
-  width: 1.75rem;
-  height: 1.75rem;
-
   padding: 0.25rem;
+
+  justify-self: center;
 }
 
 .add-txn-controls {
@@ -550,7 +600,7 @@ nav a:hover {
   padding: 0rem 2rem;
 }
 
-.delete-txn-modal .delete-modal-options {
+.delete-modal-options {
   display: flex;
   justify-content: center;
 
@@ -568,7 +618,7 @@ nav a:hover {
 
   border-radius: 10px;
 
-  width: 8ch;
+  min-width: 12ch;
 }
 
 .delete-modal-options button:hover {
@@ -579,8 +629,14 @@ nav a:hover {
   transition: 0.25s;
 }
 
+button.delete-modal-yes {
+  border-color: var(--warn-color);
+  color: var(--warn-color);
+}
+
 button.delete-modal-yes:hover {
-  background-color: var(--alert-color);
+  background-color: var(--warn-color);
   color: white;
+  border-color: var(--warn-color);
   transition: 0.25s;
 }

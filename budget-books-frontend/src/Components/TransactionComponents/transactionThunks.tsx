@@ -3,6 +3,7 @@ import {
   setTransactionsIsLoaded,
   categorizeTransaction,
   deleteTransaction,
+  categorizeManyTransactions,
 } from './transactionSlice';
 import DataFetch from '../../Common/DataFetch';
 import BadResponseError from '../../Common/BadResponseError';
@@ -127,6 +128,68 @@ export const addTransactionCategory =
             transactionID: transaction_id,
             categoryID: category_id,
             debitOrCredit: debit_or_credit,
+          })
+        );
+
+        dispatch(fetchAccountBalances([account.id, category_id]));
+      }
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        console.log('Aborted');
+      }
+      console.log(error.status, error.message, error.serverError);
+    }
+  };
+
+export const addManyTransactionCategories =
+  (account: Account, transactions: Transaction[], category_id: number) =>
+  async (dispatch: AppDispatch) => {
+    try {
+      const postableTransactions: {
+        transaction_id: number;
+        category_id: number;
+        debit_or_credit: 'credit' | 'debit';
+      }[] = transactions.map((transaction) => ({
+        transaction_id: transaction.id,
+        category_id,
+        debit_or_credit:
+          transaction.debit_account_id !== 'undefined' ? 'credit' : 'debit',
+      }));
+
+      const {
+        responsePromise,
+      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+        'PUT',
+        `/api/transactions`,
+        {
+          transactions: postableTransactions,
+        }
+      );
+
+      const response: Response = await responsePromise;
+
+      if (response.ok) {
+        const responseData: any = await response.json();
+
+        const responseDataParsed: any = JSON.parse(responseData);
+
+        if (!(responseDataParsed.message === 'SUCCESS')) {
+          throw new BadResponseError(
+            response.status,
+            responseDataParsed.message,
+            responseDataParsed.serverError
+          );
+        }
+
+        dispatch(setTransactionsIsLoaded({ loaded: false }));
+        dispatch(
+          categorizeManyTransactions({
+            accountID: account.id,
+            transactionInfo: postableTransactions.map((transaction) => ({
+              id: transaction.transaction_id,
+              debitOrCredit: transaction.debit_or_credit,
+            })),
+            categoryID: category_id,
           })
         );
 

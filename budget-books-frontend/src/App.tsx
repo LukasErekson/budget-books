@@ -6,6 +6,7 @@ import CategorizeTransactionsPage from './Routes/CategorizeTransactionPage';
 import BalanceSheetPage from './Routes/BalanceSheetPage';
 import ExpenseReportPage from './Routes/ExpenseReportPage';
 import AccountSettingsPage from './Routes/AccountSettingsPage';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path='/expense-report' element={<ExpenseReportPage />} />
         <Route path='/account/settings' element={<AccountSettingsPage />} />
       </Routes>
+      <ToastContainer />
     </div>
   );
 }
