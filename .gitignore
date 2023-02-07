@@ -1,8 +1,9 @@
 *.vscode/*
 *.pytest_cache/*
 **/__pycache__/*
+/python_backend
 
-**/.prettierrc
+.prettierrc
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -12,6 +13,7 @@
 
 # testing
 /coverage
+/sample_statements
 
 # production
 /build
