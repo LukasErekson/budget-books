@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../stores/store';
+
 import Account from '../../Accounts/types/types';
-import AddTxnForm from './AddTxnForm';
-import CategorizeTxnForm from './CategorizeTxnForm';
-import { selectUncategorizedTransactions } from '../../Transactions/stores/transactionSelectors';
 import Transaction from '../../Transactions/types/types';
 
 import { TbSortAscending, TbSortDescending } from 'react-icons/tb';
+
+import { AddTxnForm } from '../';
+import { CategorizeTxnForm } from '../';
+
+import { RootState } from '../../../stores/store';
+import { selectUncategorizedTransactions } from '../../Transactions/stores/transactionSelectors';
 
 type sortDataObj = {
   mode: string;

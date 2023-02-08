@@ -10,16 +10,18 @@ import { changeActiveAccount } from '../stores/PageSlice';
 
 import { useSelector } from 'react-redux';
 
-import AccountCardContainer from '../features/Accounts/components/AccountCardContainer';
-import CategorizeList from '../features/CategorizeTransactions/components/CategorizeList';
+import { AccountCardContainer } from '../features/Accounts';
 
 import { IoMdRefresh } from 'react-icons/io';
 import { FiPlusCircle } from 'react-icons/fi';
 import { BiUpload } from 'react-icons/bi';
 import { RiCheckboxMultipleFill } from 'react-icons/ri';
 import ButtonWithToolTip from '../components/ButtonWithToolTip';
-import UploadTxnModal from '../features/CategorizeTransactions/components/UploadTxnModal';
-import BulkActionModal from '../features/CategorizeTransactions/components/BulkActionModal';
+import {
+  UploadTxnModal,
+  CategorizeList,
+  BulkActionModal,
+} from '../features/CategorizeTransactions';
 import Transaction from '../features/Transactions/types/types';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

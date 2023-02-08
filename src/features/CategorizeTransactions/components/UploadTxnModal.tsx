@@ -1,18 +1,18 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
+import Modal from 'react-modal';
 import { Importer, ImporterField } from 'react-csv-importer';
 import 'react-csv-importer/dist/index.css';
 
 import { AiOutlineClose } from 'react-icons/ai';
 
 import Account from '../../Accounts/types/types';
-
-import Modal from 'react-modal';
-import { useSelector } from 'react-redux';
-import { yearMonthDay } from '../../../utils/TextFilters';
-import { useThunkDispatch } from '../../../hooks/hooks';
-import { RootState } from '../../../stores/store';
 import { UploadableTransaction } from '../types/types';
+
+import { yearMonthDay } from '../../../utils/TextFilters';
+import { RootState } from '../../../stores/store';
+import { useThunkDispatch } from '../../../hooks/hooks';
 import { uploadTransactions } from '../../Transactions/stores/transactionThunks';
 
 interface addTxnModalProps {
@@ -32,9 +32,7 @@ type ImportedTransactionData = {
   credit_amount?: number;
 };
 
-const UploadTxnModal: FC<addTxnModalProps> = (
-  props: addTxnModalProps
-): JSX.Element => {
+function UploadTxnModal(props: addTxnModalProps): JSX.Element {
   const thunkDispatch = useThunkDispatch();
   const activeAccount: Account = useSelector(
     (state: RootState) => state.pageSlice.categorizationPage.activeAccount
@@ -171,6 +169,6 @@ const UploadTxnModal: FC<addTxnModalProps> = (
       </Importer>
     </Modal>
   );
-};
+}
 
 export default UploadTxnModal;

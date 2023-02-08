@@ -1,12 +1,15 @@
-import React, { FC } from 'react';
+import React from 'react';
+
+import Modal from 'react-modal';
+
 import { AiOutlineClose } from 'react-icons/ai';
 import { IoMdWarning } from 'react-icons/io';
 
-import Modal from 'react-modal';
+import Transaction from '../../Transactions/types/types';
+
 import { pyToJsDate } from '../../../utils/TextFilters';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { deleteTransactions } from '../../Transactions/stores/transactionThunks';
-import Transaction from '../../Transactions/types/types';
 
 interface deleteTxnModalProps {
   isOpen: boolean;
@@ -18,9 +21,7 @@ interface deleteTxnModalProps {
   amountIsNegative?: boolean;
 }
 
-const DeleteTxnModal: FC<deleteTxnModalProps> = (
-  props: deleteTxnModalProps
-): JSX.Element => {
+function DeleteTxnModal(props: deleteTxnModalProps): JSX.Element {
   const thunkDispatch = useThunkDispatch();
 
   function deleteTransaction(): void {
@@ -83,6 +84,6 @@ const DeleteTxnModal: FC<deleteTxnModalProps> = (
       </div>
     </Modal>
   );
-};
+}
 
 export default DeleteTxnModal;

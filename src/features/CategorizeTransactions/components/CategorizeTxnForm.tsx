@@ -1,17 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { pyToJsDate } from '../../../utils/TextFilters';
-import AccountDropdownSelect from '../../Accounts/components/AccountDropdownSelect';
-import Account from '../../Accounts/types/types';
-import { addNewAccount } from '../../Accounts/stores/accountThunks';
-import Transaction from '../../Transactions/types/types';
-import { useThunkDispatch } from '../../../hooks/hooks';
-import { addTransactionCategory } from '../../Transactions/stores/transactionThunks';
+
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../stores/store';
-import { selectAccounts } from '../../Accounts/stores/accountSelectors';
+
 import { FiTrash2 } from 'react-icons/fi';
+
+import Account from '../../Accounts/types/types';
+import Transaction from '../../Transactions/types/types';
+
+import { RootState } from '../../../stores/store';
+import { useThunkDispatch } from '../../../hooks/hooks';
+import { addNewAccount } from '../../Accounts/stores/accountThunks';
+import { selectAccounts } from '../../Accounts/stores/accountSelectors';
+import { addTransactionCategory } from '../../Transactions/stores/transactionThunks';
+
+import { pyToJsDate } from '../../../utils/TextFilters';
+import { AccountDropdownSelect } from '../../Accounts';
 import ButtonWithToolTip from '../../../components/ButtonWithToolTip';
-import DeleteTxnModal from './DeleteTxnModal';
+import { DeleteTxnModal } from '../';
 
 function CategorizeTxnForm(props: {
   transacitonData: Transaction;

@@ -1,19 +1,22 @@
-import React, { FC, useState } from 'react';
-import { AiOutlineClose } from 'react-icons/ai';
-import { IoMdWarning } from 'react-icons/io';
+import React, { useState } from 'react';
 
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
-import { useThunkDispatch } from '../../../hooks/hooks';
-import { RootState } from '../../../stores/store';
-import AccountDropdownSelect from '../../Accounts/components/AccountDropdownSelect';
-import { addNewAccount } from '../../Accounts/stores/accountThunks';
+
+import { AiOutlineClose } from 'react-icons/ai';
+import { IoMdWarning } from 'react-icons/io';
+
+import Transaction from '../../Transactions/types/types';
 import Account from '../../Accounts/types/types';
+
+import { RootState } from '../../../stores/store';
+import { useThunkDispatch } from '../../../hooks/hooks';
+import { addNewAccount } from '../../Accounts/stores/accountThunks';
 import {
   addManyTransactionCategories,
   deleteTransactions,
 } from '../../Transactions/stores/transactionThunks';
-import Transaction from '../../Transactions/types/types';
+import { AccountDropdownSelect } from '../../Accounts';
 
 type BulkActionModalProps = {
   isOpen: boolean;
@@ -25,9 +28,7 @@ type BulkActionModalProps = {
   removeSelectedTransactions: Function; // For cleaning up upon submit.
 };
 
-const BulkActionModal: FC<BulkActionModalProps> = (
-  props: BulkActionModalProps
-): JSX.Element => {
+function BulkActionModal(props: BulkActionModalProps): JSX.Element {
   const thunkDispatch = useThunkDispatch();
 
   const activeAccount: Account = useSelector(
@@ -157,6 +158,6 @@ const BulkActionModal: FC<BulkActionModalProps> = (
       </div>
     </Modal>
   );
-};
+}
 
 export default BulkActionModal;

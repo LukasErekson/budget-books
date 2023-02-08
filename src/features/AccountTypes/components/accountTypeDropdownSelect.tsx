@@ -1,13 +1,16 @@
 import React from 'react';
+
 import { useSelector } from 'react-redux';
 import Select, { OptionsOrGroups } from 'react-select';
+
+import AccountType from '../types/types';
+
 import { RootState } from '../../../stores/store';
 import {
   selectAccountTypeByGroups,
   selectAccountTypeNames,
   selectAccountTypes,
 } from '../stores/accountTypeSelectors';
-import AccountType from '../types/types';
 
 function AccountTypeDropdownSelector(props: {
   setCategory: Function;

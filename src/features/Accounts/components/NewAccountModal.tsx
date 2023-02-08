@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+
 import Modal from 'react-modal';
-import { addNewAccount } from '../stores/accountThunks';
+
 import { FiHelpCircle } from 'react-icons/fi';
-import AccountTypeSelect from '../../AccountTypes/components/accountTypeDropdownSelect';
+
+import { addNewAccount } from '../stores/accountThunks';
 import { useThunkDispatch } from '../../../hooks/hooks';
+import { AccountTypeDropdownSelector } from '../../AccountTypes';
 
 function NewAccountModal(props: {
   isOpen: boolean;
@@ -59,7 +62,7 @@ function NewAccountModal(props: {
           </div>
           <br />
           <label htmlFor='accountType'>Category:</label>
-          <AccountTypeSelect
+          <AccountTypeDropdownSelector
             setCategory={setCategory}
             category={category}
             setInputCategory={setInputCategory}

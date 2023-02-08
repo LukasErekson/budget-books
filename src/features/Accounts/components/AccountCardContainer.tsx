@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import NewAccountModal from './NewAccountModal';
-import AccountCard from './AccountCard';
-import { fetchAccounts } from '../stores/accountThunks';
-import { selectBankAccounts } from '../stores/accountSelectors';
-import { AiFillPlusCircle } from 'react-icons/ai';
-import { changeActiveAccount } from '../../../stores/PageSlice';
-import { fetchAccountTypes } from '../../AccountTypes/stores/accountTypeThunks';
-import Account from '../types/types';
-import { RootState } from '../../../stores/store';
 import { useAppDispatch, useThunkDispatch } from '../../../hooks/hooks';
+
+import { useSelector } from 'react-redux';
+
+import { AiFillPlusCircle } from 'react-icons/ai';
+
+import Account from '../types/types';
+
+import { RootState } from '../../../stores/store';
+import { selectBankAccounts } from '../stores/accountSelectors';
+import { changeActiveAccount } from '../../../stores/PageSlice';
+import { fetchAccounts } from '../stores/accountThunks';
+import { fetchAccountTypes } from '../../AccountTypes/stores/accountTypeThunks';
 import { fetchBankAccountTransactions } from '../../Transactions/stores/transactionThunks';
+
+import { AccountCard, NewAccountModal } from '../';
 
 function AccountCardContainer(): JSX.Element {
   const [isAccountsLoaded, setIsAccountsLoaded]: [boolean, Function] =

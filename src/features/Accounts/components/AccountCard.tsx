@@ -1,9 +1,13 @@
 import React from 'react';
+
 import { useSelector } from 'react-redux';
-import { pyToJsDate } from '../../../utils/TextFilters';
+
+import Account from '../types/types';
+
 import { RootState } from '../../../stores/store';
 import { selectUncategorizedTransactions } from '../../Transactions/stores/transactionSelectors';
-import Account from '../types/types';
+
+import { pyToJsDate } from '../../../utils/TextFilters';
 
 function AccountCard(props: {
   accountData: Account;
