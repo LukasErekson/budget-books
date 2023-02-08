@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import Navbar from './Routes/Navbar';
+import Navbar from './routes/Navbar';
 import { Route, Routes } from 'react-router-dom';
-import CategorizeTransactionsPage from './Routes/CategorizeTransactionPage';
-import BalanceSheetPage from './Routes/BalanceSheetPage';
-import ExpenseReportPage from './Routes/ExpenseReportPage';
-import AccountSettingsPage from './Routes/AccountSettingsPage';
+import CategorizeTransactionsPage from './routes/CategorizeTransactionPage';
+import BalanceSheetPage from './routes/BalanceSheetPage';
+import ExpenseReportPage from './routes/ExpenseReportPage';
+import AccountSettingsPage from './routes/AccountSettingsPage';
 import { ToastContainer } from 'react-toastify';
 
 function App() {
