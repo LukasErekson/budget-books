@@ -1,4 +1,4 @@
-interface Account {
+type Account = {
   id: number;
   name: string;
   account_type_id: number;
@@ -6,6 +6,6 @@ interface Account {
   debit_inc: boolean | number;
   balance: number;
   last_updated: string;
-}
+};
 
 export default Account;
