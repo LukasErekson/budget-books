@@ -1,8 +1,11 @@
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import { AccountCard } from '../features/Accounts';
 import Account from '../features/Accounts/types/types';
-import * as transactionSelectors from '../features/Transactions/stores/transactionSelectors';
-import { setTransactions } from '../features/Transactions/stores/transactionSlice';
+import {
+  setTransactions,
+  categorizeTransaction,
+  categorizeManyTransactions,
+} from '../features/Transactions/stores/transactionSlice';
 import { setupStore } from '../stores/store';
 import { renderWithProviders } from './setupTests';
 
@@ -93,9 +96,7 @@ describe('AccountCard Component', () => {
     it('Displays an alerted 1 if there is one uncategorized transaction', async () => {
       const testStore = setupStore();
 
-      const dispatch = testStore.dispatch;
-
-      dispatch(
+      testStore.dispatch(
         setTransactions({
           transactions: [
             {
@@ -129,6 +130,131 @@ describe('AccountCard Component', () => {
       expect(uncategorizedTransactions.classList).toContain(
         'uncategorized-alert'
       );
+    });
+
+    it('Updates with categorizeTransaction action', async () => {
+      const testStore = setupStore();
+
+      testStore.dispatch(
+        setTransactions({
+          transactions: [
+            {
+              id: 1,
+              name: 'Test Transcation',
+              description: 'This transaction is only a test',
+              amount: -10.99,
+              debit_account_id: 1,
+              credit_account_id: 'undefined',
+              transaction_date: '2022-02-22',
+              date_entered: '2022-02-22',
+            },
+          ],
+        })
+      );
+
+      renderWithProviders(
+        <AccountCard
+          accountData={{ ...testAccount, balance: 10.0 }}
+          onClick={() => {}}
+        />,
+        { store: testStore }
+      );
+
+      let uncategorizedTransactions = await screen.findByText('1');
+
+      expect(uncategorizedTransactions).toBeDefined();
+
+      act(() => {
+        testStore.dispatch(
+          categorizeTransaction({
+            accountID: 1,
+            transactionID: 1,
+            categoryID: 2,
+            debitOrCredit: 'credit',
+          })
+        );
+      });
+
+      uncategorizedTransactions = await screen.findByText('0');
+
+      expect(uncategorizedTransactions).toBeDefined();
+      expect(uncategorizedTransactions.classList).toContain('muted');
+    });
+
+    it('Updates with categorizeManyTransactions action', async () => {
+      const testStore = setupStore();
+
+      testStore.dispatch(
+        setTransactions({
+          transactions: [
+            {
+              id: 1,
+              name: 'Test Transcation',
+              description: 'This transaction is only a test',
+              amount: -10.99,
+              debit_account_id: 1,
+              credit_account_id: 'undefined',
+              transaction_date: '2022-02-22',
+              date_entered: '2022-02-22',
+            },
+            {
+              id: 2,
+              name: 'Test Transcation2',
+              description: 'This transaction is only a test',
+              amount: -10.99,
+              debit_account_id: 'undefined',
+              credit_account_id: 1,
+              transaction_date: '2022-02-22',
+              date_entered: '2022-02-22',
+            },
+            {
+              id: 3,
+              name: 'Test Transcation 3',
+              description: 'This transaction is only a test',
+              amount: -10.99,
+              debit_account_id: 'undefined',
+              credit_account_id: 1,
+              transaction_date: '2022-02-22',
+              date_entered: '2022-02-22',
+            },
+          ],
+        })
+      );
+
+      renderWithProviders(
+        <AccountCard
+          accountData={{ ...testAccount, balance: 10.0 }}
+          onClick={() => {}}
+        />,
+        { store: testStore }
+      );
+
+      let uncategorizedTransactions = await screen.findByText('3');
+
+      expect(uncategorizedTransactions).toBeDefined();
+
+      act(() => {
+        testStore.dispatch(
+          categorizeManyTransactions({
+            accountID: 1,
+            transactionInfo: [
+              {
+                id: 1,
+                debitOrCredit: 'credit',
+              },
+              {
+                id: 2,
+                debitOrCredit: 'debit',
+              },
+            ],
+            categoryID: 2,
+          })
+        );
+      });
+
+      uncategorizedTransactions = await screen.findByText('1');
+
+      expect(uncategorizedTransactions).toBeDefined();
     });
   });
 });
