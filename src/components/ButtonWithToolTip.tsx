@@ -22,7 +22,7 @@ const ButtonWithToolTip: FC<buttonWithToolTipProps> = (props): JSX.Element => {
     return;
   }
 
-  function handleMoustLeave(event: any): void {
+  function handleMouseLeave(event: any): void {
     if (event.target.tagName !== 'BUTTON') {
       return;
     }
@@ -37,7 +37,7 @@ const ButtonWithToolTip: FC<buttonWithToolTipProps> = (props): JSX.Element => {
       className={`btn-with-tooltip ${props.className}`}
       onClick={props.onClick}
       onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMoustLeave}
+      onMouseLeave={handleMouseLeave}
     >
       <span>{props.children}</span>
       <span className='btn-with-tooltip-tooltip hide'>
