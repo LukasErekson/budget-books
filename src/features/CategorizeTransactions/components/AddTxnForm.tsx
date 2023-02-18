@@ -79,6 +79,7 @@ function AddTxnForm(props: {
 
   return (
     <div className='categorize-txn-form' key={id}>
+      <span />
       <span className='categorize-txn-item'>
         <input
           type='date'
