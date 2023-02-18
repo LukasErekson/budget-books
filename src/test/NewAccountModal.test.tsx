@@ -3,8 +3,6 @@ import { fireEvent, screen } from '@testing-library/react';
 import Account from '../features/Accounts/types/types';
 import { NewAccountModal } from '../features/Accounts';
 import * as AccountThunks from '../features/Accounts/stores/accountThunks';
-import * as AccountTypeThunks from '../features/AccountTypes/stores/accountTypeThunks';
-import * as TransactionThunks from '../features/Transactions/stores/transactionThunks';
 
 import { RootState, setupStore } from '../stores/store';
 import { renderWithProviders } from './setupTests';
@@ -118,5 +116,58 @@ describe('AccountCardContainer Component', () => {
     fakeAccountTypes.forEach(async (accountType: AccountType) => {
       expect(await screen.findByText(accountType.name)).toBeVisible();
     });
+  });
+
+  it('Reports a problem if Account Name is blank', async () => {
+    let alertMock = jest.spyOn(window, 'alert');
+
+    renderWithProviders(
+      <div id='root'>
+        <NewAccountModal isOpen={true} onRequestClose={() => {}} />
+      </div>,
+      { store: testStore }
+    );
+
+    let accountName = (await screen.findByPlaceholderText(
+      'Account Name...'
+    )) as HTMLInputElement;
+    expect(accountName.value).toEqual('');
+
+    let submitButton = await screen.findByText('Add Account');
+    fireEvent.click(submitButton);
+
+    expect(alertMock).toHaveBeenCalled();
+    expect(alertMock).toHaveBeenCalledWith('Please input an account name!');
+  });
+
+  it('Calls the addNewAccount thunk upon submission', async () => {
+    let addNewAccount = jest.spyOn(AccountThunks, 'addNewAccount');
+    addNewAccount.mockReturnValue(() => fakePromise);
+
+    renderWithProviders(
+      <div id='root'>
+        <NewAccountModal isOpen={true} onRequestClose={() => {}} />
+      </div>,
+      { store: testStore }
+    );
+
+    let accountName = (await screen.findByPlaceholderText(
+      'Account Name...'
+    )) as HTMLInputElement;
+    expect(accountName.value).toEqual('');
+
+    fireEvent.change(accountName, { target: { value: 'Jest Testing Fees' } });
+    expect(accountName.value).toEqual('Jest Testing Fees');
+
+    let submitButton = await screen.findByText('Add Account');
+    fireEvent.click(submitButton);
+
+    expect(addNewAccount).toHaveBeenCalled();
+
+    expect(addNewAccount).toHaveBeenCalledWith(
+      'Jest Testing Fees',
+      { label: 'New Account', value: -1 },
+      true
+    );
   });
 });
