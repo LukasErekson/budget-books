@@ -120,6 +120,7 @@ describe('AccountCardContainer Component', () => {
 
   it('Reports a problem if Account Name is blank', async () => {
     let alertMock = jest.spyOn(window, 'alert');
+    alertMock.mockImplementation((message: string) => message);
 
     renderWithProviders(
       <div id='root'>
