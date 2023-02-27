@@ -57,7 +57,7 @@ function AccountDropdownSelect(props: {
           }
           if (accountNames.includes(newCategory.label)) {
             const matchingAccount: Account = accounts.filter(
-              (account: Account) => account.name === newCategory.name
+              (account: Account) => account.name === newCategory.label
             )[0];
             props.setCategory({
               label: matchingAccount.name,
