@@ -1,12 +1,12 @@
 import { fireEvent, screen } from '@testing-library/react';
 
-import Account from '../features/Accounts/types/types';
-import { AccountDropdownSelect } from '../features/Accounts';
+import Account from '../../features/Accounts/types/types';
+import { AccountDropdownSelect } from '../../features/Accounts';
 
-import { RootState, setupStore } from '../stores/store';
-import { renderWithProviders } from './setupTests';
-import AccountType from '../features/AccountTypes/types/types';
-import * as AccountSelectors from '../features/Accounts/stores/accountSelectors';
+import { RootState, setupStore } from '../../stores/store';
+import { renderWithProviders } from '../setupTests';
+import AccountType from '../../features/AccountTypes/types/types';
+import * as AccountSelectors from '../../features/Accounts/stores/accountSelectors';
 
 describe('AccountDropdownSelect Component', () => {
   let testStore: RootState;

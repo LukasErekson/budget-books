@@ -1,13 +1,13 @@
 import { act, screen } from '@testing-library/react';
-import { AccountCard } from '../features/Accounts';
-import Account from '../features/Accounts/types/types';
+import { AccountCard } from '../../features/Accounts';
+import Account from '../../features/Accounts/types/types';
 import {
   setTransactions,
   categorizeTransaction,
   categorizeManyTransactions,
-} from '../features/Transactions/stores/transactionSlice';
-import { setupStore } from '../stores/store';
-import { renderWithProviders } from './setupTests';
+} from '../../features/Transactions/stores/transactionSlice';
+import { setupStore } from '../../stores/store';
+import { renderWithProviders } from '../setupTests';
 
 const testAccount: Account = {
   id: 1,

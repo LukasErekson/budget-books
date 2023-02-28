@@ -2,7 +2,7 @@ import React from 'react';
 
 import { fireEvent, render, screen } from '@testing-library/react';
 
-import ButtonWithToolTip from '../components/ButtonWithToolTip';
+import ButtonWithToolTip from '../../components/ButtonWithToolTip';
 
 describe('Button With Tool Tip Component', () => {
   it('Renders the button without error', () => {
