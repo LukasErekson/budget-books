@@ -1,13 +1,13 @@
 import { fireEvent, screen } from '@testing-library/react';
 
-import Account from '../features/Accounts/types/types';
-import { NewAccountModal } from '../features/Accounts';
-import * as AccountThunks from '../features/Accounts/stores/accountThunks';
+import Account from '../../features/Accounts/types/types';
+import { NewAccountModal } from '../../features/Accounts';
+import * as AccountThunks from '../../features/Accounts/stores/accountThunks';
 
-import { RootState, setupStore } from '../stores/store';
-import { renderWithProviders } from './setupTests';
-import * as DataFetch from '../utils/DataFetch';
-import AccountType from '../features/AccountTypes/types/types';
+import { RootState, setupStore } from '../../stores/store';
+import { renderWithProviders } from '../setupTests';
+import * as DataFetch from '../../utils/DataFetch';
+import AccountType from '../../features/AccountTypes/types/types';
 
 import ReactModal from 'react-modal';
 ReactModal.setAppElement('body');

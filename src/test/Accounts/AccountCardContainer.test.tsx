@@ -1,15 +1,15 @@
 import { fireEvent, screen } from '@testing-library/react';
 
-import Account from '../features/Accounts/types/types';
-import { AccountCardContainer } from '../features/Accounts';
-import * as AccountThunks from '../features/Accounts/stores/accountThunks';
-import * as AccountTypeThunks from '../features/AccountTypes/stores/accountTypeThunks';
-import * as TransactionThunks from '../features/Transactions/stores/transactionThunks';
+import Account from '../../features/Accounts/types/types';
+import { AccountCardContainer } from '../../features/Accounts';
+import * as AccountThunks from '../../features/Accounts/stores/accountThunks';
+import * as AccountTypeThunks from '../../features/AccountTypes/stores/accountTypeThunks';
+import * as TransactionThunks from '../../features/Transactions/stores/transactionThunks';
 
-import { RootState, setupStore } from '../stores/store';
-import { renderWithProviders } from './setupTests';
-import * as DataFetch from '../utils/DataFetch';
-import AccountType from '../features/AccountTypes/types/types';
+import { RootState, setupStore } from '../../stores/store';
+import { renderWithProviders } from '../setupTests';
+import * as DataFetch from '../../utils/DataFetch';
+import AccountType from '../../features/AccountTypes/types/types';
 
 describe('AccountCardContainer Component', () => {
   let DataFetchMock = jest.spyOn(DataFetch, 'default');

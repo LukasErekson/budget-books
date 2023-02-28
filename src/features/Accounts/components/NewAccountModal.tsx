@@ -6,7 +6,7 @@ import { FiHelpCircle } from 'react-icons/fi';
 
 import { addNewAccount } from '../stores/accountThunks';
 import { useThunkDispatch } from '../../../hooks/hooks';
-import { AccountTypeDropdownSelector } from '../../AccountTypes';
+import { AccountTypeDropdownSelect } from '../../AccountTypes';
 
 function NewAccountModal(props: {
   isOpen: boolean;
@@ -77,7 +77,7 @@ function NewAccountModal(props: {
           </div>
           <br />
           <label htmlFor='accountType'>Category:</label>
-          <AccountTypeDropdownSelector
+          <AccountTypeDropdownSelect
             setCategory={setCategory}
             category={category}
             setInputCategory={setInputCategory}
