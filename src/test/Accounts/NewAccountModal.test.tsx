@@ -10,6 +10,7 @@ import * as DataFetch from '../../utils/DataFetch';
 import AccountType from '../../features/AccountTypes/types/types';
 
 import ReactModal from 'react-modal';
+import userEvent from '@testing-library/user-event';
 ReactModal.setAppElement('body');
 
 describe('AccountCardContainer Component', () => {
@@ -157,11 +158,12 @@ describe('AccountCardContainer Component', () => {
     )) as HTMLInputElement;
     expect(accountName.value).toEqual('');
 
-    fireEvent.change(accountName, { target: { value: 'Jest Testing Fees' } });
+    userEvent.type(accountName, 'Jest Testing Fees');
+
     expect(accountName.value).toEqual('Jest Testing Fees');
 
     let submitButton = await screen.findByText('Add Account');
-    fireEvent.click(submitButton);
+    userEvent.click(submitButton);
 
     expect(addNewAccount).toHaveBeenCalled();
 
