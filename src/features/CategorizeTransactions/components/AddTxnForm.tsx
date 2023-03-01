@@ -83,6 +83,7 @@ function AddTxnForm(props: {
       <span className='categorize-txn-item'>
         <input
           type='date'
+          data-testid='add-txn-date'
           name='add-txn-date'
           value={formData.transaction_date}
           onChange={(event: any) => {
