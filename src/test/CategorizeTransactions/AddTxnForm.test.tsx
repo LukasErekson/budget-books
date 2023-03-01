@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { act, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import Account from '../../features/Accounts/types/types';
 import AccountType from '../../features/AccountTypes/types/types';
@@ -11,13 +12,14 @@ import { RootState, setupStore } from '../../stores/store';
 
 import { AddTxnForm } from '../../features/CategorizeTransactions';
 import { yearMonthDay } from '../../utils/TextFilters';
-import userEvent from '@testing-library/user-event';
 
 describe('Add Transaction Form', () => {
   let testStore: RootState;
   let fakeAccounts: Account[];
 
-  let setShowMock: jest.Mock<any, any, any> = jest.fn((show: boolean) => show);
+  const setShowMock: jest.Mock<any, any, any> = jest.fn(
+    (show: boolean) => show
+  );
 
   beforeAll(() => {
     fakeAccounts = [
@@ -41,7 +43,7 @@ describe('Add Transaction Form', () => {
       },
     ];
 
-    let fakeAccountTypes: AccountType[] = [
+    const fakeAccountTypes: AccountType[] = [
       {
         id: 1,
         name: 'Checking Account',
@@ -88,17 +90,19 @@ describe('Add Transaction Form', () => {
       { store: testStore }
     );
 
-    let dateInput = screen.getByTestId('add-txn-date') as HTMLInputElement;
+    const dateInput = screen.getByTestId('add-txn-date') as HTMLInputElement;
 
     expect(dateInput).toBeDefined();
     expect(dateInput.value).toEqual(yearMonthDay(new Date()));
 
-    let transactionName = screen.getAllByRole('textbox')[0] as HTMLInputElement;
+    const transactionName = screen.getAllByRole(
+      'textbox'
+    )[0] as HTMLInputElement;
 
     expect(transactionName).toBeDefined();
     expect(transactionName.placeholder).toEqual('Transaction Name');
 
-    let transactionDescription = screen.getAllByRole(
+    const transactionDescription = screen.getAllByRole(
       'textbox'
     )[1] as HTMLInputElement;
 
@@ -107,7 +111,7 @@ describe('Add Transaction Form', () => {
       'Transaction Description'
     );
 
-    let transactionAmount = screen.getAllByRole(
+    const transactionAmount = screen.getAllByRole(
       'textbox'
     )[2] as HTMLInputElement;
 
@@ -124,7 +128,7 @@ describe('Add Transaction Form', () => {
       { store: testStore }
     );
 
-    let postButton = screen.getAllByRole('button')[0];
+    const postButton = screen.getAllByRole('button')[0];
 
     userEvent.click(postButton);
 
@@ -133,7 +137,7 @@ describe('Add Transaction Form', () => {
 
   it('Posts the transaction information on click', () => {
     const fakePromise: Promise<any> = new Promise(() => {});
-    let addTransactionThunk = jest.spyOn(TransactionThunks, 'addTransaction');
+    const addTransactionThunk = jest.spyOn(TransactionThunks, 'addTransaction');
     addTransactionThunk.mockReturnValue(() => fakePromise);
 
     renderWithProviders(
@@ -145,13 +149,15 @@ describe('Add Transaction Form', () => {
       { store: testStore }
     );
 
-    let transactionName = screen.getAllByRole('textbox')[0] as HTMLInputElement;
+    const transactionName = screen.getAllByRole(
+      'textbox'
+    )[0] as HTMLInputElement;
 
-    let transactionDescription = screen.getAllByRole(
+    const transactionDescription = screen.getAllByRole(
       'textbox'
     )[1] as HTMLInputElement;
 
-    let transactionAmount = screen.getAllByRole(
+    const transactionAmount = screen.getAllByRole(
       'textbox'
     )[2] as HTMLInputElement;
 
@@ -164,7 +170,7 @@ describe('Add Transaction Form', () => {
       userEvent.type(transactionAmount, '-20.25');
     });
 
-    let postButton = screen.getAllByRole('button')[0];
+    const postButton = screen.getAllByRole('button')[0];
     userEvent.click(postButton);
 
     expect(addTransactionThunk).toHaveBeenCalledWith(fakeAccounts[0], {
@@ -187,7 +193,7 @@ describe('Add Transaction Form', () => {
       { store: testStore }
     );
 
-    let closeButton = screen.getAllByRole('button')[1];
+    const closeButton = screen.getAllByRole('button')[1];
 
     expect(closeButton).toBeDefined();
 
