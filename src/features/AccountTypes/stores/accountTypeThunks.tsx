@@ -17,7 +17,7 @@ export const fetchAccountTypes =
       const response: Response = await responsePromise;
       const responseData: any = await response.json();
       if (response.ok) {
-        const accountTypes: any[] = JSON.parse(responseData.account_types);
+        const accountTypes: any[] = responseData.account_types;
 
         const accountGroups: string[] = accountTypes.reduce(
           (accumulator: any[], currentValue: AccountType) => {

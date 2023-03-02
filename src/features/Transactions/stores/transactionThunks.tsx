@@ -67,7 +67,7 @@ export const fetchBankAccountTransactions =
         const responseData: any = await response.json();
 
         const payload: { transactions: Transaction[] } = {
-          transactions: JSON.parse(responseData.transactions),
+          transactions: responseData.transactions,
         };
         dispatch(setTransactions(payload));
         dispatch(setTransactionsIsLoaded({ loaded: true }));

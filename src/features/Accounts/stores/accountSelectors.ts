@@ -58,6 +58,7 @@ export const selectAccountOptions = (
 
   accountRows.forEach((row: Account) => {
     const accountGroup = accountTypeToGroup[row.account_type];
+
     if (!(accountGroup in groupings)) {
       groupings[accountGroup] = [];
     }
@@ -73,16 +74,18 @@ export const selectAccountOptions = (
     (group: string) => {
       return {
         label: group,
-        options: groupings[group].sort(
-          (a: { label: string }, b: { label: string }) => {
-            if (a.label < b.label) {
-              return -1;
-            } else if (a.label > b.label) {
-              return 1;
-            }
-            return 0;
-          }
-        ),
+        options: groupings[group]
+          ? groupings[group].sort(
+              (a: { label: string }, b: { label: string }) => {
+                if (a.label < b.label) {
+                  return -1;
+                } else if (a.label > b.label) {
+                  return 1;
+                }
+                return 0;
+              }
+            )
+          : [],
       };
     }
   );

@@ -139,8 +139,8 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
               <IoMdWarning style={{ fontSize: '2rem', margin: '-.5rem' }} />
             </p>
             <p className='warn center'>
-              By hitting &quotDelete All&quot below, you are deleting all of the
-              selected transactions. There is no undoing this action.
+              By hitting &quot;Delete All&quot; below, you are deleting all of
+              the selected transactions. There is no undoing this action.
             </p>
             <div className='delete-modal-options'>
               <button

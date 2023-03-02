@@ -35,8 +35,6 @@ function AccountTypeDropdownSelector(props: {
     props.setCategory(options[0].options[0]);
   }
 
-  console.log(options);
-
   return (
     <Select
       name={'accountType'}
