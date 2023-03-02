@@ -25,7 +25,7 @@ type BulkActionModalProps = {
     | React.KeyboardEvent<Element>
     | any;
   selectedTransactions: Transaction[];
-  removeSelectedTransactions: Function; // For cleaning up upon submit.
+  removeSelectedTransactions: (arg0: Transaction) => void; // For cleaning up upon submit.
 };
 
 function BulkActionModal(props: BulkActionModalProps): JSX.Element {
@@ -42,10 +42,15 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
         transaction.credit_account_id === activeAccount.id
     );
 
-  const [category, setCategory]: [{ label: string; value: number }, Function] =
-    useState({ label: '', value: -2 });
+  const [category, setCategory]: [
+    { label: string; value: number },
+    React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
+  ] = useState({ label: '', value: -2 });
 
-  const [inputCategory, setInputCategory]: [string, Function] = useState('');
+  const [inputCategory, setInputCategory]: [
+    string,
+    React.Dispatch<React.SetStateAction<string>>
+  ] = useState('');
 
   // Clean up selected Transactions/close the modal on compelted
   // action.
@@ -134,7 +139,7 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
               <IoMdWarning style={{ fontSize: '2rem', margin: '-.5rem' }} />
             </p>
             <p className='warn center'>
-              By hitting "Delete All" below, you are deleting all of the
+              By hitting &quotDelete All&quot below, you are deleting all of the
               selected transactions. There is no undoing this action.
             </p>
             <div className='delete-modal-options'>

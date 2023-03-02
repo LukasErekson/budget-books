@@ -13,13 +13,15 @@ import {
 } from '../stores/accountTypeSelectors';
 
 function AccountTypeDropdownSelector(props: {
-  setCategory: Function;
-  category: Number;
-  setInputCategory: Function;
+  setCategory: React.Dispatch<
+    React.SetStateAction<{ label: string; value: number }>
+  >;
+  category: { label: string; value: number };
+  setInputCategory: React.Dispatch<React.SetStateAction<string>>;
   inputCategory: string;
 }): JSX.Element {
-  let options: OptionsOrGroups<Number, any> = useSelector((state: RootState) =>
-    selectAccountTypeByGroups(state)
+  const options: OptionsOrGroups<number, any> = useSelector(
+    (state: RootState) => selectAccountTypeByGroups(state)
   );
 
   const accountTypes: AccountType[] = useSelector((state: RootState) =>
@@ -61,7 +63,7 @@ function AccountTypeDropdownSelector(props: {
             )[0];
             props.setCategory({
               label: matchingAccountType.name,
-              value: matchingAccountType.id,
+              value: Number(matchingAccountType.id),
             });
             return;
           }

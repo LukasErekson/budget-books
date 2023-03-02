@@ -26,7 +26,7 @@ const ButtonWithToolTip: FC<buttonWithToolTipProps> = (props): JSX.Element => {
     if (event.target.tagName !== 'BUTTON') {
       return;
     }
-    let controlText: HTMLSpanElement = event.target.children[1];
+    const controlText: HTMLSpanElement = event.target.children[1];
     controlText?.classList.add('hide');
     controlText?.classList.remove('unhide');
     return;

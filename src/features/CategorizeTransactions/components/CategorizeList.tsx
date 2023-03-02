@@ -19,12 +19,12 @@ type sortDataObj = {
 
 function CategorizeList(props: {
   account: Account;
-  showAddNewTxn?: Boolean;
-  setShowAddNewTxn: Function;
+  showAddNewTxn?: boolean;
+  setShowAddNewTxn: React.Dispatch<React.SetStateAction<boolean>>;
   selectedTransactions: Transaction[];
-  setSelectedTransactions: Function;
-  addSelectedTransaction: Function;
-  removeSelectedTransaction: Function;
+  setSelectedTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>;
+  addSelectedTransaction: (arg0: Transaction) => void;
+  removeSelectedTransaction: (arg0: Transaction) => void;
 }): JSX.Element {
   const transactions: Transaction[] = useSelector((state: RootState) =>
     props.account.id
@@ -36,28 +36,31 @@ function CategorizeList(props: {
     (state: RootState) => state.transactions.isTransactionsLoaded
   );
 
-  const [sortData, setSortData]: [sortDataObj, Function] = useState({
+  const [sortData, setSortData]: [
+    sortDataObj,
+    React.Dispatch<React.SetStateAction<sortDataObj>>
+  ] = useState({
     mode: 'date',
     ascending: true,
-  });
+  } as sortDataObj);
 
   const debitInc = props.account.debit_inc === 1;
 
   function sortTransactionsFunc(
     mode: string,
-    ascending: boolean = true
+    ascending = true
   ): (a: Transaction, b: Transaction) => number {
     let compareFn: (a: Transaction, b: Transaction) => number;
     switch (mode) {
       case 'amount':
         compareFn = (a, b) => {
           const debitA: boolean = a.debit_account_id !== 'undefined';
-          let amountA: number =
+          const amountA: number =
             (debitA && debitInc) || (!debitA && !debitInc)
               ? -a.amount
               : a.amount;
           const debitB: boolean = b.debit_account_id !== 'undefined';
-          let amountB: number =
+          const amountB: number =
             (debitB && debitInc) || (!debitB && !debitInc)
               ? -b.amount
               : b.amount;
@@ -84,8 +87,8 @@ function CategorizeList(props: {
       case 'date':
       default:
         compareFn = (a, b) => {
-          let dateA: Date = new Date(a.transaction_date);
-          let dateB: Date = new Date(b.transaction_date);
+          const dateA: Date = new Date(a.transaction_date);
+          const dateB: Date = new Date(b.transaction_date);
           if (dateA < dateB) {
             return -1;
           } else if (dateB < dateA) {
@@ -98,7 +101,7 @@ function CategorizeList(props: {
     }
 
     if (!ascending) {
-      let tempCompareFn = compareFn;
+      const tempCompareFn = compareFn;
       compareFn = (a, b) => -tempCompareFn(a, b);
     }
 

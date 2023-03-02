@@ -34,19 +34,25 @@ function CategorizeTransactionsPage() {
     (state: RootState) => state.accounts.accounts
   );
 
-  const [showaddNewTxn, setShowAddNewTxn]: [boolean, Function] =
-    useState(false);
+  const [showaddNewTxn, setShowAddNewTxn]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState(false);
 
-  const [showUploadTxnModal, setShowUploadTxnModal]: [boolean, Function] =
-    useState(false);
+  const [showUploadTxnModal, setShowUploadTxnModal]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState(false);
 
-  const [showBulkActionModal, setShowBulkActionModal]: [boolean, Function] =
-    useState(false);
+  const [showBulkActionModal, setShowBulkActionModal]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState(false);
 
   const [selectedTransactions, setSelectedTransactions]: [
     Transaction[],
-    Function
-  ] = useState([]);
+    React.Dispatch<React.SetStateAction<Transaction[]>>
+  ] = useState([] as Transaction[]);
 
   function addSelectedTransaction(newTransaction: Transaction): void {
     if (
@@ -67,18 +73,20 @@ function CategorizeTransactionsPage() {
     );
   }
 
-  const [accountTransactions, setAccountTransactions]: [JSX.Element, Function] =
-    useState(
-      <CategorizeList
-        account={activeAccount}
-        showAddNewTxn={showaddNewTxn}
-        setShowAddNewTxn={setShowAddNewTxn}
-        selectedTransactions={selectedTransactions}
-        setSelectedTransactions={setSelectedTransactions}
-        addSelectedTransaction={addSelectedTransaction}
-        removeSelectedTransaction={removeSelectedTransaction}
-      />
-    );
+  const [accountTransactions, setAccountTransactions]: [
+    JSX.Element,
+    React.Dispatch<React.SetStateAction<JSX.Element>>
+  ] = useState(
+    <CategorizeList
+      account={activeAccount}
+      showAddNewTxn={showaddNewTxn}
+      setShowAddNewTxn={setShowAddNewTxn}
+      selectedTransactions={selectedTransactions}
+      setSelectedTransactions={setSelectedTransactions}
+      addSelectedTransaction={addSelectedTransaction}
+      removeSelectedTransaction={removeSelectedTransaction}
+    />
+  );
 
   const dispatch = useAppDispatch();
 
@@ -107,7 +115,7 @@ function CategorizeTransactionsPage() {
   }, [activeAccount, showaddNewTxn]);
 
   function refreshTransactions(): void {
-    let refreshIcon: Element =
+    const refreshIcon: Element =
       document.getElementsByClassName('refresh-icon')[0];
 
     refreshIcon.classList.toggle('rotate');

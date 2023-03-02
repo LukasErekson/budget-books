@@ -11,7 +11,7 @@ import { pyToJsDate } from '../../../utils/TextFilters';
 
 function AccountCard(props: {
   accountData: Account;
-  onClick: Function;
+  onClick: () => void;
 }): JSX.Element {
   const { id, name, balance, account_type, last_updated } = props.accountData;
 
@@ -19,7 +19,7 @@ function AccountCard(props: {
     (balance < 0.0 && props.accountData.debit_inc === 1) ||
     (balance > 0.0 && props.accountData.debit_inc === 0);
 
-  const activeAccountID: Number = useSelector(
+  const activeAccountID: number = useSelector(
     (state: RootState) => state.pageSlice.categorizationPage.activeAccount.id
   );
 

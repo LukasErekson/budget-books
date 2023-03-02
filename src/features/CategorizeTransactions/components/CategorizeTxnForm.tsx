@@ -23,8 +23,8 @@ function CategorizeTxnForm(props: {
   debitInc: boolean;
   account: Account;
   isSelected: number;
-  selectTransaction: Function;
-  unSelectTransaction: Function;
+  selectTransaction: (arg0: Transaction) => void;
+  unSelectTransaction: (arg0: Transaction) => void;
 }): JSX.Element {
   const {
     id,
@@ -38,45 +38,58 @@ function CategorizeTxnForm(props: {
 
   const isDebitTransaction: boolean = debit_account_id !== 'undefined';
 
-  const amountIsNegative: boolean = !isDebitTransaction;
+  const amountIsNegative = !isDebitTransaction;
 
   const accounts: Account[] = useSelector((state: RootState) =>
     selectAccounts(state)
   );
 
-  let firstAccountIdx: number = 0;
+  let firstAccountIdx = 0;
 
   if (accounts.indexOf(props.account) === 0) {
     firstAccountIdx = 1;
   }
 
-  const [isSelected, setIsSelected]: [number, Function] = useState(
-    props.isSelected
-  );
+  const [isSelected, setIsSelected]: [
+    number,
+    React.Dispatch<React.SetStateAction<number>>
+  ] = useState(props.isSelected);
 
-  const [category, setCategory]: [{ label: string; value: number }, Function] =
-    useState({
-      label: accounts[firstAccountIdx].name,
-      value: accounts[firstAccountIdx].id,
-    });
+  const [category, setCategory]: [
+    { label: string; value: number },
+    React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
+  ] = useState({
+    label: accounts[firstAccountIdx].name,
+    value: accounts[firstAccountIdx].id,
+  });
 
-  const [inputCategory, setInputCategory]: [string, Function] = useState('');
+  const [inputCategory, setInputCategory]: [
+    string,
+    React.Dispatch<React.SetStateAction<string>>
+  ] = useState('');
 
-  const [displayDeleteModal, setDisplayDeleteModal]: [boolean, Function] =
-    useState(false);
+  const [displayDeleteModal, setDisplayDeleteModal]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState(false);
 
   const nameCell = useRef<HTMLSpanElement>(null);
-  const [nameCharWidth, setNameCharWidth]: [number, Function] = useState(16);
+  const [nameCharWidth, setNameCharWidth]: [
+    number,
+    React.Dispatch<React.SetStateAction<number>>
+  ] = useState(16);
 
   const descriptionCell = useRef<HTMLSpanElement>(null);
-  const [descriptionCellWidth, setDescriptionCellWidth]: [number, Function] =
-    useState(32);
+  const [descriptionCellWidth, setDescriptionCellWidth]: [
+    number,
+    React.Dispatch<React.SetStateAction<number>>
+  ] = useState(32);
 
   const getCellWidths = () => {
-    let newNameWidth: number | undefined = nameCell.current?.offsetWidth;
+    const newNameWidth: number | undefined = nameCell.current?.offsetWidth;
     setNameCharWidth(newNameWidth ? Math.floor(newNameWidth / 10) : 16);
 
-    let newDescriptionCellWidth: number | undefined =
+    const newDescriptionCellWidth: number | undefined =
       descriptionCell.current?.offsetWidth;
     setDescriptionCellWidth(
       newDescriptionCellWidth ? Math.floor(newDescriptionCellWidth / 10) : 32
@@ -156,7 +169,7 @@ function CategorizeTxnForm(props: {
         <input
           type='checkbox'
           name='selected'
-          id={`$checkbox-{id}`}
+          id={'$checkbox-{id}'}
           value={isSelected}
           checked={isSelected === 1}
           onChange={() => {

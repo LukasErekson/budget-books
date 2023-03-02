@@ -17,20 +17,29 @@ import { fetchBankAccountTransactions } from '../../Transactions/stores/transact
 import { AccountCard, NewAccountModal } from '../';
 
 function AccountCardContainer(): JSX.Element {
-  const [isAccountsLoaded, setIsAccountsLoaded]: [boolean, Function] =
-    useState(false);
+  const [isAccountsLoaded, setIsAccountsLoaded]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState(false);
 
-  const [isTypesFetched, setIsTypesFetched]: [boolean, Function] =
-    useState(false);
+  const [isTypesFetched, setIsTypesFetched]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState(false);
 
-  const [isAccountsFetched, setIsAccountsFetched]: [boolean, Function] =
-    useState(false);
+  const [isAccountsFetched, setIsAccountsFetched]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState(false);
 
   const bankAccounts: Account[] = useSelector((state: RootState) =>
     selectBankAccounts(state)
   );
 
-  const [modalIsOpen, setModalIsOpen]: [boolean, Function] = useState(false);
+  const [modalIsOpen, setModalIsOpen]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState(false);
 
   const thunkDispatch = useThunkDispatch();
   const dispatch = useAppDispatch();
@@ -76,7 +85,9 @@ function AccountCardContainer(): JSX.Element {
             <AccountCard
               key={`account-${acct.id}`}
               accountData={acct}
-              onClick={() => dispatch(changeActiveAccount(acct))}
+              onClick={() => {
+                dispatch(changeActiveAccount(acct));
+              }}
             />
           ))
         ) : (

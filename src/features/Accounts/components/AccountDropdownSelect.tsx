@@ -12,14 +12,16 @@ import {
 } from '../stores/accountSelectors';
 
 function AccountDropdownSelect(props: {
-  setCategory: Function;
+  setCategory: React.Dispatch<
+    React.SetStateAction<{ label: string; value: number }>
+  >;
   category: { label: string; value: number };
-  setInputCategory: Function;
+  setInputCategory: React.Dispatch<React.SetStateAction<string>>;
   inputCategory: string;
   excludeAccount: Account;
 }): JSX.Element {
-  let options: OptionsOrGroups<Number, any> = useSelector((state: any) =>
-    selectAccountOptions(state, props.excludeAccount)
+  const options: OptionsOrGroups<number, any> = useSelector(
+    (state: RootState) => selectAccountOptions(state, props.excludeAccount)
   );
 
   const accountNames: string[] = useSelector((state: RootState) =>

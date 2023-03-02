@@ -12,12 +12,27 @@ function NewAccountModal(props: {
   isOpen: boolean;
   onRequestClose: any;
 }): JSX.Element {
-  const [category, setCategory]: [any, Function] = useState({});
-  const [inputCategory, setInputCategory]: [string, Function] = useState('');
+  const [category, setCategory]: [
+    { label: string; value: number },
+    React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
+  ] = useState({ label: '', value: -1 } as {
+    label: string;
+    value: number;
+  });
+  const [inputCategory, setInputCategory]: [
+    string,
+    React.Dispatch<React.SetStateAction<string>>
+  ] = useState('');
 
-  const [accountName, setAccountName]: [string, Function] = useState('');
+  const [accountName, setAccountName]: [
+    string,
+    React.Dispatch<React.SetStateAction<string>>
+  ] = useState('');
 
-  const [debitInc, setDebitInc]: [boolean, Function] = useState(true);
+  const [debitInc, setDebitInc]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState(true);
 
   const thunkDispatch = useThunkDispatch();
 

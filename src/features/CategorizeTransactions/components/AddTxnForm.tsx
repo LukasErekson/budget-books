@@ -12,37 +12,47 @@ import { yearMonthDay } from '../../../utils/TextFilters';
 
 import { addTransaction } from '../../Transactions/stores/transactionThunks';
 
+const initialFormData: transactionData = {
+  transaction_date: yearMonthDay(new Date()),
+  name: '',
+  description: '',
+  amount: 0,
+};
+
 function AddTxnForm(props: {
   debitInc: boolean;
   account: Account;
-  setShowAddNewTxn: Function;
+  setShowAddNewTxn: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
   const id = -1;
-  const [formData, setFormData]: [transactionData, Function] = useState({
-    transaction_date: yearMonthDay(new Date()),
-    name: '',
-    description: '',
-    amount: 0,
-  });
+  const [formData, setFormData]: [
+    transactionData,
+    React.Dispatch<React.SetStateAction<transactionData>>
+  ] = useState(initialFormData);
 
   const thunkDispatch = useThunkDispatch();
 
-  const [category, setCategory]: [{ label: string; value: number }, Function] =
-    useState({
-      label: '',
-      value: -1,
-    });
+  const [category, setCategory]: [
+    { label: string; value: number },
+    React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
+  ] = useState({
+    label: '',
+    value: -1,
+  });
 
-  const [inputCategory, setInputCategory]: [string, Function] = useState('');
+  const [inputCategory, setInputCategory]: [
+    string,
+    React.Dispatch<React.SetStateAction<string>>
+  ] = useState('');
 
   function postTransaction() {
-    for (let val of Object.values(formData)) {
+    for (const val of Object.values(formData)) {
       if (!val) {
         return;
       }
     }
 
-    let newTransactionData: transactionData = { ...formData };
+    const newTransactionData: transactionData = { ...formData };
 
     // Convert to an actual number
     newTransactionData.amount = +newTransactionData.amount
@@ -75,7 +85,7 @@ function AddTxnForm(props: {
           name='add-txn-date'
           value={formData.transaction_date}
           onChange={(event: any) => {
-            let newDate: string = event.target.value;
+            const newDate: string = event.target.value;
             setFormData((prevState: transactionData) => ({
               ...prevState,
               transaction_date: newDate,
@@ -91,7 +101,7 @@ function AddTxnForm(props: {
           placeholder='Transaction Name'
           value={formData.name}
           onChange={(event: any) => {
-            let newName: string = event.target.value;
+            const newName: string = event.target.value;
             setFormData((prevState: transactionData) => ({
               ...prevState,
               name: newName,
@@ -107,7 +117,7 @@ function AddTxnForm(props: {
           placeholder='Transaction Description'
           value={formData.description}
           onChange={(event: any) => {
-            let newDescription: string = event.target.value;
+            const newDescription: string = event.target.value;
             setFormData((prevState: transactionData) => ({
               ...prevState,
               description: newDescription,
@@ -127,7 +137,7 @@ function AddTxnForm(props: {
           style={{ width: '80%' }}
           value={formData.amount === 0 ? '' : formData.amount}
           onChange={(event: any) => {
-            let newAmount: string = event.target.value;
+            const newAmount: string = event.target.value;
             setFormData((prevState: transactionData) => ({
               ...prevState,
               amount: newAmount,

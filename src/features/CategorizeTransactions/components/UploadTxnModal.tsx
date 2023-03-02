@@ -38,18 +38,18 @@ function UploadTxnModal(props: addTxnModalProps): JSX.Element {
     (state: RootState) => state.pageSlice.categorizationPage.activeAccount
   );
 
-  const [oneColumnAmounts, setOneColumnAmounts]: [number, Function] =
-    useState(1);
+  const [oneColumnAmounts, setOneColumnAmounts]: [
+    number,
+    React.Dispatch<React.SetStateAction<number>>
+  ] = useState(1);
 
   function prepTransactionsForUpload(
     uploadCandidates: ImportedTransactionData[]
   ): UploadableTransaction[] {
     return uploadCandidates.map((transaction: ImportedTransactionData) => {
-      let uploadableTransaction: UploadableTransaction;
-
-      let transaction_date: string = yearMonthDay(new Date(transaction.date));
-      let name: string = transaction.name;
-      let description: string = transaction.description;
+      const transaction_date: string = yearMonthDay(new Date(transaction.date));
+      const name: string = transaction.name;
+      const description: string = transaction.description;
       let debit_account_id: number | undefined;
       let credit_account_id: number | undefined;
       let amount: number;
@@ -79,7 +79,7 @@ function UploadTxnModal(props: addTxnModalProps): JSX.Element {
         amount = transaction.debit_amount || transaction.credit_amount || 0;
       }
 
-      uploadableTransaction = {
+      const uploadableTransaction = {
         name,
         description,
         amount,
