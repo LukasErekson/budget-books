@@ -18,12 +18,12 @@ export const selectAccountTypeNames = (state: RootState): string[] =>
 // Return an array of objects ordered by group - good for passing into the "options" parameter of <Select />
 export const selectAccountTypeByGroups = (
   state: RootState
-): OptionsOrGroups<Number, any> => {
+): OptionsOrGroups<number, any> => {
   const groups: string[] = selectAccountTypeGroups(state);
 
   const orderedGroups: string[] = JSON.parse(JSON.stringify(groups)).sort();
 
-  let groupings: {
+  const groupings: {
     [accountGroup: string]: { label: string; value: number | string }[];
   } = {};
 
@@ -39,7 +39,7 @@ export const selectAccountTypeByGroups = (
     groupings[row.group].push({ label: row.name, value: row.id });
   });
 
-  let optionGroups: OptionsOrGroups<Number, any> = orderedGroups.map(
+  const optionGroups: OptionsOrGroups<number, any> = orderedGroups.map(
     (group) => {
       return {
         label: group,

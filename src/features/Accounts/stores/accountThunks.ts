@@ -6,12 +6,12 @@ import Account from '../types/types';
 import { AppDispatch } from '../../../stores/store';
 
 export const fetchAccounts =
-  (accountType: string = 'all') =>
+  (accountType = 'all') =>
   async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'GET',
         `/api/accounts?account_type=${accountType}`
       );
@@ -33,7 +33,7 @@ export const addNewAccount =
     try {
       const {
         responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'POST',
         '/api/accounts',
         {
@@ -66,7 +66,7 @@ export const fetchAccountBalances =
     try {
       const {
         responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'GET',
         `/api/accounts/balances?account_ids=${accountIds}`
       );

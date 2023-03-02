@@ -14,10 +14,10 @@ export const transactionSlice = createSlice({
       const transactions: Transaction[] = action.payload.transactions;
 
       // Deep copy of the state's transactions
-      let stateTransactions: { [id: number | string]: Transaction[] } =
+      const stateTransactions: { [id: number | string]: Transaction[] } =
         JSON.parse(JSON.stringify(state.transactionList));
 
-      for (let trxn of transactions) {
+      for (const trxn of transactions) {
         const debitAcctId: number | string = trxn.debit_account_id;
         const creditAcctId: number | string = trxn.credit_account_id;
 
@@ -64,10 +64,10 @@ export const transactionSlice = createSlice({
       const debitOrCredit: string = action.payload.debitOrCredit;
 
       // Deep copy of the state's transactions
-      let stateTransactions: { [id: number | string]: Transaction[] } =
+      const stateTransactions: { [id: number | string]: Transaction[] } =
         JSON.parse(JSON.stringify(state.transactionList));
 
-      let indexOfTransaction = stateTransactions[accountID]
+      const indexOfTransaction = stateTransactions[accountID]
         .map((trxn: Transaction) => trxn.id)
         .indexOf(transactionID);
 
@@ -88,11 +88,11 @@ export const transactionSlice = createSlice({
       const categoryID: number = action.payload.categoryID;
 
       // Deep copy of the state's transactions
-      let stateTransactions: { [id: number | string]: Transaction[] } =
+      const stateTransactions: { [id: number | string]: Transaction[] } =
         JSON.parse(JSON.stringify(state.transactionList));
 
       transactionInfo.forEach((tInfo) => {
-        let indexOfTransaction = stateTransactions[accountID]
+        const indexOfTransaction = stateTransactions[accountID]
           .map((trxn: Transaction) => trxn.id)
           .indexOf(tInfo.id);
 
@@ -117,10 +117,10 @@ export const transactionSlice = createSlice({
         action.payload;
 
       // Deep copy of the state's transactions
-      let stateTransactions: { [id: number | string]: Transaction[] } =
+      const stateTransactions: { [id: number | string]: Transaction[] } =
         JSON.parse(JSON.stringify(state.transactionList));
 
-      for (let accountID of changedAccountIds) {
+      for (const accountID of changedAccountIds) {
         stateTransactions[accountID] = stateTransactions[accountID].filter(
           (txn: Transaction) => !idsToDelete.includes(txn.id)
         );

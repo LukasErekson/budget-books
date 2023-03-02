@@ -17,12 +17,12 @@ import { fetchAccountBalances } from '../../Accounts/stores/accountThunks';
 import { AppDispatch } from '../../../stores/store';
 
 export const fetchAccountTransactions =
-  (account: Account, categorized_status: string = 'all') =>
+  (account: Account, categorized_status = 'all') =>
   async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'GET',
         `/api/transactions?account_ids=${account.id}&categorize_type=${categorized_status}`
       );
@@ -49,12 +49,12 @@ export const fetchAccountTransactions =
   };
 
 export const fetchBankAccountTransactions =
-  (bankAccounts: Account[], categorized_status: string = 'all') =>
+  (bankAccounts: Account[], categorized_status = 'all') =>
   async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'GET',
         `/api/transactions?account_ids=${bankAccounts.map(
           (account: Account) => account.id
@@ -93,9 +93,9 @@ export const addTransactionCategory =
     try {
       const {
         responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'PUT',
-        `/api/transactions`,
+        '/api/transactions',
         {
           transactions: [
             {
@@ -159,9 +159,9 @@ export const addManyTransactionCategories =
 
       const {
         responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'PUT',
-        `/api/transactions`,
+        '/api/transactions',
         {
           transactions: postableTransactions,
         }
@@ -218,9 +218,9 @@ export const addTransaction =
       } = transactionData;
       const {
         responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'POST',
-        `/api/transactions`,
+        '/api/transactions',
         {
           transactions: [
             {
@@ -253,7 +253,7 @@ export const addTransaction =
         dispatch(setTransactionsIsLoaded({ loaded: false }));
         dispatch(fetchAccountTransactions(account));
 
-        let changedAccountIds: number[] = [];
+        const changedAccountIds: number[] = [];
 
         if (debit_account_id) {
           changedAccountIds.push(debit_account_id);
@@ -282,9 +282,9 @@ export const deleteTransactions =
 
       const {
         responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'DELETE',
-        `/api/transactions`,
+        '/api/transactions',
         {
           transaction_ids: idsToDelete,
         }
@@ -305,7 +305,7 @@ export const deleteTransactions =
           );
         }
 
-        let changedAccountIds: number[] = [];
+        const changedAccountIds: number[] = [];
 
         transactionsToDelete.forEach((transaction: Transaction) => {
           if (
@@ -341,9 +341,9 @@ export const uploadTransactions =
     try {
       const {
         responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'POST',
-        `/api/transactions`,
+        '/api/transactions',
         {
           transactions: transactionsToUpload,
         }

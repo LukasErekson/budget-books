@@ -2,13 +2,14 @@ import { setAccountTypes } from './accountTypeSlice';
 import DataFetch from '../../../utils/DataFetch';
 import BadResponseError from '../../../utils/BadResponseError';
 import AccountType from '../types/types';
+import { AppDispatch } from '../../../stores/store';
 
 export const fetchAccountTypes =
-  (group: string) => async (dispatch: Function) => {
+  (group: string) => async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,
-      }: { cancel: Function; responsePromise: Promise<Response> } = DataFetch(
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'GET',
         `/api/accounttypes?group=${group}`
       );

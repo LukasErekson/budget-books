@@ -12,7 +12,7 @@ function DataFetch(
   url: RequestInfo,
   requestData?: any,
   headers: any = { 'Content-Type': 'application/json' }
-): { cancel: Function; responsePromise: Promise<Response> } {
+): { cancel: () => void; responsePromise: Promise<Response> } {
   const controller = new AbortController();
   const signal = controller.signal;
 
@@ -44,9 +44,9 @@ function DataFetch(
  * @returns Object that has proprties like a new Error would.
  */
 function serverError(serverResponse: {
-  serverStatus: Number;
-  serverMessage: String;
-}): Object {
+  serverStatus: number;
+  serverMessage: string;
+}): object {
   return {
     name: 'ServerError',
     message: serverResponse.serverMessage,

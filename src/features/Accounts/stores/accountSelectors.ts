@@ -27,12 +27,12 @@ export const selectAccountTypesUsed = (state: RootState): string[] =>
 export const selectAccountOptions = (
   state: RootState,
   excludeAccount?: Account
-): OptionsOrGroups<Number, any> => {
+): OptionsOrGroups<number, any> => {
   const groups: string[] = selectAccountTypeGroups(state);
 
   const orderedGroups: string[] = JSON.parse(JSON.stringify(groups)).sort();
 
-  let groupings: {
+  const groupings: {
     [accountGroup: string]: { label: string; value: number | string }[];
   } = {};
 
@@ -69,7 +69,7 @@ export const selectAccountOptions = (
     }
   });
 
-  let optionGroups: OptionsOrGroups<Number, any> = orderedGroups.map(
+  const optionGroups: OptionsOrGroups<number, any> = orderedGroups.map(
     (group: string) => {
       return {
         label: group,
