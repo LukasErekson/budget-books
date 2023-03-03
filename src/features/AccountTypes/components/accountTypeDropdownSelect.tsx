@@ -12,15 +12,10 @@ import {
   selectAccountTypes,
 } from '../stores/accountTypeSelectors';
 
-<<<<<<< HEAD
-function AccountTypeDropdownSelector(props: {
+function AccountTypeDropdownSelect(props: {
   setCategory: React.Dispatch<
     React.SetStateAction<{ label: string; value: number }>
   >;
-=======
-function AccountTypeDropdownSelect(props: {
-  setCategory: Function;
->>>>>>> 63dc2b3 ([Issue #15] Reorganize file structure for tests)
   category: { label: string; value: number };
   setInputCategory: React.Dispatch<React.SetStateAction<string>>;
   inputCategory: string;
