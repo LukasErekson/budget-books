@@ -7,7 +7,7 @@ import ButtonWithToolTip from '../../components/ButtonWithToolTip';
 describe('Button With Tool Tip Component', () => {
   it('Renders the button without error', () => {
     render(
-      <ButtonWithToolTip onClick={() => {}} toolTipContent={'Test Button'}>
+      <ButtonWithToolTip onClick={() => null} toolTipContent={'Test Button'}>
         Button Text
       </ButtonWithToolTip>
     );
@@ -15,16 +15,16 @@ describe('Button With Tool Tip Component', () => {
 
   it('Displays the tooltip on hover', async () => {
     render(
-      <ButtonWithToolTip onClick={() => {}} toolTipContent={'Test Button'}>
+      <ButtonWithToolTip onClick={() => null} toolTipContent={'Test Button'}>
         Button Text
       </ButtonWithToolTip>
     );
 
-    let exampleButton = await screen.findByText('Button Text');
+    const exampleButton = await screen.findByText('Button Text');
 
     fireEvent.mouseOver(exampleButton);
 
-    let tooltip = await screen.findByText('Test Button');
+    const tooltip = await screen.findByText('Test Button');
 
     fireEvent.mouseOut(exampleButton);
 
@@ -34,18 +34,18 @@ describe('Button With Tool Tip Component', () => {
 
   it('Removes the tooltip on hover out', async () => {
     render(
-      <ButtonWithToolTip onClick={() => {}} toolTipContent={'Test Button'}>
+      <ButtonWithToolTip onClick={() => null} toolTipContent={'Test Button'}>
         Button Text
       </ButtonWithToolTip>
     );
 
-    let exampleButton = (await (
+    const exampleButton = (await (
       await screen.findByText('Button Text')
     ).parentElement) as HTMLElement;
 
     fireEvent.mouseOver(exampleButton);
 
-    let tooltip = await screen.findByText('Test Button');
+    const tooltip = await screen.findByText('Test Button');
 
     expect(tooltip.classList).not.toContain('hide');
 
@@ -57,12 +57,12 @@ describe('Button With Tool Tip Component', () => {
 
   it('Hides the tooltip by default', async () => {
     render(
-      <ButtonWithToolTip onClick={() => {}} toolTipContent={'Test Button'}>
+      <ButtonWithToolTip onClick={() => null} toolTipContent={'Test Button'}>
         Button Text
       </ButtonWithToolTip>
     );
 
-    let tooltip = await screen.findByText('Test Button');
+    const tooltip = await screen.findByText('Test Button');
 
     expect(tooltip).toBeDefined();
     expect(tooltip.classList).toContain('hide');

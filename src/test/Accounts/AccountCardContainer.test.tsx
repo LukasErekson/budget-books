@@ -1,3 +1,4 @@
+import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 
 import Account from '../../features/Accounts/types/types';
@@ -12,22 +13,22 @@ import * as DataFetch from '../../utils/DataFetch';
 import AccountType from '../../features/AccountTypes/types/types';
 
 describe('AccountCardContainer Component', () => {
-  let DataFetchMock = jest.spyOn(DataFetch, 'default');
+  const DataFetchMock = jest.spyOn(DataFetch, 'default');
   let testStore: RootState;
 
-  const fakePromise: Promise<any> = new Promise(() => {});
+  const fakePromise: Promise<any> = new Promise(() => null);
 
   beforeAll(() => {
     DataFetchMock.mockImplementation(
       (method: string, url: RequestInfo, requestData?: any) => {
         return {
-          cancel: () => {},
+          cancel: () => null,
           responsePromise: fakePromise,
         };
       }
     );
 
-    let fakeAccounts: Account[] = [
+    const fakeAccounts: Account[] = [
       {
         id: 1,
         name: 'Fake Account 1',
@@ -48,7 +49,7 @@ describe('AccountCardContainer Component', () => {
       },
     ];
 
-    let fakeAccountTypes: AccountType[] = [
+    const fakeAccountTypes: AccountType[] = [
       {
         id: 1,
         name: 'Checking Account',
@@ -84,16 +85,16 @@ describe('AccountCardContainer Component', () => {
   });
 
   it('Displays account cards with loaded accounts', async () => {
-    let fetchAccountsMock = jest.spyOn(AccountThunks, 'fetchAccounts');
+    const fetchAccountsMock = jest.spyOn(AccountThunks, 'fetchAccounts');
     fetchAccountsMock.mockReturnValue(() => fakePromise);
 
-    let fetchAccountTypesMock = jest.spyOn(
+    const fetchAccountTypesMock = jest.spyOn(
       AccountTypeThunks,
       'fetchAccountTypes'
     );
     fetchAccountTypesMock.mockReturnValue(() => fakePromise);
 
-    let fetchBankAccountTransactionsMock = jest.spyOn(
+    const fetchBankAccountTransactionsMock = jest.spyOn(
       TransactionThunks,
       'fetchBankAccountTransactions'
     );
@@ -114,7 +115,7 @@ describe('AccountCardContainer Component', () => {
 
     expect(state.pageSlice.categorizationPage.activeAccount).toEqual({});
 
-    let firstAccount = await screen.findByText('Fake Account 1');
+    const firstAccount = await screen.findByText('Fake Account 1');
     fireEvent.click(firstAccount);
 
     state = testStore.getState();
@@ -131,16 +132,16 @@ describe('AccountCardContainer Component', () => {
   });
 
   it('Opens the new account modal on click', async () => {
-    let fetchAccountsMock = jest.spyOn(AccountThunks, 'fetchAccounts');
+    const fetchAccountsMock = jest.spyOn(AccountThunks, 'fetchAccounts');
     fetchAccountsMock.mockReturnValue(() => fakePromise);
 
-    let fetchAccountTypesMock = jest.spyOn(
+    const fetchAccountTypesMock = jest.spyOn(
       AccountTypeThunks,
       'fetchAccountTypes'
     );
     fetchAccountTypesMock.mockReturnValue(() => fakePromise);
 
-    let fetchBankAccountTransactionsMock = jest.spyOn(
+    const fetchBankAccountTransactionsMock = jest.spyOn(
       TransactionThunks,
       'fetchBankAccountTransactions'
     );
@@ -153,7 +154,7 @@ describe('AccountCardContainer Component', () => {
       { store: testStore }
     );
 
-    let newAccountButton = await screen.findByText(/Add New Account/i);
+    const newAccountButton = await screen.findByText(/Add New Account/i);
     fireEvent.click(newAccountButton);
 
     // Expect to find the modal title

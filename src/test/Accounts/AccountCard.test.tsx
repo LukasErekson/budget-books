@@ -1,3 +1,4 @@
+import React from 'react';
 import { act, screen } from '@testing-library/react';
 import { AccountCard } from '../../features/Accounts';
 import Account from '../../features/Accounts/types/types';
@@ -22,13 +23,13 @@ const testAccount: Account = {
 describe('AccountCard Component', () => {
   it('Renders the Account Card without Error', async () => {
     renderWithProviders(
-      <AccountCard accountData={testAccount} onClick={() => {}} />
+      <AccountCard accountData={testAccount} onClick={() => null} />
     );
   });
 
   it('Displays the account name', async () => {
     renderWithProviders(
-      <AccountCard accountData={testAccount} onClick={() => {}} />
+      <AccountCard accountData={testAccount} onClick={() => null} />
     );
 
     expect(await screen.findByText(testAccount.name)).toBeDefined();
@@ -36,7 +37,7 @@ describe('AccountCard Component', () => {
 
   it('Displays the account type group', async () => {
     renderWithProviders(
-      <AccountCard accountData={testAccount} onClick={() => {}} />
+      <AccountCard accountData={testAccount} onClick={() => null} />
     );
 
     expect(await screen.findByText(testAccount.account_type)).toBeDefined();
@@ -45,7 +46,7 @@ describe('AccountCard Component', () => {
   describe('Balance Display', () => {
     it('Rounds dispalyed balance to 2 decimal places', async () => {
       renderWithProviders(
-        <AccountCard accountData={testAccount} onClick={() => {}} />
+        <AccountCard accountData={testAccount} onClick={() => null} />
       );
 
       expect(await screen.findByText('-$10.00')).toBeDefined();
@@ -53,10 +54,10 @@ describe('AccountCard Component', () => {
 
     it('Adds negative class to negative balances', async () => {
       renderWithProviders(
-        <AccountCard accountData={testAccount} onClick={() => {}} />
+        <AccountCard accountData={testAccount} onClick={() => null} />
       );
 
-      let balance = await screen.findByText('-$10.00');
+      const balance = await screen.findByText('-$10.00');
 
       expect(balance.classList).toContain('negative');
     });
@@ -65,11 +66,11 @@ describe('AccountCard Component', () => {
       renderWithProviders(
         <AccountCard
           accountData={{ ...testAccount, balance: 10.0 }}
-          onClick={() => {}}
+          onClick={() => null}
         />
       );
 
-      let balance = await screen.findByText('$10.00');
+      const balance = await screen.findByText('$10.00');
 
       expect(balance.classList).toContain('positive');
     });
@@ -80,11 +81,11 @@ describe('AccountCard Component', () => {
       renderWithProviders(
         <AccountCard
           accountData={{ ...testAccount, balance: 10.0 }}
-          onClick={() => {}}
+          onClick={() => null}
         />
       );
 
-      let uncategorizedTransactions = await screen.findByText('0');
+      const uncategorizedTransactions = await screen.findByText('0');
 
       expect(uncategorizedTransactions).toBeDefined();
       expect(uncategorizedTransactions.classList).toContain(
@@ -116,12 +117,12 @@ describe('AccountCard Component', () => {
       renderWithProviders(
         <AccountCard
           accountData={{ ...testAccount, balance: 10.0 }}
-          onClick={() => {}}
+          onClick={() => null}
         />,
         { store: testStore }
       );
 
-      let uncategorizedTransactions = await screen.findByText('1');
+      const uncategorizedTransactions = await screen.findByText('1');
 
       expect(uncategorizedTransactions).toBeDefined();
       expect(uncategorizedTransactions.classList).toContain(
@@ -155,7 +156,7 @@ describe('AccountCard Component', () => {
       renderWithProviders(
         <AccountCard
           accountData={{ ...testAccount, balance: 10.0 }}
-          onClick={() => {}}
+          onClick={() => null}
         />,
         { store: testStore }
       );
@@ -224,7 +225,7 @@ describe('AccountCard Component', () => {
       renderWithProviders(
         <AccountCard
           accountData={{ ...testAccount, balance: 10.0 }}
-          onClick={() => {}}
+          onClick={() => null}
         />,
         { store: testStore }
       );

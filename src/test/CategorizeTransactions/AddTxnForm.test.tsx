@@ -136,7 +136,7 @@ describe('Add Transaction Form', () => {
   });
 
   it('Posts the transaction information on click', () => {
-    const fakePromise: Promise<any> = new Promise(() => {});
+    const fakePromise: Promise<any> = new Promise(() => null);
     const addTransactionThunk = jest.spyOn(TransactionThunks, 'addTransaction');
     addTransactionThunk.mockReturnValue(() => fakePromise);
 

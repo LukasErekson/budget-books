@@ -1,3 +1,4 @@
+import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 
 import Account from '../../features/Accounts/types/types';
@@ -14,24 +15,24 @@ import userEvent from '@testing-library/user-event';
 ReactModal.setAppElement('body');
 
 describe('AccountCardContainer Component', () => {
-  let DataFetchMock = jest.spyOn(DataFetch, 'default');
+  const DataFetchMock = jest.spyOn(DataFetch, 'default');
   let testStore: RootState;
 
   let fakeAccountTypes: AccountType[];
 
-  const fakePromise: Promise<any> = new Promise(() => {});
+  const fakePromise: Promise<any> = new Promise(() => null);
 
   beforeAll(() => {
     DataFetchMock.mockImplementation(
       (method: string, url: RequestInfo, requestData?: any) => {
         return {
-          cancel: () => {},
+          cancel: () => null,
           responsePromise: fakePromise,
         };
       }
     );
 
-    let fakeAccounts: Account[] = [
+    const fakeAccounts: Account[] = [
       {
         id: 1,
         name: 'Fake Account 1',
@@ -80,7 +81,7 @@ describe('AccountCardContainer Component', () => {
   it('Renders without error', async () => {
     renderWithProviders(
       <div id='root'>
-        <NewAccountModal isOpen={true} onRequestClose={() => {}} />
+        <NewAccountModal isOpen={true} onRequestClose={() => null} />
       </div>,
       { store: testStore }
     );
@@ -99,19 +100,19 @@ describe('AccountCardContainer Component', () => {
       expect(await screen.findByLabelText(label)).toBeDefined();
     });
 
-    // New category defaults to "New Account"
-    expect(await screen.findByText('New Account')).toBeDefined();
+    // New category defaults to "Misc. Accounts"
+    expect(await screen.findByText('Misc. Accounts')).toBeDefined();
   });
 
   it('Populates the AccountType dropdown select correctly', async () => {
     renderWithProviders(
       <div id='root'>
-        <NewAccountModal isOpen={true} onRequestClose={() => {}} />
+        <NewAccountModal isOpen={true} onRequestClose={() => null} />
       </div>,
       { store: testStore }
     );
 
-    let accountTypeDropdown = await screen.findByText('New Account');
+    const accountTypeDropdown = await screen.findByText('Misc. Accounts');
     fireEvent.click(accountTypeDropdown);
 
     fakeAccountTypes.forEach(async (accountType: AccountType) => {
@@ -120,22 +121,22 @@ describe('AccountCardContainer Component', () => {
   });
 
   it('Reports a problem if Account Name is blank', async () => {
-    let alertMock = jest.spyOn(window, 'alert');
+    const alertMock = jest.spyOn(window, 'alert');
     alertMock.mockImplementation((message: string) => message);
 
     renderWithProviders(
       <div id='root'>
-        <NewAccountModal isOpen={true} onRequestClose={() => {}} />
+        <NewAccountModal isOpen={true} onRequestClose={() => null} />
       </div>,
       { store: testStore }
     );
 
-    let accountName = (await screen.findByPlaceholderText(
+    const accountName = (await screen.findByPlaceholderText(
       'Account Name...'
     )) as HTMLInputElement;
     expect(accountName.value).toEqual('');
 
-    let submitButton = await screen.findByText('Add Account');
+    const submitButton = await screen.findByText('Add Account');
     fireEvent.click(submitButton);
 
     expect(alertMock).toHaveBeenCalled();
@@ -143,17 +144,17 @@ describe('AccountCardContainer Component', () => {
   });
 
   it('Calls the addNewAccount thunk upon submission', async () => {
-    let addNewAccount = jest.spyOn(AccountThunks, 'addNewAccount');
+    const addNewAccount = jest.spyOn(AccountThunks, 'addNewAccount');
     addNewAccount.mockReturnValue(() => fakePromise);
 
     renderWithProviders(
       <div id='root'>
-        <NewAccountModal isOpen={true} onRequestClose={() => {}} />
+        <NewAccountModal isOpen={true} onRequestClose={() => null} />
       </div>,
       { store: testStore }
     );
 
-    let accountName = (await screen.findByPlaceholderText(
+    const accountName = (await screen.findByPlaceholderText(
       'Account Name...'
     )) as HTMLInputElement;
     expect(accountName.value).toEqual('');
@@ -162,14 +163,14 @@ describe('AccountCardContainer Component', () => {
 
     expect(accountName.value).toEqual('Jest Testing Fees');
 
-    let submitButton = await screen.findByText('Add Account');
+    const submitButton = await screen.findByText('Add Account');
     userEvent.click(submitButton);
 
     expect(addNewAccount).toHaveBeenCalled();
 
     expect(addNewAccount).toHaveBeenCalledWith(
       'Jest Testing Fees',
-      { label: 'New Account', value: -1 },
+      { label: 'Misc. Accounts', value: -1 },
       true
     );
   });

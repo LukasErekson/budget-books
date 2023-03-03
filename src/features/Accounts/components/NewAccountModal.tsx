@@ -15,14 +15,14 @@ function NewAccountModal(props: {
   const [category, setCategory]: [
     { label: string; value: number },
     React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
-  ] = useState({ label: '', value: -1 } as {
+  ] = useState({ label: 'Misc. Accounts', value: -1 } as {
     label: string;
     value: number;
   });
   const [inputCategory, setInputCategory]: [
     string,
     React.Dispatch<React.SetStateAction<string>>
-  ] = useState('');
+  ] = useState('Misc. Accounts');
 
   const [accountName, setAccountName]: [
     string,
