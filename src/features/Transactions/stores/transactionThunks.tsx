@@ -33,7 +33,7 @@ export const fetchAccountTransactions =
         const responseData: any = await response.json();
 
         const payload: { transactions: Transaction[] } = {
-          transactions: JSON.parse(responseData.transactions),
+          transactions: responseData.transactions,
         };
         dispatch(setTransactions(payload));
         dispatch(setTransactionsIsLoaded({ loaded: true }));
@@ -112,7 +112,7 @@ export const addTransactionCategory =
       if (response.ok) {
         const responseData: any = await response.json();
 
-        const responseDataParsed: any = JSON.parse(responseData);
+        const responseDataParsed: any = responseData;
 
         if (!(responseDataParsed.message === 'SUCCESS')) {
           throw new BadResponseError(
