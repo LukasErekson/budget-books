@@ -38,7 +38,7 @@ describe('AccountCardContainer Component', () => {
         last_updated: '2022-02-22',
       },
       {
-        id: 1,
+        id: 2,
         name: 'Fake Account 2',
         account_type_id: 2,
         account_type: 'Credit Card',
@@ -146,7 +146,12 @@ describe('AccountCardContainer Component', () => {
     );
     fetchBankAccountTransactionsMock.mockReturnValue(() => fakePromise);
 
-    renderWithProviders(<AccountCardContainer />, { store: testStore });
+    renderWithProviders(
+      <div id='root'>
+        <AccountCardContainer />
+      </div>,
+      { store: testStore }
+    );
 
     let newAccountButton = await screen.findByText(/Add New Account/i);
     fireEvent.click(newAccountButton);
