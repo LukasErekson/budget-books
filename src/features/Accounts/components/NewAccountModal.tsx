@@ -82,6 +82,7 @@ function NewAccountModal(props: {
             category={category}
             setInputCategory={setInputCategory}
             inputCategory={inputCategory}
+            name='accountType'
           />
           <br />
           <div className='modal-input'>

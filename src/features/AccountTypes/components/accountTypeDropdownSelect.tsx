@@ -19,6 +19,7 @@ function AccountTypeDropdownSelector(props: {
   category: { label: string; value: number };
   setInputCategory: React.Dispatch<React.SetStateAction<string>>;
   inputCategory: string;
+  name: string;
 }): JSX.Element {
   const options: OptionsOrGroups<number, any> = useSelector(
     (state: RootState) => selectAccountTypeByGroups(state)
