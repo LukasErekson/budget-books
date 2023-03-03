@@ -1,3 +1,4 @@
+import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 
 import Account from '../../features/Accounts/types/types';
@@ -17,13 +18,13 @@ describe('AccountDropdownSelect Component', () => {
     label: 'New Account',
     value: -1,
   };
-  let setCategoryMock: jest.Mock<any, any, any> = jest.fn(
+  const setCategoryMock: jest.Mock<any, any, any> = jest.fn(
     (newValue: { label: string; value: number }) => {
       category = newValue;
     }
   );
   let input: string = category.label;
-  let setInputCategoryMock: jest.Mock<any, any, any> = jest.fn(
+  const setInputCategoryMock: jest.Mock<any, any, any> = jest.fn(
     (newValue: string) => {
       input = newValue;
     }
@@ -101,7 +102,7 @@ describe('AccountDropdownSelect Component', () => {
   });
 
   it('Displays all options on click', async () => {
-    let selectMock = jest.spyOn(
+    const selectMock = jest.spyOn(
       AccountTypeSelectors,
       'selectAccountTypeByGroups'
     );
@@ -117,7 +118,7 @@ describe('AccountDropdownSelect Component', () => {
       { store: testStore }
     );
 
-    let dropdown = await screen.findByRole('combobox');
+    const dropdown = await screen.findByRole('combobox');
 
     expect(selectMock).toHaveBeenCalled();
 
@@ -141,11 +142,11 @@ describe('AccountDropdownSelect Component', () => {
       { store: testStore }
     );
 
-    let dropdown = await screen.findByRole('combobox');
+    const dropdown = await screen.findByRole('combobox');
 
     fireEvent.input(dropdown, { target: { value: ' ' } });
 
-    let accountType = await screen.findByText(fakeAccountTypes[0].name);
+    const accountType = await screen.findByText(fakeAccountTypes[0].name);
 
     fireEvent.click(accountType);
 
@@ -168,7 +169,7 @@ describe('AccountDropdownSelect Component', () => {
       { store: testStore }
     );
 
-    let dropdown = await screen.findByRole('combobox');
+    const dropdown = await screen.findByRole('combobox');
 
     fireEvent.input(dropdown, { target: { value: 'Fake Account Type' } });
 
@@ -176,7 +177,7 @@ describe('AccountDropdownSelect Component', () => {
   });
 
   it('Assigns an account type with a new label', async () => {
-    let { rerender } = renderWithProviders(
+    const { rerender } = renderWithProviders(
       <AccountTypeDropdownSelect
         category={category}
         setCategory={setCategoryMock}
@@ -187,7 +188,7 @@ describe('AccountDropdownSelect Component', () => {
       { store: testStore }
     );
 
-    let dropdown = await screen.findByRole('combobox');
+    const dropdown = await screen.findByRole('combobox');
 
     fireEvent.click(dropdown);
     fireEvent.input(dropdown, { target: { value: 'My New Account type' } });
@@ -204,7 +205,7 @@ describe('AccountDropdownSelect Component', () => {
       />
     );
 
-    let newAccount = await screen.findByText(
+    const newAccount = await screen.findByText(
       'Create new category: My New Account type'
     );
 
@@ -218,7 +219,7 @@ describe('AccountDropdownSelect Component', () => {
   });
 
   it('Matches "new" cateogry with existing one', async () => {
-    let { rerender } = renderWithProviders(
+    const { rerender } = renderWithProviders(
       <AccountTypeDropdownSelect
         category={category}
         setCategory={setCategoryMock}
@@ -229,7 +230,7 @@ describe('AccountDropdownSelect Component', () => {
       { store: testStore }
     );
 
-    let dropdown = await screen.findByRole('combobox');
+    const dropdown = await screen.findByRole('combobox');
 
     fireEvent.click(dropdown);
     fireEvent.input(dropdown, { target: { value: 'Checking Account' } });
@@ -246,7 +247,7 @@ describe('AccountDropdownSelect Component', () => {
       />
     );
 
-    let newAccount = await screen.findByText(
+    const newAccount = await screen.findByText(
       'Create new category: Checking Account'
     );
 
