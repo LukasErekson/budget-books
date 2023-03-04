@@ -18,6 +18,8 @@ Aside from creating a useful application for personal use, this repository is al
   - Integrating unit tests into the development workflow
 - Full-Stack Development
   - Being able to develop front and back end systems concurrently, accounting for changes in either (also see the [Python backend repo](https://github.com/LukasErekson/budget-books-backend))
+- CI/CD
+  - Use of GitHub Actions to simulate a full CI/CD environment (_Coming Soon..._)
 
 # Planned Features
 
