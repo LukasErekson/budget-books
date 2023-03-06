@@ -45,12 +45,12 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
   const [category, setCategory]: [
     { label: string; value: number },
     React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
-  ] = useState({ label: '', value: -2 });
+  ] = useState({ label: 'New Account', value: -1 });
 
   const [inputCategory, setInputCategory]: [
     string,
     React.Dispatch<React.SetStateAction<string>>
-  ] = useState('');
+  ] = useState('New Account');
 
   // Clean up selected Transactions/close the modal on compelted
   // action.
@@ -115,7 +115,7 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
 
       <div className='bulk-action-form'>
         <div className='bulk-action-group'>
-          <h5 className='bulk-action-header'>Categorize</h5>
+          <h5 className='bulk-action-header'>Categorize:</h5>
           <div className='bulk-categorize-form'>
             <AccountDropdownSelect
               setCategory={setCategory}
@@ -133,7 +133,7 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
           </div>
         </div>
         <div className='bulk-action-group'>
-          <h5 className='bulk-action-header'>Delete</h5>
+          <h5 className='bulk-action-header'>Delete:</h5>
           <div className='bulk-delete-form'>
             <p className='warn center'>
               <IoMdWarning style={{ fontSize: '2rem', margin: '-.5rem' }} />
