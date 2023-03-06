@@ -129,9 +129,11 @@ describe('Bulk Action Modal', () => {
       'addManyTransactionCategories'
     );
 
-    // Prevent fetch requests from being dispatched
-    addNewAccount.mockReturnValue(mockThunkReturn);
-    addManyTransactionCategories.mockReturnValue(mockThunkReturn);
+    beforeEach(() => {
+      // Prevent fetch requests from being dispatched
+      addNewAccount.mockReturnValue(mockThunkReturn);
+      addManyTransactionCategories.mockReturnValue(mockThunkReturn);
+    });
 
     it('Dispatches categorization for multiple transactions', async () => {
       renderWithProviders(
@@ -218,8 +220,10 @@ describe('Bulk Action Modal', () => {
       'deleteTransactions'
     );
 
-    // Prevent fetch requests from being dispatched
-    deleteTransactions.mockReturnValue(mockThunkReturn);
+    beforeEach(() => {
+      // Prevent fetch requests from being dispatched
+      deleteTransactions.mockReturnValue(mockThunkReturn);
+    });
 
     it('Dispatches delete for multiple transactions', async () => {
       renderWithProviders(
