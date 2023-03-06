@@ -7,7 +7,7 @@ import Account from '../../features/Accounts/types/types';
 import AccountType from '../../features/AccountTypes/types/types';
 import * as TransactionThunks from '../../features/Transactions/stores/transactionThunks';
 
-import { renderWithProviders } from '../setupTests';
+import { mockThunkReturn, renderWithProviders } from '../setupTests';
 import { RootState, setupStore } from '../../stores/store';
 
 import { AddTxnForm } from '../../features/CategorizeTransactions';
@@ -136,9 +136,8 @@ describe('Add Transaction Form', () => {
   });
 
   it('Posts the transaction information on click', () => {
-    const fakePromise: Promise<any> = new Promise(() => null);
     const addTransactionThunk = jest.spyOn(TransactionThunks, 'addTransaction');
-    addTransactionThunk.mockReturnValue(() => fakePromise);
+    addTransactionThunk.mockReturnValue(mockThunkReturn);
 
     renderWithProviders(
       <AddTxnForm
