@@ -10,6 +10,18 @@ import { PreloadedState } from 'redux';
 import { render, RenderOptions } from '@testing-library/react';
 import { RootState, AppStore } from '../stores/store';
 
+export const fakePromise: Promise<any> = new Promise(() => null);
+
+/**
+ * Mock the return value of a thunk dispatch so that the mock
+ * itself doesn't call anything.
+ *
+ * @returns {Promise<any>} An empty promise (rather sad to put it that way...)
+ */
+export function mockThunkReturn(): Promise<any> {
+  return fakePromise;
+}
+
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
   preloadedState?: PreloadedState<RootState>;
   store?: AppStore;

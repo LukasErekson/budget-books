@@ -6,7 +6,11 @@ import { NewAccountModal } from '../../features/Accounts';
 import * as AccountThunks from '../../features/Accounts/stores/accountThunks';
 
 import { RootState, setupStore } from '../../stores/store';
-import { renderWithProviders } from '../setupTests';
+import {
+  fakePromise,
+  mockThunkReturn,
+  renderWithProviders,
+} from '../setupTests';
 import * as DataFetch from '../../utils/DataFetch';
 import AccountType from '../../features/AccountTypes/types/types';
 
@@ -19,8 +23,6 @@ describe('AccountCardContainer Component', () => {
   let testStore: RootState;
 
   let fakeAccountTypes: AccountType[];
-
-  const fakePromise: Promise<any> = new Promise(() => null);
 
   beforeAll(() => {
     DataFetchMock.mockImplementation(
@@ -145,7 +147,7 @@ describe('AccountCardContainer Component', () => {
 
   it('Calls the addNewAccount thunk upon submission', async () => {
     const addNewAccount = jest.spyOn(AccountThunks, 'addNewAccount');
-    addNewAccount.mockReturnValue(() => fakePromise);
+    addNewAccount.mockReturnValue(mockThunkReturn);
 
     renderWithProviders(
       <div id='root'>

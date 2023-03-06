@@ -2,7 +2,7 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderWithProviders } from '../setupTests';
+import { mockThunkReturn, renderWithProviders } from '../setupTests';
 
 import Transaction from '../../features/Transactions/types/types';
 import Account from '../../features/Accounts/types/types';
@@ -129,11 +129,9 @@ describe('Bulk Action Modal', () => {
       'addManyTransactionCategories'
     );
 
-    const fakePromise: Promise<any> = new Promise(() => null);
-
     // Prevent fetch requests from being dispatched
-    addNewAccount.mockReturnValue(() => fakePromise);
-    addManyTransactionCategories.mockReturnValue(() => fakePromise);
+    addNewAccount.mockReturnValue(mockThunkReturn);
+    addManyTransactionCategories.mockReturnValue(mockThunkReturn);
 
     it('Dispatches categorization for multiple transactions', async () => {
       renderWithProviders(
@@ -220,10 +218,8 @@ describe('Bulk Action Modal', () => {
       'deleteTransactions'
     );
 
-    const fakePromise: Promise<any> = new Promise(() => null);
-
     // Prevent fetch requests from being dispatched
-    deleteTransactions.mockReturnValue(() => fakePromise);
+    deleteTransactions.mockReturnValue(mockThunkReturn);
 
     it('Dispatches delete for multiple transactions', async () => {
       renderWithProviders(

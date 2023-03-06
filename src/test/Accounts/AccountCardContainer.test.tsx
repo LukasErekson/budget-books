@@ -8,15 +8,17 @@ import * as AccountTypeThunks from '../../features/AccountTypes/stores/accountTy
 import * as TransactionThunks from '../../features/Transactions/stores/transactionThunks';
 
 import { RootState, setupStore } from '../../stores/store';
-import { renderWithProviders } from '../setupTests';
+import {
+  fakePromise,
+  mockThunkReturn,
+  renderWithProviders,
+} from '../setupTests';
 import * as DataFetch from '../../utils/DataFetch';
 import AccountType from '../../features/AccountTypes/types/types';
 
 describe('AccountCardContainer Component', () => {
   const DataFetchMock = jest.spyOn(DataFetch, 'default');
   let testStore: RootState;
-
-  const fakePromise: Promise<any> = new Promise(() => null);
 
   beforeAll(() => {
     DataFetchMock.mockImplementation(
@@ -86,19 +88,19 @@ describe('AccountCardContainer Component', () => {
 
   it('Displays account cards with loaded accounts', async () => {
     const fetchAccountsMock = jest.spyOn(AccountThunks, 'fetchAccounts');
-    fetchAccountsMock.mockReturnValue(() => fakePromise);
+    fetchAccountsMock.mockReturnValue(mockThunkReturn);
 
     const fetchAccountTypesMock = jest.spyOn(
       AccountTypeThunks,
       'fetchAccountTypes'
     );
-    fetchAccountTypesMock.mockReturnValue(() => fakePromise);
+    fetchAccountTypesMock.mockReturnValue(mockThunkReturn);
 
     const fetchBankAccountTransactionsMock = jest.spyOn(
       TransactionThunks,
       'fetchBankAccountTransactions'
     );
-    fetchBankAccountTransactionsMock.mockReturnValue(() => fakePromise);
+    fetchBankAccountTransactionsMock.mockReturnValue(mockThunkReturn);
 
     renderWithProviders(<AccountCardContainer />, { store: testStore });
 
@@ -133,19 +135,19 @@ describe('AccountCardContainer Component', () => {
 
   it('Opens the new account modal on click', async () => {
     const fetchAccountsMock = jest.spyOn(AccountThunks, 'fetchAccounts');
-    fetchAccountsMock.mockReturnValue(() => fakePromise);
+    fetchAccountsMock.mockReturnValue(mockThunkReturn);
 
     const fetchAccountTypesMock = jest.spyOn(
       AccountTypeThunks,
       'fetchAccountTypes'
     );
-    fetchAccountTypesMock.mockReturnValue(() => fakePromise);
+    fetchAccountTypesMock.mockReturnValue(mockThunkReturn);
 
     const fetchBankAccountTransactionsMock = jest.spyOn(
       TransactionThunks,
       'fetchBankAccountTransactions'
     );
-    fetchBankAccountTransactionsMock.mockReturnValue(() => fakePromise);
+    fetchBankAccountTransactionsMock.mockReturnValue(mockThunkReturn);
 
     renderWithProviders(
       <div id='root'>
