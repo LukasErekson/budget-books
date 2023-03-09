@@ -6,7 +6,7 @@ import Transaction from '../../features/Transactions/types/types';
 
 import { CategorizeList } from '../../features/CategorizeTransactions';
 import { renderWithProviders } from '../setupTests';
-import { screen, waitForElementToBeRemoved, act } from '@testing-library/react';
+import { screen, act } from '@testing-library/react';
 import { setTransactionsIsLoaded } from '../../features/Transactions/stores/transactionSlice';
 import userEvent from '@testing-library/user-event';
 
