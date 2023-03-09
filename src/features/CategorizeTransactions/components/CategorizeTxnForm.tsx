@@ -169,6 +169,7 @@ function CategorizeTxnForm(props: {
         <input
           type='checkbox'
           name='selected'
+          role={'checkbox'}
           id={'$checkbox-{id}'}
           value={isSelected}
           checked={isSelected === 1}
