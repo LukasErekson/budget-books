@@ -285,11 +285,37 @@ describe('Categorize Transaction Form', () => {
     );
   });
 
-  describe('Transaction Details', () => {
-    it.todo('Clicking toggles greater description detail visibility');
+  it('Clicking toggles greater description detail visibility', async () => {
+    const { container } = renderWithProviders(
+      <CategorizeTxnForm
+        transacitonData={transactionData}
+        debitInc={true}
+        account={activeAccount}
+        isSelected={0}
+        selectTransaction={selectTransaction}
+        unSelectTransaction={unSelectTransaction}
+      />,
+      {
+        store: testStore,
+      }
+    );
 
-    it.todo('Delete button displays delete modal');
+    const transactionDetailsContainer = container.querySelector(
+      '.transaction-details'
+    );
 
-    it.todo('Transaction date displays');
+    expect(transactionDetailsContainer).toHaveClass('hide');
+
+    const transactionDescription = await screen.findByText(
+      "Transaction 1's very important d..."
+    );
+
+    userEvent.click(transactionDescription);
+
+    expect(transactionDetailsContainer).not.toHaveClass('hide');
+
+    userEvent.click(transactionDescription);
+
+    expect(transactionDetailsContainer).toHaveClass('hide');
   });
 });
