@@ -117,15 +117,15 @@ describe('Categorize Transaction Form', () => {
     const checkBox = (await screen.findByRole('checkbox')) as HTMLInputElement;
     expect(checkBox.value).toEqual('0');
 
-    act(() => {
-      userEvent.click(checkBox);
+    await act(async () => {
+      await userEvent.click(checkBox);
     });
 
     expect(checkBox.value).toEqual('1');
     expect(selectTransaction).toHaveBeenCalledWith(transactionData);
 
-    act(() => {
-      userEvent.click(checkBox);
+    await act(async () => {
+      await userEvent.click(checkBox);
     });
 
     expect(checkBox.value).toEqual('0');
@@ -219,7 +219,7 @@ describe('Categorize Transaction Form', () => {
 
     const addButton = await screen.findByText('Add');
 
-    userEvent.click(addButton);
+    await userEvent.click(addButton);
 
     expect(addTransactionCategory).toHaveBeenCalledWith(
       activeAccount,
@@ -259,8 +259,8 @@ describe('Categorize Transaction Form', () => {
       'combobox'
     )) as HTMLInputElement;
 
-    act(() => {
-      userEvent.type(accountDropdown, 'New Account');
+    await act(async () => {
+      await userEvent.type(accountDropdown, 'New Account');
     });
 
     const newAccountSelection = await screen.findByText(
@@ -269,7 +269,7 @@ describe('Categorize Transaction Form', () => {
 
     fireEvent.click(newAccountSelection);
 
-    userEvent.click(addButton);
+    await userEvent.click(addButton);
 
     expect(addTransactionCategory).toHaveBeenCalledWith(
       activeAccount,
@@ -310,11 +310,11 @@ describe('Categorize Transaction Form', () => {
       "Transaction 1's very important d..."
     );
 
-    userEvent.click(transactionDescription);
+    await userEvent.click(transactionDescription);
 
     expect(transactionDetailsContainer).not.toHaveClass('hide');
 
-    userEvent.click(transactionDescription);
+    await userEvent.click(transactionDescription);
 
     expect(transactionDetailsContainer).toHaveClass('hide');
   });

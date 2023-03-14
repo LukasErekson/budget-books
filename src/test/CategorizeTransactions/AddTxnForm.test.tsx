@@ -118,7 +118,7 @@ describe('Add Transaction Form', () => {
     expect(transactionAmount).toBeDefined();
   });
 
-  it('Posting to a blank form does nothing', () => {
+  it('Posting to a blank form does nothing', async () => {
     renderWithProviders(
       <AddTxnForm
         debitInc={true}
@@ -130,12 +130,12 @@ describe('Add Transaction Form', () => {
 
     const postButton = screen.getAllByRole('button')[0];
 
-    userEvent.click(postButton);
+    await userEvent.click(postButton);
 
     expect(setShowMock).not.toHaveBeenCalled();
   });
 
-  it('Posts the transaction information on click', () => {
+  it('Posts the transaction information on click', async () => {
     const addTransactionThunk = jest.spyOn(TransactionThunks, 'addTransaction');
     addTransactionThunk.mockReturnValue(mockThunkReturn);
 
@@ -160,17 +160,18 @@ describe('Add Transaction Form', () => {
       'textbox'
     )[2] as HTMLInputElement;
 
-    act(() => {
-      userEvent.type(transactionName, 'Fake Transaction');
-      userEvent.type(
+    await act(async () => {
+      await userEvent.type(transactionName, 'Fake Transaction');
+      await userEvent.type(
         transactionDescription,
         'This is an example of the add transaction form.'
       );
-      userEvent.type(transactionAmount, '-20.25');
+      await userEvent.type(transactionAmount, '-20.25');
     });
 
-    const postButton = screen.getAllByRole('button')[0];
-    userEvent.click(postButton);
+    const postButton = (await screen.findAllByRole('button'))[0];
+
+    await userEvent.click(postButton);
 
     expect(addTransactionThunk).toHaveBeenCalledWith(fakeAccounts[0], {
       amount: '20.25',
@@ -182,7 +183,7 @@ describe('Add Transaction Form', () => {
     });
   });
 
-  it('Closes with close button', () => {
+  it('Closes with close button', async () => {
     renderWithProviders(
       <AddTxnForm
         debitInc={true}
@@ -192,11 +193,11 @@ describe('Add Transaction Form', () => {
       { store: testStore }
     );
 
-    const closeButton = screen.getAllByRole('button')[1];
+    const closeButton = (await screen.findAllByRole('button'))[1];
 
     expect(closeButton).toBeDefined();
 
-    userEvent.click(closeButton);
+    await userEvent.click(closeButton);
 
     expect(setShowMock).toHaveBeenCalled();
   });

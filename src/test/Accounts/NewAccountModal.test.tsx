@@ -18,7 +18,7 @@ import ReactModal from 'react-modal';
 import userEvent from '@testing-library/user-event';
 ReactModal.setAppElement('body');
 
-describe('AccountCardContainer Component', () => {
+describe('NewAccountModal Component', () => {
   const DataFetchMock = jest.spyOn(DataFetch, 'default');
   let testStore: RootState;
 
@@ -93,15 +93,12 @@ describe('AccountCardContainer Component', () => {
 
     // Form controls render properly
     // Expect to find each of the modal's form components
-    [
-      'Account Name',
-      'Category',
-      'Balance increases with debits?',
-      'Add Account',
-    ].forEach(async (label: string) => {
-      expect(await screen.findByLabelText(label)).toBeDefined();
-    });
-
+    ['Account Name:', 'Category:', 'Balance increases with debits?'].forEach(
+      async (label: string) => {
+        const formLabel = await screen.findByText(label);
+        expect(formLabel).toBeDefined();
+      }
+    );
     // New category defaults to "Misc. Accounts"
     expect(await screen.findByText('Misc. Accounts')).toBeDefined();
   });
@@ -115,7 +112,7 @@ describe('AccountCardContainer Component', () => {
     );
 
     const accountTypeDropdown = await screen.findByText('Misc. Accounts');
-    fireEvent.click(accountTypeDropdown);
+    await userEvent.click(accountTypeDropdown);
 
     fakeAccountTypes.forEach(async (accountType: AccountType) => {
       expect(await screen.findByText(accountType.name)).toBeVisible();
@@ -161,12 +158,12 @@ describe('AccountCardContainer Component', () => {
     )) as HTMLInputElement;
     expect(accountName.value).toEqual('');
 
-    userEvent.type(accountName, 'Jest Testing Fees');
+    await userEvent.type(accountName, 'Jest Testing Fees');
 
     expect(accountName.value).toEqual('Jest Testing Fees');
 
     const submitButton = await screen.findByText('Add Account');
-    userEvent.click(submitButton);
+    await userEvent.click(submitButton);
 
     expect(addNewAccount).toHaveBeenCalled();
 

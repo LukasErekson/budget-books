@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Account from '../../features/Accounts/types/types';
@@ -137,7 +137,9 @@ describe('Delete Transaction Modal', () => {
 
     const yesButton = await screen.findByText('Yes');
 
-    userEvent.click(yesButton);
+    await act(async () => {
+      await userEvent.click(yesButton);
+    });
 
     expect(deleteTransaction).toHaveBeenCalledWith([transactionData]);
   });
@@ -156,7 +158,9 @@ describe('Delete Transaction Modal', () => {
 
     const noButton = await screen.findByText('No');
 
-    userEvent.click(noButton);
+    await act(async () => {
+      await userEvent.click(noButton);
+    });
 
     expect(onRequestClose).toBeCalled();
   });
