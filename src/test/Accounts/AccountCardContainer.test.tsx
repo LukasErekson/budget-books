@@ -15,6 +15,7 @@ import {
 } from '../setupTests';
 import * as DataFetch from '../../utils/DataFetch';
 import AccountType from '../../features/AccountTypes/types/types';
+import userEvent from '@testing-library/user-event/';
 
 describe('AccountCardContainer Component', () => {
   const DataFetchMock = jest.spyOn(DataFetch, 'default');
@@ -157,7 +158,7 @@ describe('AccountCardContainer Component', () => {
     );
 
     const newAccountButton = await screen.findByText(/Add New Account/i);
-    fireEvent.click(newAccountButton);
+    await userEvent.click(newAccountButton);
 
     // Expect to find the modal title
     expect(await screen.findAllByText(/Add New Account/i)).toBeDefined();

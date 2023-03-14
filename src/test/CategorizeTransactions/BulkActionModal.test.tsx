@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockThunkReturn, renderWithProviders } from '../setupTests';
 
@@ -152,7 +152,9 @@ describe('Bulk Action Modal', () => {
 
       expect(categorizeButton).toBeVisible();
 
-      userEvent.click(categorizeButton);
+      await act(async () => {
+        await userEvent.click(categorizeButton);
+      });
 
       expect(addNewAccount).toHaveBeenCalledWith(
         'New Account',
@@ -184,7 +186,9 @@ describe('Bulk Action Modal', () => {
 
       expect(categorizeButton).toBeVisible();
 
-      userEvent.click(categorizeButton);
+      await act(async () => {
+        await userEvent.click(categorizeButton);
+      });
 
       expect(removeSelectedTransactions).toHaveBeenCalledWith(
         selectedTransactions[0]
@@ -208,7 +212,9 @@ describe('Bulk Action Modal', () => {
 
       expect(categorizeButton).toBeVisible();
 
-      userEvent.click(categorizeButton);
+      await act(async () => {
+        await userEvent.click(categorizeButton);
+      });
 
       expect(onRequestClose).toHaveBeenCalled();
     });
@@ -242,7 +248,9 @@ describe('Bulk Action Modal', () => {
 
       expect(deleteButton).toBeVisible();
 
-      userEvent.click(deleteButton);
+      await act(async () => {
+        await userEvent.click(deleteButton);
+      });
 
       expect(deleteTransactions).toHaveBeenCalledWith([
         selectedTransactions[0],
@@ -266,7 +274,9 @@ describe('Bulk Action Modal', () => {
 
       expect(deleteButton).toBeVisible();
 
-      userEvent.click(deleteButton);
+      await act(async () => {
+        await userEvent.click(deleteButton);
+      });
 
       expect(removeSelectedTransactions).toHaveBeenCalledWith(
         selectedTransactions[0]
@@ -290,7 +300,9 @@ describe('Bulk Action Modal', () => {
 
       expect(deleteButton).toBeVisible();
 
-      userEvent.click(deleteButton);
+      await act(async () => {
+        await userEvent.click(deleteButton);
+      });
 
       expect(onRequestClose).toHaveBeenCalled();
     });
