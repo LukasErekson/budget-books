@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import Modal from 'react-modal';
-import { Importer, ImporterField } from 'react-csv-importer';
+import { BaseRow, Importer, ImporterField } from 'react-csv-importer';
 import 'react-csv-importer/dist/index.css';
 
 import { AiOutlineClose } from 'react-icons/ai';
@@ -15,15 +15,15 @@ import { RootState } from '../../../stores/store';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { uploadTransactions } from '../../Transactions/stores/transactionThunks';
 
-interface addTxnModalProps {
+type UploadTransactionModalProps = {
   isOpen: boolean;
   onRequestClose:
     | React.MouseEvent<Element, MouseEvent>
     | React.KeyboardEvent<Element>
     | any;
-}
+};
 
-type ImportedTransactionData = {
+export type ImportedTransactionData = {
   date: string;
   name: string;
   description: string;
@@ -32,7 +32,7 @@ type ImportedTransactionData = {
   credit_amount?: number;
 };
 
-function UploadTxnModal(props: addTxnModalProps): JSX.Element {
+function UploadTxnModal(props: UploadTransactionModalProps): JSX.Element {
   const thunkDispatch = useThunkDispatch();
   const activeAccount: Account = useSelector(
     (state: RootState) => state.pageSlice.categorizationPage.activeAccount
@@ -116,6 +116,7 @@ function UploadTxnModal(props: addTxnModalProps): JSX.Element {
       />
       <h3>Upload Transactions</h3>
 
+      <label htmlFor='one-col-amt-checkbox'>Use one column for amount?</label>
       <input
         type='checkbox'
         name='one_column_amount'
@@ -124,7 +125,6 @@ function UploadTxnModal(props: addTxnModalProps): JSX.Element {
         onChange={() => setOneColumnAmounts((prev: number) => (prev + 1) % 2)}
         defaultChecked={oneColumnAmounts === 1}
       />
-      <label htmlFor='one-column-amount'>Use one column for amount?</label>
 
       <p>
         {oneColumnAmounts
@@ -136,10 +136,7 @@ function UploadTxnModal(props: addTxnModalProps): JSX.Element {
       </p>
 
       <Importer
-        dataHandler={async (potentialTransactions) => {
-          // required, receives a list of parsed objects based on defined fields and user column mapping;
-          // may be called several times if file is large
-          // (if this callback returns a promise, the widget will wait for it before parsing more data)
+        dataHandler={async (potentialTransactions: BaseRow[]) => {
           console.log('received batch of rows', potentialTransactions);
 
           // mock timeout to simulate processing
