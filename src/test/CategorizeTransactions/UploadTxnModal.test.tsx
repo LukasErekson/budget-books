@@ -127,7 +127,7 @@ describe('Upload Transaction Modal', () => {
       );
     });
 
-    it('Process dataif onColumnAmounts is checked', async () => {
+    it('Process data if onColumnAmounts is checked', async () => {
       const uploadTransactions = jest.spyOn(
         TransactionThunks,
         'uploadTransactions'
