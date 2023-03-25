@@ -11,12 +11,12 @@ function DataFetch(
   method: string,
   url: RequestInfo,
   requestData?: any,
-  headers: any = { 'Content-Type': 'application/json' }
+  headers: HeadersInit = { 'Content-Type': 'application/json' }
 ): { cancel: () => void; responsePromise: Promise<Response> } {
   const controller = new AbortController();
   const signal = controller.signal;
 
-  const fetchParams: any = requestData
+  const fetchParams: RequestInit = requestData
     ? {
         method,
         mode: 'cors',
