@@ -63,6 +63,7 @@
     "eslint-plugin-react": "^7.32.2",
     "jest-environment-jsdom": "^29.4.3",
     "jest-fetch-mock": "^3.0.3",
-    "ts-jest": "^29.0.5"
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1"
   }
 }
