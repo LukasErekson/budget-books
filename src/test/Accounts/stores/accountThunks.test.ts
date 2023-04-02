@@ -70,8 +70,14 @@ describe('Account Thunks', () => {
         'GET',
         '/api/accounts?account_type=all'
       );
+    });
 
-      expect(loadAccounts).toHaveBeenCalledWith(fakeAccounts);
+    describe('Given an ok response', () => {
+      it('Dispatches loadAccounts', async () => {
+        await dispatch(fetchAccounts());
+
+        expect(loadAccounts).toHaveBeenCalledWith(fakeAccounts);
+      });
     });
 
     describe('Given a bad response', () => {
@@ -103,6 +109,16 @@ describe('Account Thunks', () => {
     });
 
     describe('Given a bad response', () => {
+      it.todo('Throws a BadResponseError');
+    });
+  });
+
+  describe('fetchAccountBalances', () => {
+    describe('Given an ok response', () => {
+      it.todo('Dispatches updateAccoutnBalances');
+    });
+
+    describe('Given a bad resposne', () => {
       it.todo('Throws a BadResponseError');
     });
   });
