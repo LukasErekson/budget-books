@@ -21,6 +21,8 @@ export const fetchAccounts =
         const responseData: any = await response.json();
         const accounts: Account[] = JSON.parse(responseData.accounts);
         dispatch(loadAccounts(accounts));
+      } else {
+        throw new BadResponseError(response.status, 'Bad status', 'bad status');
       }
     } catch (error) {
       console.log(error);
@@ -28,7 +30,11 @@ export const fetchAccounts =
   };
 
 export const addNewAccount =
-  (name: string, account_type: any, debit_inc: boolean) =>
+  (
+    name: string,
+    account_type: { label: string; value: number },
+    debit_inc: boolean
+  ) =>
   async (dispatch: AppDispatch) => {
     try {
       const {
