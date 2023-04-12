@@ -15,9 +15,6 @@ describe('Account Thunks', () => {
   const mockStore = setupStore();
   const dispatch = mockStore.dispatch;
 
-  const mockDispatch = jest.fn();
-  mockDispatch.mockImplementation((action) => mockThunkReturn);
-
   const fakeAccounts: Account[] = [
     {
       id: 1,
@@ -48,10 +45,9 @@ describe('Account Thunks', () => {
       responsePromise: new Promise<any>((resolve, reject) => {
         resolve({
           ok: true,
-          json: () =>
-            JSON.stringify({
-              accounts: fakeAccounts,
-            }),
+          json: () => ({
+            accounts: JSON.stringify(fakeAccounts),
+          }),
         });
       }),
       cancel: () => null,
