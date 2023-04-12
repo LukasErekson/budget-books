@@ -19,7 +19,7 @@ export const fetchAccounts =
       const response: Response = await responsePromise;
       if (response.ok) {
         const responseData: any = await response.json();
-        const accounts: Account[] = JSON.parse(responseData).accounts;
+        const accounts: Account[] = JSON.parse(responseData.accounts);
         dispatch(loadAccounts(accounts));
       }
     } catch (error) {
