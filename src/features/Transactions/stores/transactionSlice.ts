@@ -52,11 +52,13 @@ export const transactionSlice = createSlice({
 
       return { ...state, transactionList: stateTransactions };
     },
+
     setTransactionsIsLoaded: (state, action) => {
       const loaded: boolean = action.payload.loaded;
 
       return { ...state, isTransactionsLoaded: loaded };
     },
+
     categorizeTransaction: (state, action) => {
       const accountID: number = action.payload.accountID;
       const transactionID: number = action.payload.transactionID;
@@ -81,6 +83,7 @@ export const transactionSlice = createSlice({
         isTransactionsLoaded: true,
       };
     },
+
     categorizeManyTransactions: (state, action) => {
       const accountID: number = action.payload.accountID;
       const transactionInfo: { id: number; debitOrCredit: string }[] =
@@ -109,6 +112,7 @@ export const transactionSlice = createSlice({
         isTransactionsLoaded: true,
       };
     },
+
     deleteTransaction: (state, action) => {
       const {
         idsToDelete,
