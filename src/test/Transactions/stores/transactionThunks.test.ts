@@ -16,13 +16,14 @@ import * as TransactionThunks from '../../../features/Transactions/stores/transa
 import * as AccountThunks from '../../../features/Accounts/stores/accountThunks';
 
 import Transaction from '../../../features/Transactions/types/types';
-import * as BadResponseError from '../../../utils/BadResponseError';
+import BadResponseError from '../../../utils/BadResponseError';
+jest.mock('../../../utils/BadResponseError');
+
 import Account from '../../../features/Accounts/types/types';
 import { transactionData } from '../../../features/CategorizeTransactions/types/types';
 
 describe('Transaction Thunks', () => {
   const DataFetchMock = jest.spyOn(DataFetch, 'default');
-  const BadResponseMock = jest.spyOn(BadResponseError, 'default');
 
   const mockStore = setupStore();
   const dispatch = mockStore.dispatch;
@@ -154,7 +155,11 @@ describe('Transaction Thunks', () => {
 
         await dispatch(fetchAccountTransactions(fakeAccounts[0]));
 
-        expect(BadResponseMock).toHaveBeenCalled();
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
       });
     });
   });
@@ -240,7 +245,11 @@ describe('Transaction Thunks', () => {
 
         await dispatch(fetchBankAccountTransactions(fakeAccounts));
 
-        expect(BadResponseMock).toHaveBeenCalled();
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
       });
     });
   });
@@ -288,13 +297,13 @@ describe('Transaction Thunks', () => {
     });
 
     describe('Given a bad response', () => {
-      it('Throws a BadResponseError', async () => {
+      it('Throws a BadResponseError with a given message if provided', async () => {
         const dataFetchReturn = {
           responsePromise: new Promise<any>((resolve, reject) => {
             resolve({
               ok: true,
               json: () => ({
-                message: 'FAILURE',
+                message: 'Problem converting data types probably.',
               }),
               status: 500,
             });
@@ -306,7 +315,33 @@ describe('Transaction Thunks', () => {
 
         await dispatch(addTransactionCategory(fakeAccounts[0], 1, 2, 'debit'));
 
-        expect(BadResponseMock).toHaveBeenCalled();
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'Problem converting data types probably.',
+          'There was an irrecoverable server error.'
+        );
+      });
+
+      it('Throws a BadResponseError when ok is false', async () => {
+        const dataFetchReturn = {
+          responsePromise: new Promise<any>((resolve, reject) => {
+            resolve({
+              ok: false,
+              status: 500,
+            });
+          }),
+          cancel: () => null,
+        };
+
+        DataFetchMock.mockReturnValue(dataFetchReturn);
+
+        await dispatch(addTransactionCategory(fakeAccounts[0], 1, 2, 'debit'));
+
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
       });
     });
   });
@@ -359,11 +394,40 @@ describe('Transaction Thunks', () => {
     });
 
     describe('Given a bad response', () => {
-      it('Throws a BadResponseError', async () => {
+      it('Throws a BadResponseError with a message if given', async () => {
         const dataFetchReturn = {
           responsePromise: new Promise<any>((resolve, reject) => {
             resolve({
               ok: true,
+              json: () => ({
+                message: 'FAILURE',
+                serverError:
+                  'The following transactions failed to be categorized: []',
+              }),
+              status: 500,
+            });
+          }),
+          cancel: () => null,
+        };
+
+        DataFetchMock.mockReturnValue(dataFetchReturn);
+
+        await dispatch(
+          addManyTransactionCategories(fakeAccounts[0], fakeTransactions, 2)
+        );
+
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'The following transactions failed to be categorized: []'
+        );
+      });
+
+      it('Throws a BadResponseError when ok is false', async () => {
+        const dataFetchReturn = {
+          responsePromise: new Promise<any>((resolve, reject) => {
+            resolve({
+              ok: false,
               json: () => ({
                 message: 'FAILURE',
               }),
@@ -379,7 +443,11 @@ describe('Transaction Thunks', () => {
           addManyTransactionCategories(fakeAccounts[0], fakeTransactions, 2)
         );
 
-        expect(BadResponseMock).toHaveBeenCalled();
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
       });
     });
   });
@@ -566,14 +634,14 @@ describe('Transaction Thunks', () => {
 
         await dispatch(addTransaction(fakeAccounts[0], fakeTransactionData));
 
-        expect(BadResponseMock).toHaveBeenCalledWith(
+        expect(BadResponseError).toHaveBeenCalledWith(
           500,
           'FAILURE',
           'Something went wrong with the request'
         );
       });
 
-      it('Throws a BadResponseError if given a general server error.', async () => {
+      it('Throws a BadResponseError if ok is false', async () => {
         const dataFetchReturn = {
           responsePromise: new Promise<any>((resolve, reject) => {
             resolve({
@@ -597,7 +665,7 @@ describe('Transaction Thunks', () => {
 
         await dispatch(addTransaction(fakeAccounts[0], fakeTransactionData));
 
-        expect(BadResponseMock).toHaveBeenCalledWith(
+        expect(BadResponseError).toHaveBeenCalledWith(
           500,
           'FAILURE',
           'There was an irrecoverable server error.'
