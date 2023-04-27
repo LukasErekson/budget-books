@@ -20,7 +20,10 @@ import BadResponseError from '../../../utils/BadResponseError';
 jest.mock('../../../utils/BadResponseError');
 
 import Account from '../../../features/Accounts/types/types';
-import { transactionData } from '../../../features/CategorizeTransactions/types/types';
+import {
+  UploadableTransaction,
+  TransactionData,
+} from '../../../features/CategorizeTransactions/types/types';
 
 describe('Transaction Thunks', () => {
   const DataFetchMock = jest.spyOn(DataFetch, 'default');
@@ -479,7 +482,7 @@ describe('Transaction Thunks', () => {
           'fetchAccountTransactions'
         );
 
-        const fakeTransactionData: transactionData = {
+        const fakeTransactionData: TransactionData = {
           name: 'Fake Transaction',
           description: 'This is a fake transaction without a debit id',
           amount: 20.35,
@@ -518,7 +521,7 @@ describe('Transaction Thunks', () => {
           'fetchAccountBalances'
         );
 
-        const fakeTransactionData: transactionData = {
+        const fakeTransactionData: TransactionData = {
           name: 'Fake Transaction',
           description: 'This is a fake transaction without a debit id',
           amount: 20.35,
@@ -553,7 +556,7 @@ describe('Transaction Thunks', () => {
           'fetchAccountBalances'
         );
 
-        const fakeTransactionData: transactionData = {
+        const fakeTransactionData: TransactionData = {
           name: 'Fake Transaction',
           description: 'This is a fake transaction without a credit id',
           amount: 20.35,
@@ -588,7 +591,7 @@ describe('Transaction Thunks', () => {
           'fetchAccountBalances'
         );
 
-        const fakeTransactionData: transactionData = {
+        const fakeTransactionData: TransactionData = {
           name: 'Fake Transaction',
           description: 'This is a fake transaction',
           amount: 20.35,
@@ -623,7 +626,7 @@ describe('Transaction Thunks', () => {
 
         DataFetchMock.mockReturnValue(dataFetchReturn);
 
-        const fakeTransactionData: transactionData = {
+        const fakeTransactionData: TransactionData = {
           name: 'Fake Transaction',
           description: 'This is a fake transaction',
           amount: 20.35,
@@ -654,7 +657,7 @@ describe('Transaction Thunks', () => {
 
         DataFetchMock.mockReturnValue(dataFetchReturn);
 
-        const fakeTransactionData: transactionData = {
+        const fakeTransactionData: TransactionData = {
           name: 'Fake Transaction',
           description: 'This is a fake transaction',
           amount: 20.35,
@@ -676,20 +679,216 @@ describe('Transaction Thunks', () => {
 
   describe('deleteTransactions', () => {
     describe('Given an ok response', () => {
-      it.todo('');
+      it('Dispatches deleteTransaction and setTransactionsIsLoaded', async () => {
+        const dataFetchReturn = {
+          responsePromise: new Promise<any>((resolve, reject) => {
+            resolve({
+              ok: true,
+              json: () => ({
+                message: 'SUCCESS',
+              }),
+            });
+          }),
+          cancel: () => null,
+        };
+
+        DataFetchMock.mockReturnValue(dataFetchReturn);
+
+        const deleteTransaction = jest.spyOn(
+          TransactionActions,
+          'deleteTransaction'
+        );
+
+        const setTransactionsIsLoaded = jest.spyOn(
+          TransactionActions,
+          'setTransactionsIsLoaded'
+        );
+
+        const fetchAccountBalancesMock = jest.spyOn(
+          AccountThunks,
+          'fetchAccountBalances'
+        );
+
+        await dispatch(deleteTransactions(fakeTransactions));
+
+        expect(setTransactionsIsLoaded).toHaveBeenCalledWith({
+          loaded: false,
+        });
+
+        expect(deleteTransaction).toHaveBeenCalledWith({
+          idsToDelete: fakeTransactions.map((transaction) => transaction.id),
+          changedAccountIds: [1],
+        });
+
+        expect(fetchAccountBalancesMock).toHaveBeenCalledWith([1]);
+      });
     });
 
     describe('Given a bad response', () => {
-      it.todo('Throws a BadResponseError');
+      it('Throws a BadResponseError with a message if given', async () => {
+        const dataFetchReturn = {
+          responsePromise: new Promise<any>((resolve, reject) => {
+            resolve({
+              ok: true,
+              json: () => ({
+                message: 'FAILURE',
+                serverError:
+                  'The following transactions failed to be deleted: []',
+              }),
+              status: 500,
+            });
+          }),
+          cancel: () => null,
+        };
+
+        DataFetchMock.mockReturnValue(dataFetchReturn);
+
+        await dispatch(deleteTransactions(fakeTransactions));
+
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'The following transactions failed to be deleted: []'
+        );
+      });
+
+      it('Throws a BadResponseError when ok is false', async () => {
+        const dataFetchReturn = {
+          responsePromise: new Promise<any>((resolve, reject) => {
+            resolve({
+              ok: false,
+              json: () => ({
+                message: 'FAILURE',
+              }),
+              status: 500,
+            });
+          }),
+          cancel: () => null,
+        };
+
+        DataFetchMock.mockReturnValue(dataFetchReturn);
+
+        await dispatch(deleteTransactions(fakeTransactions));
+
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
+      });
     });
   });
   describe('uploadTransactions', () => {
+    const fakeUploadableTransactions: UploadableTransaction[] = [
+      {
+        name: 'Jesting Supplies',
+        description: 'Jesting supplies for all your testing needs!',
+        amount: 30.25,
+        debit_account_id: 1,
+        transaction_date: '03/20/2023',
+      },
+      {
+        name: 'Credit card payment',
+        description: 'Credit Card Payment',
+        amount: 30.25,
+        credit_account_id: 1,
+        transaction_date: '03/22/2023',
+      },
+    ];
     describe('Given an ok response', () => {
-      it.todo('');
+      it('Dispatches fetchAccountTransactions and setTransactionsIsLoaded', async () => {
+        const dataFetchReturn = {
+          responsePromise: new Promise<any>((resolve, reject) => {
+            resolve({
+              ok: true,
+              json: () => ({
+                message: 'SUCCESS',
+              }),
+            });
+          }),
+          cancel: () => null,
+        };
+
+        DataFetchMock.mockReturnValue(dataFetchReturn);
+
+        const setTransactionsIsLoaded = jest.spyOn(
+          TransactionActions,
+          'setTransactionsIsLoaded'
+        );
+
+        const fetchAccountTransactions = jest.spyOn(
+          TransactionThunks,
+          'fetchAccountTransactions'
+        );
+
+        await dispatch(
+          uploadTransactions(fakeAccounts[0], fakeUploadableTransactions)
+        );
+
+        expect(setTransactionsIsLoaded).toHaveBeenCalledWith({
+          loaded: false,
+        });
+
+        expect(fetchAccountTransactions).toHaveBeenCalledWith(fakeAccounts[0]);
+      });
     });
 
     describe('Given a bad response', () => {
-      it.todo('Throws a BadResponseError');
+      it('Throws a BadResponseError with a message if given', async () => {
+        const dataFetchReturn = {
+          responsePromise: new Promise<any>((resolve, reject) => {
+            resolve({
+              ok: true,
+              json: () => ({
+                message: 'FAILURE',
+                serverError:
+                  'The following transactions failed to be uploaded: []',
+              }),
+              status: 500,
+            });
+          }),
+          cancel: () => null,
+        };
+
+        DataFetchMock.mockReturnValue(dataFetchReturn);
+
+        await dispatch(
+          uploadTransactions(fakeAccounts[0], fakeUploadableTransactions)
+        );
+
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'The following transactions failed to be uploaded: []'
+        );
+      });
+
+      it('Throws a BadResponseError when ok is false', async () => {
+        const dataFetchReturn = {
+          responsePromise: new Promise<any>((resolve, reject) => {
+            resolve({
+              ok: false,
+              json: () => ({
+                message: 'FAILURE',
+              }),
+              status: 500,
+            });
+          }),
+          cancel: () => null,
+        };
+
+        DataFetchMock.mockReturnValue(dataFetchReturn);
+
+        await dispatch(
+          uploadTransactions(fakeAccounts[0], fakeUploadableTransactions)
+        );
+
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
+      });
     });
   });
 });

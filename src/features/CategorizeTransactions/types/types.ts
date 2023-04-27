@@ -1,4 +1,4 @@
-type transactionData = {
+type TransactionData = {
   transaction_date: string;
   name: string;
   description: string;
@@ -17,4 +17,4 @@ type UploadableTransaction = {
   transaction_date: string;
 };
 
-export { transactionData, UploadableTransaction };
+export { TransactionData, UploadableTransaction };

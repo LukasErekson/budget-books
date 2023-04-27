@@ -18,8 +18,9 @@ export const fetchAccounts =
 
       const response: Response = await responsePromise;
       if (response.ok) {
-        const responseData: any = await response.json();
-        const accounts: Account[] = JSON.parse(responseData.accounts);
+        const responseData: { message: string; accounts: Account[] } =
+          await response.json();
+        const accounts: Account[] = responseData.accounts;
         dispatch(loadAccounts(accounts));
       } else {
         throw new BadResponseError(response.status, 'Bad status', 'bad status');

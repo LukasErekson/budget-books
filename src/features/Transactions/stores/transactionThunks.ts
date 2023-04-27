@@ -9,7 +9,7 @@ import DataFetch from '../../../utils/DataFetch';
 import BadResponseError from '../../../utils/BadResponseError';
 import Transaction from '../types/types';
 import {
-  transactionData,
+  TransactionData,
   UploadableTransaction,
 } from '../../CategorizeTransactions/types/types';
 import Account from '../../Accounts/types/types';
@@ -221,7 +221,7 @@ export const addManyTransactionCategories =
   };
 
 export const addTransaction =
-  (account: Account, transactionData: transactionData) =>
+  (account: Account, transactionData: TransactionData) =>
   async (dispatch: AppDispatch) => {
     try {
       const {
@@ -250,13 +250,15 @@ export const addTransaction =
       const response: Response = await responsePromise;
 
       if (response.ok) {
-        const responseData: any = await response.json();
+        const responseData: { message: string; serverError?: string } =
+          await response.json();
 
         if (responseData.message !== 'SUCCESS') {
           throw new BadResponseError(
             response.status,
             responseData.message,
-            responseData.serverError
+            responseData.serverError ||
+              'There was an irrecoverable server error.'
           );
         }
 
@@ -309,40 +311,46 @@ export const deleteTransactions =
       const response: Response = await responsePromise;
 
       if (response.ok) {
-        const responseData: any = await response.json();
+        const responseData: { message: string; serverError?: string } =
+          await response.json();
 
-        const responseDataParsed: any = JSON.parse(responseData);
-
-        if (!(responseDataParsed.message === 'SUCCESS')) {
+        if (responseData.message !== 'SUCCESS') {
           throw new BadResponseError(
             response.status,
-            responseDataParsed.message,
-            responseDataParsed.serverError
+            responseData.message,
+            responseData.serverError ||
+              'There was an irrecoverable server error.'
           );
         }
-
-        const changedAccountIds: number[] = [];
-
-        transactionsToDelete.forEach((transaction: Transaction) => {
-          if (
-            +transaction.credit_account_id &&
-            !changedAccountIds.includes(+transaction.credit_account_id)
-          ) {
-            changedAccountIds.push(+transaction.credit_account_id);
-          }
-
-          if (
-            +transaction.debit_account_id &&
-            !changedAccountIds.includes(+transaction.debit_account_id)
-          ) {
-            changedAccountIds.push(+transaction.debit_account_id);
-          }
-        });
-
-        dispatch(setTransactionsIsLoaded({ loaded: false }));
-        dispatch(deleteTransaction({ idsToDelete, changedAccountIds }));
-        dispatch(fetchAccountBalances(changedAccountIds));
+      } else {
+        throw new BadResponseError(
+          response.status,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
       }
+
+      const changedAccountIds: number[] = [];
+
+      transactionsToDelete.forEach((transaction: Transaction) => {
+        if (
+          +transaction.credit_account_id &&
+          !changedAccountIds.includes(+transaction.credit_account_id)
+        ) {
+          changedAccountIds.push(+transaction.credit_account_id);
+        }
+
+        if (
+          +transaction.debit_account_id &&
+          !changedAccountIds.includes(+transaction.debit_account_id)
+        ) {
+          changedAccountIds.push(+transaction.debit_account_id);
+        }
+      });
+
+      dispatch(setTransactionsIsLoaded({ loaded: false }));
+      dispatch(deleteTransaction({ idsToDelete, changedAccountIds }));
+      dispatch(fetchAccountBalances(changedAccountIds));
     } catch (error: any) {
       if (error.name === 'AbortError') {
         console.log('Aborted');
@@ -368,20 +376,26 @@ export const uploadTransactions =
       const response: Response = await responsePromise;
 
       if (response.ok) {
-        const responseData: any = await response.json();
+        const responseData: { message: string; serverError?: string } =
+          await response.json();
 
-        const responseDataParsed: any = JSON.parse(responseData);
-
-        if (!(responseDataParsed.message === 'SUCCESS')) {
+        if (responseData.message !== 'SUCCESS') {
           throw new BadResponseError(
             response.status,
-            responseDataParsed.message,
-            responseDataParsed.serverError
+            responseData.message,
+            responseData.serverError ||
+              'There was an irrecoverable server error.'
           );
         }
 
         dispatch(setTransactionsIsLoaded({ loaded: false }));
         dispatch(fetchAccountTransactions(account));
+      } else {
+        throw new BadResponseError(
+          response.status,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
       }
     } catch (error: any) {
       if (error.name === 'AbortError') {
