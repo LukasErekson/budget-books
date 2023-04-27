@@ -3,7 +3,7 @@ import { useThunkDispatch } from '../../../hooks/hooks';
 
 import { AiOutlineStop, AiOutlinePlus } from 'react-icons/ai';
 
-import { transactionData } from '../types/types';
+import { TransactionData } from '../types/types';
 import Account from '../../Accounts/types/types';
 
 import ButtonWithToolTip from '../../../components/ButtonWithToolTip';
@@ -12,7 +12,7 @@ import { yearMonthDay } from '../../../utils/TextFilters';
 
 import { addTransaction } from '../../Transactions/stores/transactionThunks';
 
-const initialFormData: transactionData = {
+const initialFormData: TransactionData = {
   transaction_date: yearMonthDay(new Date()),
   name: '',
   description: '',
@@ -26,8 +26,8 @@ function AddTxnForm(props: {
 }): JSX.Element {
   const id = -1;
   const [formData, setFormData]: [
-    transactionData,
-    React.Dispatch<React.SetStateAction<transactionData>>
+    TransactionData,
+    React.Dispatch<React.SetStateAction<TransactionData>>
   ] = useState(initialFormData);
 
   const thunkDispatch = useThunkDispatch();
@@ -52,7 +52,7 @@ function AddTxnForm(props: {
       }
     }
 
-    const newTransactionData: transactionData = { ...formData };
+    const newTransactionData: TransactionData = { ...formData };
 
     // Convert to an actual number
     newTransactionData.amount = +newTransactionData.amount
@@ -88,7 +88,7 @@ function AddTxnForm(props: {
           value={formData.transaction_date}
           onChange={(event: any) => {
             const newDate: string = event.target.value;
-            setFormData((prevState: transactionData) => ({
+            setFormData((prevState: TransactionData) => ({
               ...prevState,
               transaction_date: newDate,
             }));
@@ -104,7 +104,7 @@ function AddTxnForm(props: {
           value={formData.name}
           onChange={(event: any) => {
             const newName: string = event.target.value;
-            setFormData((prevState: transactionData) => ({
+            setFormData((prevState: TransactionData) => ({
               ...prevState,
               name: newName,
             }));
@@ -120,7 +120,7 @@ function AddTxnForm(props: {
           value={formData.description}
           onChange={(event: any) => {
             const newDescription: string = event.target.value;
-            setFormData((prevState: transactionData) => ({
+            setFormData((prevState: TransactionData) => ({
               ...prevState,
               description: newDescription,
             }));
@@ -130,7 +130,7 @@ function AddTxnForm(props: {
       <span
         className={
           'categorize-txn-item' +
-          (formData.amount < 0 ? ' negative' : ' positive')
+          (+formData.amount < 0 ? ' negative' : ' positive')
         }
       >
         <input
@@ -140,7 +140,7 @@ function AddTxnForm(props: {
           value={formData.amount === 0 ? '' : formData.amount}
           onChange={(event: any) => {
             const newAmount: string = event.target.value;
-            setFormData((prevState: transactionData) => ({
+            setFormData((prevState: TransactionData) => ({
               ...prevState,
               amount: newAmount,
             }));

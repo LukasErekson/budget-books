@@ -50,7 +50,7 @@ describe('Account Thunks', () => {
         resolve({
           ok: true,
           json: () => ({
-            accounts: JSON.stringify(fakeAccounts),
+            accounts: fakeAccounts,
           }),
         });
       }),
