@@ -3,18 +3,19 @@ import {
   addNewAccount,
   fetchAccountBalances,
 } from '../../../features/Accounts/stores/accountThunks';
+
 import * as AccountThunks from '../../../features/Accounts/stores/accountThunks';
 import * as AccountTypeThunks from '../../../features/AccountTypes/stores/accountTypeThunks';
 import { setupStore } from '../../../stores/store';
 import * as AccountActions from '../../../features/Accounts/stores/accountSlice';
 import * as DataFetch from '../../../utils/DataFetch';
-import { mockThunkReturn } from '../../setupTests';
+
 import Account from '../../../features/Accounts/types/types';
-import * as BadResponseError from '../../../utils/BadResponseError';
+import BadResponseError from '../../../utils/BadResponseError';
+jest.mock('../../../utils/BadResponseError');
 
 describe('Account Thunks', () => {
   const DataFetchMock = jest.spyOn(DataFetch, 'default');
-  const BadResponseMock = jest.spyOn(BadResponseError, 'default');
 
   const mockStore = setupStore();
   const dispatch = mockStore.dispatch;
@@ -50,6 +51,7 @@ describe('Account Thunks', () => {
         resolve({
           ok: true,
           json: () => ({
+            message: 'SUCCESS',
             accounts: fakeAccounts,
           }),
         });
@@ -81,33 +83,35 @@ describe('Account Thunks', () => {
     });
 
     describe('Given a bad response', () => {
-      it("Doesn't dispatch loadAccounts", async () => {
+      it('Throws a BadResponseError with a message if available', async () => {
         DataFetchMock.mockReturnValue({
           responsePromise: new Promise<any>((resolve, reject) => {
             resolve({
-              ok: false,
-              json: () =>
-                JSON.stringify({
-                  accounts: fakeAccounts,
-                }),
+              ok: true,
+              status: 400,
+              json: () => ({
+                message: 'FAILURE',
+                serverError: 'Exception finding account in ACCOUNTS.',
+              }),
             });
           }),
           cancel: () => null,
         });
         await dispatch(fetchAccounts());
 
-        expect(loadAccounts).not.toHaveBeenCalled();
+        expect(BadResponseError).toHaveBeenCalledWith(
+          400,
+          'FAILURE',
+          'Exception finding account in ACCOUNTS.'
+        );
       });
 
-      it('Throws a BadResponseError', async () => {
+      it('Throws a BadResponseError when ok is false', async () => {
         DataFetchMock.mockReturnValue({
           responsePromise: new Promise<any>((resolve, reject) => {
             resolve({
               ok: false,
-              json: () =>
-                JSON.stringify({
-                  accounts: fakeAccounts,
-                }),
+              status: 500,
             });
           }),
           cancel: () => null,
@@ -115,7 +119,11 @@ describe('Account Thunks', () => {
 
         await dispatch(fetchAccounts());
 
-        expect(BadResponseMock).toHaveBeenCalled();
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
       });
     });
   });
@@ -160,13 +168,15 @@ describe('Account Thunks', () => {
     });
 
     describe('Given a bad response', () => {
-      it('Throws a BadResponseError', async () => {
+      it('Throws a BadResponseError with message if given', async () => {
         DataFetchMock.mockReturnValue({
           responsePromise: new Promise<any>((resolve, _) => {
             resolve({
               ok: false,
+              status: 500,
               json: () => ({
-                message: 'Something went wrong',
+                message: 'FAILURE',
+                serverError: 'Exception raised in backend',
               }),
             });
           }),
@@ -181,7 +191,37 @@ describe('Account Thunks', () => {
           )
         );
 
-        expect(BadResponseMock).toHaveBeenCalled();
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
+      });
+
+      it('Throws a BadResponseError when ok is false', async () => {
+        DataFetchMock.mockReturnValue({
+          responsePromise: new Promise<any>((resolve, _) => {
+            resolve({
+              ok: false,
+              status: 500,
+            });
+          }),
+          cancel: () => null,
+        });
+
+        await dispatch(
+          addNewAccount(
+            'My New Account',
+            { label: 'Misc. Accounts', value: 1 },
+            true
+          )
+        );
+
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
       });
     });
   });
@@ -194,8 +234,11 @@ describe('Account Thunks', () => {
             resolve({
               ok: true,
               json: () => ({
-                1: 2000.0,
-                34: 2000,
+                message: 'SUCCESS',
+                balances: {
+                  1: 2000.0,
+                  34: 2000,
+                },
               }),
             });
           }),
@@ -214,14 +257,16 @@ describe('Account Thunks', () => {
       });
     });
 
-    describe('Given a bad resposne', () => {
-      it('Throws a BadResponseError', async () => {
+    describe('Given a bad response', () => {
+      it('Throws a BadResponseError when ok is false', async () => {
         DataFetchMock.mockReturnValue({
           responsePromise: new Promise<any>((resolve, _) => {
             resolve({
-              ok: false,
+              ok: true,
+              status: 400,
               json: () => ({
-                message: 'Something went wrong',
+                message: 'FAILURE',
+                serverError: 'Account with ID 34 not found.',
               }),
             });
           }),
@@ -230,7 +275,31 @@ describe('Account Thunks', () => {
 
         await dispatch(fetchAccountBalances([1, 34]));
 
-        expect(BadResponseMock).toHaveBeenCalled();
+        expect(BadResponseError).toHaveBeenCalledWith(
+          400,
+          'FAILURE',
+          'Account with ID 34 not found.'
+        );
+      });
+
+      it('Throws a BadResponseError when ok is false', async () => {
+        DataFetchMock.mockReturnValue({
+          responsePromise: new Promise<any>((resolve, _) => {
+            resolve({
+              ok: false,
+              status: 500,
+            });
+          }),
+          cancel: () => null,
+        });
+
+        await dispatch(fetchAccountBalances([1, 34]));
+
+        expect(BadResponseError).toHaveBeenCalledWith(
+          500,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
       });
     });
   });
