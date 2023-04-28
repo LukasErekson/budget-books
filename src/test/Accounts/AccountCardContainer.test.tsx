@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 
 import Account from '../../features/Accounts/types/types';
 import { AccountCardContainer } from '../../features/Accounts';
@@ -119,7 +119,9 @@ describe('AccountCardContainer Component', () => {
     expect(state.pageSlice.categorizationPage.activeAccount).toEqual({});
 
     const firstAccount = await screen.findByText('Fake Account 1');
-    fireEvent.click(firstAccount);
+    await act(async () => {
+      await userEvent.click(firstAccount);
+    });
 
     state = testStore.getState();
 
@@ -158,7 +160,9 @@ describe('AccountCardContainer Component', () => {
     );
 
     const newAccountButton = await screen.findByText(/Add New Account/i);
-    await userEvent.click(newAccountButton);
+    await act(async () => {
+      await userEvent.click(newAccountButton);
+    });
 
     // Expect to find the modal title
     expect(await screen.findAllByText(/Add New Account/i)).toBeDefined();
