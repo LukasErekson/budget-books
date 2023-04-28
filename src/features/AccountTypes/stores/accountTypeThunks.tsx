@@ -5,7 +5,8 @@ import AccountType from '../types/types';
 import { AppDispatch } from '../../../stores/store';
 
 export const fetchAccountTypes =
-  (group: string) => async (dispatch: AppDispatch) => {
+  (group = 'all') =>
+  async (dispatch: AppDispatch) => {
     try {
       const {
         responsePromise,
@@ -15,20 +16,31 @@ export const fetchAccountTypes =
       );
 
       const response: Response = await responsePromise;
-      const responseData: any = await response.json();
       if (response.ok) {
-        const accountTypes: any[] = responseData.account_types;
+        const responseData: {
+          message: string;
+          account_types: AccountType[];
+          serverError?: string;
+        } = await response.json();
 
-        const accountGroups: string[] = accountTypes.reduce(
-          (accumulator: any[], currentValue: AccountType) => {
-            if (!accumulator.includes(currentValue.group)) {
-              accumulator.push(currentValue.group);
-            }
+        if (responseData.message !== 'SUCCESS') {
+          throw new BadResponseError(
+            response.status,
+            responseData.message,
+            responseData.serverError ||
+              'There was an irrecoverable server error'
+          );
+        }
 
-            return accumulator;
-          },
-          []
-        );
+        const accountTypes: AccountType[] = responseData.account_types;
+
+        const accountGroups: string[] = [];
+
+        accountTypes.forEach((currentValue: AccountType) => {
+          if (!accountGroups.includes(currentValue.group)) {
+            accountGroups.push(currentValue.group);
+          }
+        });
 
         dispatch(setAccountTypes({ accountTypes, accountGroups }));
         return;
@@ -36,8 +48,8 @@ export const fetchAccountTypes =
 
       throw new BadResponseError(
         response.status,
-        responseData.message,
-        responseData.serverError
+        'FAILURE',
+        'There was an irrecoverable server error.'
       );
     } catch (error) {
       console.log(error);
