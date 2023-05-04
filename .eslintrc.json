@@ -17,9 +17,11 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
+    "max-len": ["warn", { "ignoreUrls": true, "ignoreStrings": true }],
     "linebreak-style": ["error", "unix"],
-    "quotes": ["error", "single"],
+    "quotes": ["warn", "single", { "avoidEscape": true }],
     "semi": ["error", "always"],
-    "testing-library/no-unnecessary-act": ["warn", { "isStrict": false }]
+    "testing-library/no-unnecessary-act": ["warn", { "isStrict": false }],
+    "testing-library/no-node-access": ["warn"]
   }
 }

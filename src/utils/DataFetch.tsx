@@ -11,12 +11,12 @@ function DataFetch(
   method: string,
   url: RequestInfo,
   requestData?: any,
-  headers: any = { 'Content-Type': 'application/json' }
+  headers: HeadersInit = { 'Content-Type': 'application/json' }
 ): { cancel: () => void; responsePromise: Promise<Response> } {
   const controller = new AbortController();
   const signal = controller.signal;
 
-  const fetchParams: any = requestData
+  const fetchParams: RequestInit = requestData
     ? {
         method,
         mode: 'cors',
@@ -38,22 +38,4 @@ function DataFetch(
   };
 }
 
-/**
- * Returns a basic serverError object. Use when the response is not okay.
- * @param serverResponse Object containing the server's return status and the accompanying message.
- * @returns Object that has proprties like a new Error would.
- */
-function serverError(serverResponse: {
-  serverStatus: number;
-  serverMessage: string;
-}): object {
-  return {
-    name: 'ServerError',
-    message: serverResponse.serverMessage,
-    status: serverResponse.serverStatus,
-  };
-}
-
 export default DataFetch;
-
-export { serverError };

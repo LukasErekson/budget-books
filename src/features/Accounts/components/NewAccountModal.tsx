@@ -6,7 +6,7 @@ import { FiHelpCircle } from 'react-icons/fi';
 
 import { addNewAccount } from '../stores/accountThunks';
 import { useThunkDispatch } from '../../../hooks/hooks';
-import { AccountTypeDropdownSelector } from '../../AccountTypes';
+import { AccountTypeDropdownSelect } from '../../AccountTypes';
 
 function NewAccountModal(props: {
   isOpen: boolean;
@@ -15,14 +15,14 @@ function NewAccountModal(props: {
   const [category, setCategory]: [
     { label: string; value: number },
     React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
-  ] = useState({ label: '', value: -1 } as {
+  ] = useState({ label: 'Misc. Accounts', value: -1 } as {
     label: string;
     value: number;
   });
   const [inputCategory, setInputCategory]: [
     string,
     React.Dispatch<React.SetStateAction<string>>
-  ] = useState('');
+  ] = useState('Misc. Accounts');
 
   const [accountName, setAccountName]: [
     string,
@@ -77,11 +77,12 @@ function NewAccountModal(props: {
           </div>
           <br />
           <label htmlFor='accountType'>Category:</label>
-          <AccountTypeDropdownSelector
+          <AccountTypeDropdownSelect
             setCategory={setCategory}
             category={category}
             setInputCategory={setInputCategory}
             inputCategory={inputCategory}
+            name='accountType'
           />
           <br />
           <div className='modal-input'>

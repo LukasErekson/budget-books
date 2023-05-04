@@ -18,9 +18,29 @@ export const fetchAccounts =
 
       const response: Response = await responsePromise;
       if (response.ok) {
-        const responseData: any = await response.json();
-        const accounts: Account[] = JSON.parse(responseData.accounts);
+        const responseData: {
+          message: string;
+          accounts: Account[];
+          serverError?: string;
+        } = await response.json();
+
+        if (responseData.message !== 'SUCCESS') {
+          throw new BadResponseError(
+            response.status,
+            responseData.message,
+            responseData.serverError ||
+              'There was an irrecoverable server error.'
+          );
+        }
+
+        const accounts: Account[] = responseData.accounts;
         dispatch(loadAccounts(accounts));
+      } else {
+        throw new BadResponseError(
+          response.status,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
       }
     } catch (error) {
       console.log(error);
@@ -28,7 +48,11 @@ export const fetchAccounts =
   };
 
 export const addNewAccount =
-  (name: string, account_type: any, debit_inc: boolean) =>
+  (
+    name: string,
+    account_type: { label: string; value: number },
+    debit_inc: boolean
+  ) =>
   async (dispatch: AppDispatch) => {
     try {
       const {
@@ -46,14 +70,23 @@ export const addNewAccount =
       const response: Response = await responsePromise;
 
       if (response.ok) {
+        const responseData: { message: string; serverError?: string } =
+          await response.json();
+        if (responseData.message !== 'SUCCESS') {
+          throw new BadResponseError(
+            response.status,
+            responseData.message,
+            responseData.serverError ||
+              'There was an irrecoverable server error.'
+          );
+        }
         dispatch(fetchAccounts());
         dispatch(fetchAccountTypes('all'));
       } else {
-        const responseData: any = await response.json();
         throw new BadResponseError(
           response.status,
-          responseData.message,
-          responseData.serverError
+          'FAILURE',
+          'There was an irrecoverable server error.'
         );
       }
     } catch (error) {
@@ -74,15 +107,29 @@ export const fetchAccountBalances =
       const response: Response = await responsePromise;
 
       if (response.ok) {
-        const accountBalances: { [id: number]: number } = await response.json();
+        const responseData: {
+          message: string;
+          serverError?: string;
+          balances: { [id: number]: number };
+        } = await response.json();
+
+        if (responseData.message !== 'SUCCESS') {
+          throw new BadResponseError(
+            response.status,
+            responseData.message,
+            responseData.serverError ||
+              'There was an irrecoverable server error.'
+          );
+        }
+
+        const accountBalances = responseData.balances;
 
         dispatch(updateAccountBalances(accountBalances));
       } else {
-        const responseData: any = await response.json();
         throw new BadResponseError(
           response.status,
-          responseData.message,
-          responseData.serverError
+          'FAILURE',
+          'There was an irrecoverable server error.'
         );
       }
     } catch (error) {

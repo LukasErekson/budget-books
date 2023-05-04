@@ -12,13 +12,14 @@ import {
   selectAccountTypes,
 } from '../stores/accountTypeSelectors';
 
-function AccountTypeDropdownSelector(props: {
+function AccountTypeDropdownSelect(props: {
   setCategory: React.Dispatch<
     React.SetStateAction<{ label: string; value: number }>
   >;
   category: { label: string; value: number };
   setInputCategory: React.Dispatch<React.SetStateAction<string>>;
   inputCategory: string;
+  name: string;
 }): JSX.Element {
   const options: OptionsOrGroups<number, any> = useSelector(
     (state: RootState) => selectAccountTypeByGroups(state)
@@ -74,4 +75,4 @@ function AccountTypeDropdownSelector(props: {
   );
 }
 
-export default AccountTypeDropdownSelector;
+export default AccountTypeDropdownSelect;
