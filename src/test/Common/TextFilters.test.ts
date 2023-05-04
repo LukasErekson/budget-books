@@ -22,22 +22,22 @@ describe('Text Filters utility functions', () => {
   });
 
   describe('dayMonthYear', () => {
-    it('Converts JS Date "Date(\'2023-02-13\')" to 12-02-2023', () => {
-      const fromDate = new Date('2023-02-13');
+    it('Converts JS Date "Date(\'02/12/2023\')" to 12-02-2023', () => {
+      const fromDate = new Date('02/12/2023');
       const toDate = '12-02-2023';
 
       expect(dayMonthYear(fromDate)).toEqual(toDate);
     });
 
-    it('Converts JS Date "Date(\'2023-02-09\')" to 08-02-2023', () => {
-      const fromDate = new Date('2023-02-09');
+    it('Converts JS Date "Date(\'02/08/2023\')" to 08-02-2023', () => {
+      const fromDate = new Date('02/08/2023');
       const toDate = '08-02-2023';
 
       expect(dayMonthYear(fromDate)).toEqual(toDate);
     });
 
-    it('Converts JS Date "Date(\'2023-12-09\')" to 08-12-2023', () => {
-      const fromDate = new Date('2023-12-09');
+    it('Converts JS Date "Date(\'12/08/2023\')" to 08-12-2023', () => {
+      const fromDate = new Date('12/08/2023');
       const toDate = '08-12-2023';
 
       expect(dayMonthYear(fromDate)).toEqual(toDate);
@@ -45,22 +45,22 @@ describe('Text Filters utility functions', () => {
   });
 
   describe('yearMonthDay', () => {
-    it('Converts JS Date "Date(\'2023-02-13\')" to 2023-02-12', () => {
-      const fromDate = new Date('2023-02-13');
+    it('Converts JS Date "Date(\'02/12/2023\')" to 2023-02-12', () => {
+      const fromDate = new Date('02/12/2023');
       const toDate = '2023-02-12';
 
       expect(yearMonthDay(fromDate)).toEqual(toDate);
     });
 
-    it('Converts JS Date "Date(\'2023-02-09\')" to 2023-02-08', () => {
-      const fromDate = new Date('2023-02-09');
+    it('Converts JS Date "Date(\'02/08/2023\')" to 2023-02-08', () => {
+      const fromDate = new Date('02/08/2023');
       const toDate = '2023-02-08';
 
       expect(yearMonthDay(fromDate)).toEqual(toDate);
     });
 
-    it('Converts JS Date "Date(\'2023-12-09\')" to 2023-12-08', () => {
-      const fromDate = new Date('2023-12-09');
+    it('Converts JS Date "Date(\'12/08/2023\')" to 2023-12-08', () => {
+      const fromDate = new Date('12/08/2023');
       const toDate = '2023-12-08';
 
       expect(yearMonthDay(fromDate)).toEqual(toDate);
