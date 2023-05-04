@@ -1,5 +1,7 @@
 # Budget Books - In Development
 
+![Node.js Workflow](https://github.com/LukasErekson/budget-books/actions/workflows/node.js.yml/badge.svg)
+
 A React web-app for consolidating transaction data and bank account balances. Budget Books aims to be a central place to analyze personal finance in a simple, straightforward way while providing users that want more customization in their analysis tools to dig deeper. It empowers users to take control of their financial data with any degree of granularity that they want.
 
 ## Skills Showcase
