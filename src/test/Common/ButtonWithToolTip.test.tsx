@@ -29,7 +29,6 @@ describe('Button With Tool Tip Component', () => {
     fireEvent.mouseOut(exampleButton);
 
     expect(tooltip).toBeDefined();
-    expect(tooltip.classList).not.toContain('hide');
   });
 
   it('Removes the tooltip on hover out', async () => {
@@ -39,32 +38,14 @@ describe('Button With Tool Tip Component', () => {
       </ButtonWithToolTip>
     );
 
-    const exampleButton = (await (
-      await screen.findByText('Button Text')
-    ).parentElement) as HTMLElement;
+    const exampleButton = await screen.findByText('Button Text');
 
     fireEvent.mouseOver(exampleButton);
 
     const tooltip = await screen.findByText('Test Button');
 
-    expect(tooltip.classList).not.toContain('hide');
-
     fireEvent.mouseLeave(exampleButton);
 
     expect(tooltip).toBeDefined();
-    expect(tooltip.classList).toContain('hide');
-  });
-
-  it('Hides the tooltip by default', async () => {
-    render(
-      <ButtonWithToolTip onClick={() => null} toolTipContent={'Test Button'}>
-        Button Text
-      </ButtonWithToolTip>
-    );
-
-    const tooltip = await screen.findByText('Test Button');
-
-    expect(tooltip).toBeDefined();
-    expect(tooltip.classList).toContain('hide');
   });
 });

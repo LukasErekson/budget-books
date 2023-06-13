@@ -90,27 +90,6 @@ code {
   transition: 0.1s;
 }
 
-.btn-with-tooltip-tooltip {
-  font-size: 0.75rem;
-  position: relative;
-  top: -400%;
-  left: -150%;
-  color: white;
-
-  display: block;
-  width: fit-content;
-  word-wrap: none;
-  padding: 0.25rem;
-
-  background-color: var(--tooltip-bg);
-  border: 1px solid var(--quarter-shadow);
-  border-radius: 5px;
-}
-
-.btn-with-tooltip-tooltip:hover {
-  color: white;
-}
-
 /* Navbar Styles */
 nav {
   display: flex;
