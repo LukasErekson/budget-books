@@ -424,10 +424,19 @@ nav a:hover {
   padding: 0.25rem;
   font-size: 1.2rem;
   color: rgb(46, 46, 46);
+  display: flex;
+  justify-content: center;
+  align-content: center;
 }
 
 .txn-from-header:hover {
   color: rgb(46, 46, 46);
+}
+
+.sort-icons {
+  height: 1.2rem;
+  width: 1.2rem;
+  display: block;
 }
 
 .categorize-txn-btn {
