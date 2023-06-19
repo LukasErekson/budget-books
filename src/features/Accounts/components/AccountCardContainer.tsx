@@ -9,7 +9,7 @@ import Account from '../types/types';
 
 import { RootState } from '../../../stores/store';
 import { selectBankAccounts } from '../stores/accountSelectors';
-import { changeActiveAccount } from '../../../stores/PageSlice';
+import { changeCategorizationActiveAccount } from '../../../stores/PageSlice';
 import { fetchAccounts } from '../stores/accountThunks';
 import { fetchAccountTypes } from '../../AccountTypes/stores/accountTypeThunks';
 import { fetchBankAccountTransactions } from '../../Transactions/stores/transactionThunks';
@@ -86,7 +86,7 @@ function AccountCardContainer(): JSX.Element {
               key={`account-${acct.id}`}
               accountData={acct}
               onClick={() => {
-                dispatch(changeActiveAccount(acct));
+                dispatch(changeCategorizationActiveAccount(acct));
               }}
             />
           ))

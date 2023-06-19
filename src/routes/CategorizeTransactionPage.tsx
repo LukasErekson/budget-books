@@ -6,7 +6,7 @@ import { RootState } from '../stores/store';
 import { useAppDispatch, useThunkDispatch } from '../hooks/hooks';
 import { setTransactionsIsLoaded } from '../features/Transactions/stores/transactionSlice';
 import { fetchAccountTransactions } from '../features/Transactions/stores/transactionThunks';
-import { changeActiveAccount } from '../stores/PageSlice';
+import { changeCategorizationActiveAccount } from '../stores/PageSlice';
 
 import { useSelector } from 'react-redux';
 
@@ -95,7 +95,7 @@ function CategorizeTransactionsPage() {
   useEffect(() => {
     if (Object.keys(activeAccount).length === 0 || activeAccount.id === 0) {
       if (possibleAccounts.length > 0) {
-        dispatch(changeActiveAccount(possibleAccounts[0]));
+        dispatch(changeCategorizationActiveAccount(possibleAccounts[0]));
       }
     }
   }, [dispatch, activeAccount, possibleAccounts]);

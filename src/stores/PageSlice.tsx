@@ -14,9 +14,13 @@ export const pageSlice = createSlice({
     categorizationPage: {
       activeAccount: initialActiveAccount,
     },
+    accountSettingsPage: {
+      activeAccount: initialActiveAccount,
+      editAccountModalIsOpen: false,
+    },
   },
   reducers: {
-    changeActiveAccount: (state, action) => {
+    changeCategorizationActiveAccount: (state, action) => {
       const newActiveAccount: Account = action.payload;
       return {
         ...state,
@@ -26,9 +30,32 @@ export const pageSlice = createSlice({
         },
       };
     },
+    openEditAccountModal: (state, action) => {
+      const editAccount: Account = action.payload.editAccount;
+      return {
+        ...state,
+        accountSettingsPage: {
+          activeAccount: editAccount,
+          editAccountModalIsOpen: true,
+        },
+      };
+    },
+    closeEditAccountModal: (state) => {
+      return {
+        ...state,
+        accountSettingsPage: {
+          ...state.accountSettingsPage,
+          editAccountModalIsOpen: false,
+        },
+      };
+    },
   },
 });
 
-export const { changeActiveAccount } = pageSlice.actions;
+export const {
+  changeCategorizationActiveAccount,
+  openEditAccountModal,
+  closeEditAccountModal,
+} = pageSlice.actions;
 
 export default pageSlice.reducer;

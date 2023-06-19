@@ -1,4 +1,8 @@
-import { loadAccounts, updateAccountBalances } from './accountSlice';
+import {
+  loadAccounts,
+  updateAccountBalances,
+  updateAccountInfo,
+} from './accountSlice';
 import DataFetch from '../../../utils/DataFetch';
 import BadResponseError from '../../../utils/BadResponseError';
 import { fetchAccountTypes } from '../../AccountTypes/stores/accountTypeThunks';
@@ -125,6 +129,50 @@ export const fetchAccountBalances =
         const accountBalances = responseData.balances;
 
         dispatch(updateAccountBalances(accountBalances));
+      } else {
+        throw new BadResponseError(
+          response.status,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export const putUpdatedAccountInfo =
+  (editedAccount: Account) => async (dispatch: AppDispatch) => {
+    try {
+      const {
+        responsePromise,
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
+        'PUT',
+        `/api/accounts/?account_id=${editedAccount.id}`,
+        {
+          editedAccount,
+        }
+      );
+
+      const response: Response = await responsePromise;
+
+      if (response.ok) {
+        const responseData: {
+          message: string;
+          serverError?: string;
+          balances: { [id: number]: number };
+        } = await response.json();
+
+        if (responseData.message !== 'SUCCESS') {
+          throw new BadResponseError(
+            response.status,
+            responseData.message,
+            responseData.serverError ||
+              'There was an irrecoverable server error.'
+          );
+        }
+
+        dispatch(updateAccountInfo(editedAccount));
       } else {
         throw new BadResponseError(
           response.status,

@@ -31,9 +31,23 @@ export const accountSlice = createSlice({
         }),
       };
     },
+
+    updateAccountInfo: (state, action) => {
+      const editedAccount: Account = action.payload;
+      return {
+        state,
+        accounts: state.accounts.map((account: Account) => {
+          if (account.id === editedAccount.id) {
+            return editedAccount;
+          }
+          return account;
+        }),
+      };
+    },
   },
 });
 
-export const { loadAccounts, updateAccountBalances } = accountSlice.actions;
+export const { loadAccounts, updateAccountBalances, updateAccountInfo } =
+  accountSlice.actions;
 
 export default accountSlice.reducer;
