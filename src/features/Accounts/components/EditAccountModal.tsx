@@ -9,6 +9,7 @@ import { AccountTypeDropdownSelect } from '../../AccountTypes';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { putUpdatedAccountInfo } from '../stores/accountThunks';
 import { toast } from 'react-toastify';
+import { FiHelpCircle } from 'react-icons/fi';
 
 function EditAccountModal(props: {
   isOpen: boolean;
@@ -112,6 +113,13 @@ function EditAccountModal(props: {
             <label htmlFor='edit-account-debit-inc'>
               Increases with Debits?
             </label>
+            <abbr
+              title={
+                'This is typically true for bank accounts and expenses, but it is not true for credit cards, loans, and other liabilities.'
+              }
+            >
+              <FiHelpCircle />
+            </abbr>
             <input
               type='checkbox'
               name='edit-account-debit-inc'

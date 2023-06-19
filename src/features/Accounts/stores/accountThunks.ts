@@ -148,7 +148,7 @@ export const putUpdatedAccountInfo =
         responsePromise,
       }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
         'PUT',
-        `/api/accounts/?account_id=${editedAccount.id}`,
+        '/api/accounts',
         {
           editedAccount,
         }
