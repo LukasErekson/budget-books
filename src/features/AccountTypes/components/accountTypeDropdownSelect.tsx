@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 import Select, { OptionsOrGroups } from 'react-select';
@@ -11,6 +11,8 @@ import {
   selectAccountTypeNames,
   selectAccountTypes,
 } from '../stores/accountTypeSelectors';
+import { useThunkDispatch } from '../../../hooks/hooks';
+import { fetchAccountTypes } from '../stores/accountTypeThunks';
 
 function AccountTypeDropdownSelect(props: {
   setCategory: React.Dispatch<
@@ -19,7 +21,7 @@ function AccountTypeDropdownSelect(props: {
   category: { label: string; value: number };
   setInputCategory: React.Dispatch<React.SetStateAction<string>>;
   inputCategory: string;
-  name: string;
+  id?: string;
 }): JSX.Element {
   const options: OptionsOrGroups<number, any> = useSelector(
     (state: RootState) => selectAccountTypeByGroups(state)
@@ -32,13 +34,22 @@ function AccountTypeDropdownSelect(props: {
     selectAccountTypeNames(state)
   );
 
+  const thunkDispatch = useThunkDispatch();
+
   if (Object.keys(props.category).length === 0) {
     props.setCategory(options[0].options[0]);
   }
 
+  useEffect(() => {
+    if (!accountTypes.length) {
+      thunkDispatch(fetchAccountTypes('all'));
+    }
+  }, []);
+
   return (
     <Select
       name={'accountType'}
+      id={props.id}
       options={options.concat({
         label: 'New Category',
         options: [

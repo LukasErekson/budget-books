@@ -93,7 +93,7 @@ describe('AccountDropdownSelect Component', () => {
         setCategory={setCategoryMock}
         inputCategory={input}
         setInputCategory={setInputCategoryMock}
-        name={'testAccountType'}
+        id={'testAccountType'}
       />,
       { store: testStore }
     );
@@ -113,7 +113,7 @@ describe('AccountDropdownSelect Component', () => {
         setCategory={setCategoryMock}
         inputCategory={input}
         setInputCategory={setInputCategoryMock}
-        name={'testAccountType'}
+        id={'testAccountType'}
       />,
       { store: testStore }
     );
@@ -137,7 +137,7 @@ describe('AccountDropdownSelect Component', () => {
         setCategory={setCategoryMock}
         inputCategory={input}
         setInputCategory={setInputCategoryMock}
-        name={'testAccountType'}
+        id={'testAccountType'}
       />,
       { store: testStore }
     );
@@ -164,7 +164,7 @@ describe('AccountDropdownSelect Component', () => {
         setCategory={setCategoryMock}
         inputCategory={input}
         setInputCategory={setInputCategoryMock}
-        name={'testAccountType'}
+        id={'testAccountType'}
       />,
       { store: testStore }
     );
@@ -183,7 +183,7 @@ describe('AccountDropdownSelect Component', () => {
         setCategory={setCategoryMock}
         inputCategory={input}
         setInputCategory={setInputCategoryMock}
-        name={'testAccountType'}
+        id={'testAccountType'}
       />,
       { store: testStore }
     );
@@ -201,7 +201,7 @@ describe('AccountDropdownSelect Component', () => {
         setCategory={setCategoryMock}
         inputCategory={'My New Account type'}
         setInputCategory={setInputCategoryMock}
-        name={'testAccountType'}
+        id={'testAccountType'}
       />
     );
 
@@ -225,7 +225,7 @@ describe('AccountDropdownSelect Component', () => {
         setCategory={setCategoryMock}
         inputCategory={input}
         setInputCategory={setInputCategoryMock}
-        name={'testAccountType'}
+        id={'testAccountType'}
       />,
       { store: testStore }
     );
@@ -243,7 +243,7 @@ describe('AccountDropdownSelect Component', () => {
         setCategory={setCategoryMock}
         inputCategory={'Checking Account'}
         setInputCategory={setInputCategoryMock}
-        name={'testAccountType'}
+        id={'testAccountType'}
       />
     );
 

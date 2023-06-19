@@ -7,6 +7,7 @@ import { FiHelpCircle } from 'react-icons/fi';
 import { addNewAccount } from '../stores/accountThunks';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { AccountTypeDropdownSelect } from '../../AccountTypes';
+import { AiOutlineClose } from 'react-icons/ai';
 
 function NewAccountModal(props: {
   isOpen: boolean;
@@ -56,8 +57,12 @@ function NewAccountModal(props: {
         isOpen={props.isOpen}
         onRequestClose={props.onRequestClose}
         appElement={document.getElementById('root') || undefined}
-        style={{ content: { height: 'fit-content' } }}
+        style={{ content: { height: '50%' } }}
       >
+        <AiOutlineClose
+          onClick={props.onRequestClose}
+          className='close-modal-x'
+        />
         <h1 className='center'>Add New Account</h1>
         <form
           className='modal-form'
@@ -82,7 +87,7 @@ function NewAccountModal(props: {
             category={category}
             setInputCategory={setInputCategory}
             inputCategory={inputCategory}
-            name='accountType'
+            id='accountType'
           />
           <br />
           <div className='modal-input'>

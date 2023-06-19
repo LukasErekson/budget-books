@@ -10,20 +10,22 @@ import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
-    <div className='App'>
+    <>
       <Navbar />
-      <Routes>
-        <Route path='/' element={<CategorizeTransactionsPage />} />
-        <Route
-          path='/categorize-transactions'
-          element={<CategorizeTransactionsPage />}
-        />
-        <Route path='/balance-sheet' element={<BalanceSheetPage />} />
-        <Route path='/expense-report' element={<ExpenseReportPage />} />
-        <Route path='/account/settings' element={<AccountSettingsPage />} />
-      </Routes>
-      <ToastContainer />
-    </div>
+      <div className='App'>
+        <Routes>
+          <Route path='/' element={<CategorizeTransactionsPage />} />
+          <Route
+            path='/categorize-transactions'
+            element={<CategorizeTransactionsPage />}
+          />
+          <Route path='/balance-sheet' element={<BalanceSheetPage />} />
+          <Route path='/expense-report' element={<ExpenseReportPage />} />
+          <Route path='/account/settings' element={<AccountSettingsPage />} />
+        </Routes>
+        <ToastContainer />
+      </div>
+    </>
   );
 }
 

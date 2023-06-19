@@ -171,6 +171,7 @@ function CategorizeTxnForm(props: {
           name='selected'
           role={'checkbox'}
           id={'$checkbox-{id}'}
+          style={{ width: '1rem', height: '1rem' }}
           value={isSelected}
           checked={isSelected === 1}
           onChange={() => {

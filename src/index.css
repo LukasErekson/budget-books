@@ -297,15 +297,21 @@ nav a:hover {
 .modal-btn {
   background-color: var(--primary);
   color: white;
-  padding: 0.75rem;
+  padding: 0.3rem 0.75rem;
+  margin: 0.75rem;
 
   font-size: 1rem;
   font-weight: bold;
 
   border-radius: 10px;
-  border: 0;
+  border: 1px solid var(--dark-primary-alpha);
 
   cursor: pointer;
+}
+
+.modal-btn:hover {
+  background-color: var(--dark-primary);
+  transition: 0.5s;
 }
 
 .center {
@@ -320,7 +326,8 @@ nav a:hover {
 .txn-form-container {
   display: flex;
   flex-direction: column;
-  border-top: 1px solid var(--half-shadow);
+  border: 1px solid var(--quarter-shadow);
+  border-radius: 5px;
 }
 
 .categorize-txn-form {
@@ -421,7 +428,7 @@ nav a:hover {
 
 .txn-form-header {
   cursor: pointer;
-  padding: 0.25rem;
+  padding: 0.25rem 0rem 0.75rem 0rem;
   font-size: 1.2rem;
   color: rgb(46, 46, 46);
   display: flex;
