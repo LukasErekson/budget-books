@@ -8,6 +8,7 @@ import { addNewAccount } from '../stores/accountThunks';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { AccountTypeDropdownSelect } from '../../AccountTypes';
 import { AiOutlineClose } from 'react-icons/ai';
+import { Checkbox } from '@mui/material';
 
 function NewAccountModal(props: {
   isOpen: boolean;
@@ -91,21 +92,31 @@ function NewAccountModal(props: {
           />
           <br />
           <div className='modal-input'>
-            <label htmlFor='debitInc'>Balance increases with debits?</label>
-            <abbr
-              title={
-                'This is typically true for bank accounts and expenses, but it is not true for credit cards, loans, and other liabilities.'
-              }
+            <label
+              htmlFor='debitIncCB'
+              style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}
             >
-              <FiHelpCircle />
-            </abbr>
-            <input
-              type='checkbox'
-              name='debitInc'
-              id='debitIncCB'
-              checked={debitInc}
-              onChange={() => setDebitInc(!debitInc)}
-            />
+              Balance increases with debits?
+              <abbr
+                title={
+                  'This is typically true for bank accounts and expenses, but it is not true for credit cards, loans, and other liabilities.'
+                }
+              >
+                <FiHelpCircle />
+              </abbr>
+              <Checkbox
+                name='debitInc'
+                id='debitIncCB'
+                checked={debitInc}
+                onChange={(event) => setDebitInc(event.target.checked)}
+                sx={{
+                  color: '#008cff',
+                  '&.Mui-checked': {
+                    color: '#008cff',
+                  },
+                }}
+              />
+            </label>
           </div>
 
           <div className='center'>

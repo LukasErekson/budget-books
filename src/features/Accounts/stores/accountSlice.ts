@@ -44,10 +44,24 @@ export const accountSlice = createSlice({
         }),
       };
     },
+
+    removeAccount: (state, action) => {
+      const removeAccountID: number = action.payload;
+      return {
+        state,
+        accounts: state.accounts.filter(
+          (account: Account) => account.id !== removeAccountID
+        ),
+      };
+    },
   },
 });
 
-export const { loadAccounts, updateAccountBalances, updateAccountInfo } =
-  accountSlice.actions;
+export const {
+  loadAccounts,
+  updateAccountBalances,
+  updateAccountInfo,
+  removeAccount,
+} = accountSlice.actions;
 
 export default accountSlice.reducer;

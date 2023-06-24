@@ -7,10 +7,18 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../stores/store';
 import { AccountTypeDropdownSelect } from '../../AccountTypes';
 import { useThunkDispatch } from '../../../hooks/hooks';
-import { putUpdatedAccountInfo } from '../stores/accountThunks';
+import { deleteAccount, putUpdatedAccountInfo } from '../stores/accountThunks';
 import { toast } from 'react-toastify';
 import { FiHelpCircle } from 'react-icons/fi';
-
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@mui/material';
+import { IoMdWarning } from 'react-icons/io';
 function EditAccountModal(props: {
   isOpen: boolean;
   onRequestClose: any;
@@ -40,7 +48,12 @@ function EditAccountModal(props: {
   const [debitInc, setDebitInc]: [
     boolean,
     React.Dispatch<React.SetStateAction<boolean>>
-  ] = useState(Boolean(editAccount.debit_inc));
+  ] = useState(Boolean(editAccount.debit_inc) || false);
+
+  const [deleteDialogIsOpen, setDeleteDialogIsOpen]: [
+    boolean,
+    React.Dispatch<React.SetStateAction<boolean>>
+  ] = useState(false);
 
   const thunkDispatch = useThunkDispatch();
 
@@ -57,6 +70,12 @@ function EditAccountModal(props: {
       debit_inc: debitInc,
     };
     thunkDispatch(putUpdatedAccountInfo(editedAccount));
+    props.onRequestClose();
+  }
+
+  function dispatchDeleteAccount(): void {
+    thunkDispatch(deleteAccount(editAccount.id));
+    setDeleteDialogIsOpen(false);
     props.onRequestClose();
   }
 
@@ -82,7 +101,24 @@ function EditAccountModal(props: {
           onClick={props.onRequestClose}
           className='close-modal-x'
         />
-
+        <Dialog
+          open={deleteDialogIsOpen}
+          onClose={() => setDeleteDialogIsOpen(false)}
+        >
+          <DialogTitle>
+            Are you sure you want to delete {editAccount.name}?
+          </DialogTitle>
+          <DialogContent>
+            All transactions connected to this account will be moved to
+            uncategorized. This action cannot be undone.
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={dispatchDeleteAccount}>Yes</Button>
+            <Button onClick={() => setDeleteDialogIsOpen(false)} autoFocus>
+              No
+            </Button>
+          </DialogActions>
+        </Dialog>
         <h1 className='center'>Edit Account</h1>
 
         <form className={'modal-form'}>
@@ -110,30 +146,56 @@ function EditAccountModal(props: {
           />
           <br />
           <div className='modal-input'>
-            <label htmlFor='edit-account-debit-inc'>
-              Increases with Debits?
-            </label>
-            <abbr
-              title={
-                'This is typically true for bank accounts and expenses, but it is not true for credit cards, loans, and other liabilities.'
-              }
+            <label
+              htmlFor='edit-account-debit-inc'
+              style={{ display: 'flex', alignItems: 'center', gap: '.5rem' }}
             >
-              <FiHelpCircle />
-            </abbr>
-            <input
-              type='checkbox'
-              name='edit-account-debit-inc'
-              id='edit-account-debit-inc'
-              checked={debitInc}
-              onChange={() => setDebitInc(!debitInc)}
-            />
+              Increases with Debits?
+              <abbr
+                title={
+                  'This is typically true for bank accounts and expenses, but it is not true for credit cards, loans, and other liabilities.'
+                }
+              >
+                <FiHelpCircle />
+              </abbr>
+              <Checkbox
+                name='edit-account-debit-inc'
+                id='edit-account-debit-inc'
+                checked={debitInc}
+                onChange={(event) => setDebitInc(event.target.checked)}
+                sx={{
+                  color: '#008cff',
+                  '&.Mui-checked': {
+                    color: '#008cff',
+                  },
+                }}
+              />
+            </label>
           </div>
         </form>
         <div className='center'>
-          <button className='modal-btn' onClick={saveAccountEdits}>
+          <button
+            className='modal-btn'
+            onClick={() => {
+              setDeleteDialogIsOpen(false);
+              saveAccountEdits();
+            }}
+          >
             Save
           </button>
-          <button className='modal-btn' onClick={props.onRequestClose}>
+          <button
+            className='modal-btn delete-modal-yes'
+            onClick={() => setDeleteDialogIsOpen(true)}
+          >
+            Delete Account
+          </button>
+          <button
+            className='modal-btn'
+            onClick={() => {
+              setDeleteDialogIsOpen(false);
+              props.onRequestClose();
+            }}
+          >
             Close
           </button>
         </div>

@@ -1,5 +1,6 @@
 import {
   loadAccounts,
+  removeAccount,
   updateAccountBalances,
   updateAccountInfo,
 } from './accountSlice';
@@ -173,6 +174,47 @@ export const putUpdatedAccountInfo =
         }
 
         dispatch(updateAccountInfo(editedAccount));
+      } else {
+        throw new BadResponseError(
+          response.status,
+          'FAILURE',
+          'There was an irrecoverable server error.'
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+export const deleteAccount =
+  (accountIDToDelete: number) => async (dispatch: AppDispatch) => {
+    try {
+      const {
+        responsePromise,
+      }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
+        'DELETE',
+        `/api/accounts?id=${accountIDToDelete}`
+      );
+
+      const response: Response = await responsePromise;
+
+      if (response.ok) {
+        const responseData: {
+          message: string;
+          serverError?: string;
+          balances: { [id: number]: number };
+        } = await response.json();
+
+        if (responseData.message !== 'SUCCESS') {
+          throw new BadResponseError(
+            response.status,
+            responseData.message,
+            responseData.serverError ||
+              'There was an irrecoverable server error.'
+          );
+        }
+
+        dispatch(removeAccount(accountIDToDelete));
       } else {
         throw new BadResponseError(
           response.status,

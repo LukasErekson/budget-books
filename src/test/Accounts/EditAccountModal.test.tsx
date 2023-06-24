@@ -196,4 +196,72 @@ describe('EditAccountModal Component', () => {
     ).toBeDefined();
     putEditedAccountInfoMock.mockClear();
   });
+
+  it('"Delete Account" opens a confirmation dialog', async () => {
+    renderWithProviders(
+      <div id='root'>
+        <ToastContainer />
+        <EditAccountModal isOpen={true} onRequestClose={() => null} />
+      </div>
+    );
+
+    const deleteButton: HTMLButtonElement = await screen.findByText(
+      'Delete Account'
+    );
+
+    await userEvent.click(deleteButton);
+
+    expect(
+      await screen.findByText(/Are you sure you want to delete/i)
+    ).toBeDefined();
+  });
+
+  describe('Opening the delete account confirmation dialog', () => {
+    it('Clicking "No" closes the dialog', async () => {
+      renderWithProviders(
+        <div id='root'>
+          <ToastContainer />
+          <EditAccountModal isOpen={true} onRequestClose={() => null} />
+        </div>
+      );
+
+      const deleteButton: HTMLButtonElement = await screen.findByText(
+        'Delete Account'
+      );
+
+      await userEvent.click(deleteButton);
+
+      const noButton: HTMLButtonElement = await screen.findByText('No');
+
+      await userEvent.click(noButton);
+
+      expect(noButton).not.toBeVisible();
+    });
+
+    it('Clicking "Yes" dispatches the the delete thunk and closes the dialog', async () => {
+      const deleteAccountMock = jest.spyOn(AccountThunks, 'deleteAccount');
+      deleteAccountMock.mockReturnValue(mockThunkReturn);
+
+      renderWithProviders(
+        <div id='root'>
+          <ToastContainer />
+          <EditAccountModal isOpen={true} onRequestClose={() => null} />
+        </div>
+      );
+
+      const deleteButton: HTMLButtonElement = await screen.findByText(
+        'Delete Account'
+      );
+
+      await userEvent.click(deleteButton);
+
+      const yesButton: HTMLButtonElement = await screen.findByText('Yes');
+
+      await userEvent.click(yesButton);
+
+      expect(deleteAccountMock).toHaveBeenCalled();
+
+      expect(yesButton).not.toBeVisible();
+    });
+  });
 });

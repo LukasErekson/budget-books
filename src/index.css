@@ -5,7 +5,7 @@
   --positive-num: darkgreen;
   --alert-color: rgb(231, 127, 0);
   --warn-color: rgb(197, 0, 46);
-  --primary: rgb(0, 140, 255);
+  --primary: #008cff;
   --dark-primary: rgb(0, 100, 182);
   --dark-primary-alpha: rgba(0, 100, 182, 0.5);
   --selected: rgba(0, 0, 0, 0.2);
@@ -295,15 +295,15 @@ nav a:hover {
 }
 
 .modal-btn {
-  background-color: var(--primary);
-  color: white;
+  color: var(--primary);
+  background-color: white;
   padding: 0.3rem 0.75rem;
   margin: 0.75rem;
 
   font-size: 1rem;
   font-weight: bold;
 
-  border-radius: 10px;
+  border-radius: 5px;
   border: 1px solid var(--dark-primary-alpha);
 
   cursor: pointer;
@@ -311,6 +311,7 @@ nav a:hover {
 
 .modal-btn:hover {
   background-color: var(--dark-primary);
+  color: white;
   transition: 0.5s;
 }
 
@@ -625,6 +626,7 @@ nav a:hover {
 }
 
 button.delete-modal-yes {
+  background-color: white;
   border-color: var(--warn-color);
   color: var(--warn-color);
 }
@@ -633,7 +635,7 @@ button.delete-modal-yes:hover {
   background-color: var(--warn-color);
   color: white;
   border-color: var(--warn-color);
-  transition: 0.25s;
+  transition: 0.5s;
 }
 
 /* ACCOUNTS TABLE STYLES */
