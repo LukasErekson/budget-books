@@ -8,7 +8,7 @@ import { addNewAccount } from '../stores/accountThunks';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { AccountTypeDropdownSelect } from '../../AccountTypes';
 import { AiOutlineClose } from 'react-icons/ai';
-import { Checkbox } from '@mui/material';
+import { Button, Checkbox, TextField } from '@mui/material';
 
 function NewAccountModal(props: {
   isOpen: boolean;
@@ -60,10 +60,11 @@ function NewAccountModal(props: {
         appElement={document.getElementById('root') || undefined}
         style={{ content: { height: '50%' } }}
       >
-        <AiOutlineClose
-          onClick={props.onRequestClose}
-          className='close-modal-x'
-        />
+        <div className='close-modal-x'>
+          <Button onClick={props.onRequestClose}>
+            <AiOutlineClose />
+          </Button>
+        </div>
         <h1 className='center'>Add New Account</h1>
         <form
           className='modal-form'
@@ -72,13 +73,17 @@ function NewAccountModal(props: {
           }
         >
           <label htmlFor='accountName'>Account Name:</label>
-          <div className='modal-input'>
-            <input
-              type='text'
-              name='accountName'
+          <div>
+            <TextField
+              id='accountName'
+              variant='outlined'
+              size='small'
+              style={{ width: '100%' }}
               value={accountName}
               placeholder='Account Name...'
-              onChange={(event: any) => setAccountName(event.target.value)}
+              onChange={(
+                event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+              ) => setAccountName(event.target.value)}
             />
           </div>
           <br />
@@ -120,9 +125,9 @@ function NewAccountModal(props: {
           </div>
 
           <div className='center'>
-            <button className={'modal-btn'} type='submit'>
+            <Button variant='contained' type='submit'>
               Add Account
-            </button>
+            </Button>
           </div>
         </form>
       </Modal>

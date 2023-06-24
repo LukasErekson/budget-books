@@ -14,6 +14,7 @@ import { yearMonthDay } from '../../../utils/TextFilters';
 import { RootState } from '../../../stores/store';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { uploadTransactions } from '../../Transactions/stores/transactionThunks';
+import { Button } from '@mui/material';
 
 type UploadTransactionModalProps = {
   isOpen: boolean;
@@ -110,10 +111,11 @@ function UploadTxnModal(props: UploadTransactionModalProps): JSX.Element {
       }}
       portalClassName='delete-txn-modal'
     >
-      <AiOutlineClose
-        onClick={props.onRequestClose}
-        className='close-modal-x'
-      />
+      <div className='close-modal-x'>
+        <Button onClick={props.onRequestClose}>
+          <AiOutlineClose />
+        </Button>
+      </div>
       <h3>Upload Transactions</h3>
 
       <label htmlFor='one-col-amt-checkbox'>Use one column for amount?</label>

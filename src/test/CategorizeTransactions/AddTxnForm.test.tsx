@@ -12,6 +12,7 @@ import { RootState, setupStore } from '../../stores/store';
 
 import { AddTxnForm } from '../../features/CategorizeTransactions';
 import { yearMonthDay } from '../../utils/TextFilters';
+import dayjs from 'dayjs';
 
 describe('Add Transaction Form', () => {
   let testStore: RootState;
@@ -90,30 +91,25 @@ describe('Add Transaction Form', () => {
       { store: testStore }
     );
 
-    const dateInput = screen.getByTestId('add-txn-date') as HTMLInputElement;
+    const dateInput = screen.getByPlaceholderText(
+      'MM/DD/YYYY'
+    ) as HTMLInputElement;
 
     expect(dateInput).toBeDefined();
-    expect(dateInput.value).toEqual(yearMonthDay(new Date()));
+    expect(dateInput.value).toEqual(dayjs().format('MM/DD/YYYY'));
 
-    const transactionName = screen.getAllByRole(
-      'textbox'
-    )[0] as HTMLInputElement;
+    const transactionName = screen.getByPlaceholderText('Transaction Name');
 
     expect(transactionName).toBeDefined();
-    expect(transactionName.placeholder).toEqual('Transaction Name');
 
-    const transactionDescription = screen.getAllByRole(
-      'textbox'
-    )[1] as HTMLInputElement;
-
-    expect(transactionDescription).toBeDefined();
-    expect(transactionDescription.placeholder).toEqual(
+    const transactionDescription = screen.getByPlaceholderText(
       'Transaction Description'
     );
+    expect(transactionDescription).toBeDefined();
 
     const transactionAmount = screen.getAllByRole(
       'textbox'
-    )[2] as HTMLInputElement;
+    )[3] as HTMLInputElement;
 
     expect(transactionAmount).toBeDefined();
   });
@@ -128,7 +124,7 @@ describe('Add Transaction Form', () => {
       { store: testStore }
     );
 
-    const postButton = screen.getAllByRole('button')[0];
+    const postButton = screen.getAllByRole('button')[1];
 
     await userEvent.click(postButton);
 
@@ -148,17 +144,15 @@ describe('Add Transaction Form', () => {
       { store: testStore }
     );
 
-    const transactionName = screen.getAllByRole(
-      'textbox'
-    )[0] as HTMLInputElement;
+    const transactionName = screen.getByPlaceholderText('Transaction Name');
 
-    const transactionDescription = screen.getAllByRole(
-      'textbox'
-    )[1] as HTMLInputElement;
+    const transactionDescription = screen.getByPlaceholderText(
+      'Transaction Description'
+    );
 
     const transactionAmount = screen.getAllByRole(
       'textbox'
-    )[2] as HTMLInputElement;
+    )[3] as HTMLInputElement;
 
     await act(async () => {
       await userEvent.type(transactionName, 'Fake Transaction');
@@ -169,7 +163,7 @@ describe('Add Transaction Form', () => {
       await userEvent.type(transactionAmount, '-20.25');
     });
 
-    const postButton = (await screen.findAllByRole('button'))[0];
+    const postButton = (await screen.findAllByRole('button'))[1];
 
     await userEvent.click(postButton);
 
@@ -193,7 +187,7 @@ describe('Add Transaction Form', () => {
       { store: testStore }
     );
 
-    const closeButton = (await screen.findAllByRole('button'))[1];
+    const closeButton = (await screen.findAllByRole('button'))[2];
 
     expect(closeButton).toBeDefined();
 

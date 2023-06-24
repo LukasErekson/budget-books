@@ -9,6 +9,8 @@ import { Provider } from 'react-redux';
 import { PreloadedState } from 'redux';
 import { render, RenderOptions } from '@testing-library/react';
 import { RootState, AppStore } from '../stores/store';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export const fakePromise: Promise<any> = new Promise(() => null);
 
@@ -48,7 +50,11 @@ export function renderWithProviders(
   }: ExtendedRenderOptions = {}
 ) {
   function Wrapper({ children }: PropsWithChildren<any>): JSX.Element {
-    return <Provider store={store}>{children}</Provider>;
+    return (
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <Provider store={store}>{children}</Provider>
+      </LocalizationProvider>
+    );
   }
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 }

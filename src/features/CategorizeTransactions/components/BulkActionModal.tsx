@@ -17,6 +17,7 @@ import {
   deleteTransactions,
 } from '../../Transactions/stores/transactionThunks';
 import { AccountDropdownSelect } from '../../Accounts';
+import { Button } from '@mui/material';
 
 type BulkActionModalProps = {
   isOpen: boolean;
@@ -100,10 +101,11 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
       }}
       portalClassName='bulk-txn-modal'
     >
-      <AiOutlineClose
-        onClick={props.onRequestClose}
-        className='close-modal-x'
-      />
+      <div className='close-modal-x'>
+        <Button onClick={props.onRequestClose}>
+          <AiOutlineClose />
+        </Button>
+      </div>
       <h3>Bulk Actions</h3>
       <h4>
         The following will apply the action to{' '}
@@ -143,20 +145,18 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
               the selected transactions. There is no undoing this action.
             </p>
             <div className='delete-modal-options'>
-              <button
+              <Button
+                variant='contained'
+                color='warning'
                 onClick={() => {
                   deleteAllTransactions();
                 }}
-                className='delete-modal-yes'
               >
                 Delete All
-              </button>
-              <button
-                onClick={props.onRequestClose}
-                className='delete-modal-no'
-              >
+              </Button>
+              <Button variant='contained' onClick={props.onRequestClose}>
                 Cancel
-              </button>
+              </Button>
             </div>
           </div>
         </div>

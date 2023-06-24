@@ -6,11 +6,15 @@ import { AiOutlineStop, AiOutlinePlus } from 'react-icons/ai';
 import { TransactionData } from '../types/types';
 import Account from '../../Accounts/types/types';
 
+import dayjs, { Dayjs } from 'dayjs';
+
 import ButtonWithToolTip from '../../../components/ButtonWithToolTip';
 import { AccountDropdownSelect } from '../../Accounts';
 import { yearMonthDay } from '../../../utils/TextFilters';
 
 import { addTransaction } from '../../Transactions/stores/transactionThunks';
+import { TextField } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers';
 
 const initialFormData: TransactionData = {
   transaction_date: yearMonthDay(new Date()),
@@ -81,28 +85,31 @@ function AddTxnForm(props: {
     <div className='categorize-txn-form' key={id}>
       <span />
       <span className='categorize-txn-item'>
-        <input
-          type='date'
+        <DatePicker
+          slotProps={{
+            textField: { size: 'small', style: { marginBottom: '10px' } },
+          }}
+          className='add-txn-date'
           data-testid='add-txn-date'
-          name='add-txn-date'
-          value={formData.transaction_date}
-          onChange={(event: any) => {
-            const newDate: string = event.target.value;
+          value={dayjs(formData.transaction_date) || null}
+          onChange={(newDate: Dayjs | null) => {
             setFormData((prevState: TransactionData) => ({
               ...prevState,
-              transaction_date: newDate,
+              transaction_date: newDate?.format('YYYY-MM-DD') || '',
             }));
           }}
         />
       </span>{' '}
       <span className='categorize-txn-item'>
-        <input
-          type='text'
+        <TextField
+          size='small'
+          style={{ width: '80%', marginBottom: '10px' }}
           name='txn-name'
-          style={{ width: '80%' }}
           placeholder='Transaction Name'
           value={formData.name}
-          onChange={(event: any) => {
+          onChange={(
+            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+          ) => {
             const newName: string = event.target.value;
             setFormData((prevState: TransactionData) => ({
               ...prevState,
@@ -112,13 +119,15 @@ function AddTxnForm(props: {
         />
       </span>{' '}
       <span className='categorize-txn-item'>
-        <input
-          type='text'
+        <TextField
+          size='small'
+          style={{ width: '80%', marginBottom: '10px' }}
           name='txn-description'
-          style={{ width: '80%' }}
           placeholder='Transaction Description'
           value={formData.description}
-          onChange={(event: any) => {
+          onChange={(
+            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+          ) => {
             const newDescription: string = event.target.value;
             setFormData((prevState: TransactionData) => ({
               ...prevState,
@@ -133,17 +142,26 @@ function AddTxnForm(props: {
           (+formData.amount < 0 ? ' negative' : ' positive')
         }
       >
-        <input
+        <TextField
           type='text'
+          inputProps={{
+            inputMode: 'numeric',
+            pattern: '^-?[d(d,)]*.{0,1}[d]{0,2}$',
+          }}
+          size='small'
+          style={{ width: '80%', marginBottom: '10px' }}
           name='txn-amount'
-          style={{ width: '80%' }}
           value={formData.amount === 0 ? '' : formData.amount}
-          onChange={(event: any) => {
+          onChange={(
+            event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+          ) => {
             const newAmount: string = event.target.value;
-            setFormData((prevState: TransactionData) => ({
-              ...prevState,
-              amount: newAmount,
-            }));
+            if (/^-?[\d(\d,)]*\.{0,1}[\d]{0,2}$/.test(newAmount)) {
+              setFormData((prevState: TransactionData) => ({
+                ...prevState,
+                amount: newAmount,
+              }));
+            }
           }}
         />
       </span>
@@ -162,7 +180,7 @@ function AddTxnForm(props: {
           toolTipContent='Post Transaction'
           className='add-txn-btn'
         >
-          <AiOutlinePlus style={{ fontSize: '1.25rem' }} />
+          <AiOutlinePlus />
         </ButtonWithToolTip>
 
         <ButtonWithToolTip
@@ -172,7 +190,7 @@ function AddTxnForm(props: {
           toolTipContent='Close'
           className='add-txn-btn'
         >
-          <AiOutlineStop style={{ fontSize: '1.25rem' }} />
+          <AiOutlineStop />
         </ButtonWithToolTip>
       </span>
     </div>

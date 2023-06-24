@@ -17,6 +17,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Input,
+  TextField,
 } from '@mui/material';
 import { IoMdWarning } from 'react-icons/io';
 function EditAccountModal(props: {
@@ -97,10 +99,11 @@ function EditAccountModal(props: {
         appElement={document.getElementById('root') || undefined}
         style={{ content: { margin: '2rem', height: '50%' } }}
       >
-        <AiOutlineClose
-          onClick={props.onRequestClose}
-          className='close-modal-x'
-        />
+        <div className='close-modal-x'>
+          <Button onClick={props.onRequestClose}>
+            <AiOutlineClose />
+          </Button>
+        </div>
         <Dialog
           open={deleteDialogIsOpen}
           onClose={() => setDeleteDialogIsOpen(false)}
@@ -113,7 +116,9 @@ function EditAccountModal(props: {
             uncategorized. This action cannot be undone.
           </DialogContent>
           <DialogActions>
-            <Button onClick={dispatchDeleteAccount}>Yes</Button>
+            <Button onClick={dispatchDeleteAccount} color='warning'>
+              Yes
+            </Button>
             <Button onClick={() => setDeleteDialogIsOpen(false)} autoFocus>
               No
             </Button>
@@ -123,10 +128,12 @@ function EditAccountModal(props: {
 
         <form className={'modal-form'}>
           <label htmlFor='edit-account-name'>Account Name:</label>
-          <div className='modal-input'>
-            <input
-              type='text'
-              id={'edit-account-name'}
+          <div>
+            <TextField
+              id='edit-account-name'
+              variant='outlined'
+              size='small'
+              style={{ width: '100%' }}
               value={accountName}
               onChange={(
                 event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -173,31 +180,32 @@ function EditAccountModal(props: {
             </label>
           </div>
         </form>
-        <div className='center'>
-          <button
-            className='modal-btn'
+        <div className='center' style={{ display: 'flex', gap: '2rem' }}>
+          <Button
+            variant='contained'
             onClick={() => {
               setDeleteDialogIsOpen(false);
               saveAccountEdits();
             }}
           >
             Save
-          </button>
-          <button
-            className='modal-btn delete-modal-yes'
+          </Button>
+          <Button
+            variant='contained'
+            color='warning'
             onClick={() => setDeleteDialogIsOpen(true)}
           >
             Delete Account
-          </button>
-          <button
-            className='modal-btn'
+          </Button>
+          <Button
+            variant='contained'
             onClick={() => {
               setDeleteDialogIsOpen(false);
               props.onRequestClose();
             }}
           >
             Close
-          </button>
+          </Button>
         </div>
       </Modal>
     </>

@@ -334,7 +334,7 @@ nav a:hover {
 .categorize-txn-form {
   cursor: pointer;
   display: grid;
-  grid-template-columns: 7ch 10ch 1fr 2fr 12ch 1fr 0.5fr;
+  grid-template-columns: 5ch 18ch 1fr 2fr 0.5fr 1fr 0.5fr;
   gap: 2rem;
   row-gap: 0.5rem;
   padding: 0.5rem 1rem 0rem 1rem;
@@ -603,41 +603,7 @@ nav a:hover {
   gap: 2rem;
 }
 
-.delete-modal-options button {
-  cursor: pointer;
-  border: 1px solid var(--dark-primary);
-
-  background-color: white;
-  color: var(--primary);
-
-  padding: 0.25rem;
-
-  border-radius: 10px;
-
-  min-width: 12ch;
-}
-
-.delete-modal-options button:hover {
-  border: 1px solid var(--dark-primary);
-  background-color: var(--primary);
-  color: white;
-
-  transition: 0.25s;
-}
-
-button.delete-modal-yes {
-  background-color: white;
-  border-color: var(--warn-color);
-  color: var(--warn-color);
-}
-
-button.delete-modal-yes:hover {
-  background-color: var(--warn-color);
-  color: white;
-  border-color: var(--warn-color);
-  transition: 0.5s;
-}
-
+.
 /* ACCOUNTS TABLE STYLES */
 #accounts-table {
   border-spacing: 0rem;
