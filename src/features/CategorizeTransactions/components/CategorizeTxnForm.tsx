@@ -17,6 +17,7 @@ import { pyToJsDate } from '../../../utils/TextFilters';
 import { AccountDropdownSelect } from '../../Accounts';
 import ButtonWithToolTip from '../../../components/ButtonWithToolTip';
 import { DeleteTxnModal } from '../';
+import { Checkbox } from '@mui/material';
 
 function CategorizeTxnForm(props: {
   transacitonData: Transaction;
@@ -166,17 +167,14 @@ function CategorizeTxnForm(props: {
       onClick={toggleDetailVisibility}
     >
       <span className='categorize-txn-item'>
-        <input
-          type='checkbox'
+        <Checkbox
           name='selected'
-          role={'checkbox'}
           id={'$checkbox-{id}'}
           style={{ width: '1rem', height: '1rem' }}
-          value={isSelected}
           checked={isSelected === 1}
           onChange={() => {
             setIsSelected((prev: number) => (prev + 1) % 2);
-            if (isSelected) {
+            if (isSelected === 1) {
               props.unSelectTransaction(props.transacitonData);
               return;
             }

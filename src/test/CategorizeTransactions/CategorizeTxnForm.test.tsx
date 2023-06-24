@@ -115,20 +115,20 @@ describe('Categorize Transaction Form', () => {
     );
 
     const checkBox = (await screen.findByRole('checkbox')) as HTMLInputElement;
-    expect(checkBox.value).toEqual('0');
+    expect(checkBox.value).toEqual('on');
 
     await act(async () => {
       await userEvent.click(checkBox);
     });
 
-    expect(checkBox.value).toEqual('1');
+    expect(checkBox.value).toEqual('on');
     expect(selectTransaction).toHaveBeenCalledWith(transactionData);
 
     await act(async () => {
       await userEvent.click(checkBox);
     });
 
-    expect(checkBox.value).toEqual('0');
+    expect(checkBox.value).toEqual('on');
     expect(unSelectTransaction).toHaveBeenCalledWith(transactionData);
   });
 
