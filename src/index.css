@@ -6,7 +6,7 @@
   --alert-color: rgb(231, 127, 0);
   --warn-color: rgb(197, 0, 46);
   --primary: #008cff;
-  --dark-primary: rgb(0, 100, 182);
+  --dark-primary: #0a79eb;
   --dark-primary-alpha: rgba(0, 100, 182, 0.5);
   --selected: rgba(0, 0, 0, 0.2);
   --selected-dark: rgba(0, 0, 0, 0.25);
@@ -610,13 +610,14 @@ nav a:hover {
   box-shadow: 0px 0px 5px var(--quarter-shadow);
   border-radius: 5px;
   margin: 1rem;
+  width: 100%;
 }
 
 .account-table-header {
   font-size: 1.25rem;
   font-weight: bold;
   padding: 0.5rem 2rem;
-  background-color: white;
+  background-color: rgba(0, 0, 0, 0.075);
   border-bottom: 1px solid black;
 }
 
@@ -624,24 +625,19 @@ nav a:hover {
   padding: 0.5rem;
 }
 
-#accounts-table tr:nth-child(2n + 1) {
-  background-color: #dadada;
-}
-
-#accounts-table tr:nth-child(2n + 1):hover {
-  background-color: var(--selected);
-  transition: 0.25s;
+#accounts-table tr:hover {
+  background-color: rgba(0, 0, 0, 0.15);
+  transition: background-color 0.25s;
 }
 
 #accounts-table tr:nth-child(2n) {
-  background-color: none;
+  background-color: rgba(0, 0, 0, 0.075);
 }
 
 #accounts-table tr:nth-child(2n):hover {
-  background-color: var(--selected);
-  transition: 0.25s;
+  background-color: rgba(0, 0, 0, 0.175);
+  transition: background-color 0.25s;
 }
-
-#accounts-table tr:hover {
-  text-shadow: 1px 1px 0px white;
+#accounts-table tr {
+  background-color: white;
 }

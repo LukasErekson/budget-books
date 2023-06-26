@@ -58,7 +58,7 @@ function NewAccountModal(props: {
         isOpen={props.isOpen}
         onRequestClose={props.onRequestClose}
         appElement={document.getElementById('root') || undefined}
-        style={{ content: { height: '50%' } }}
+        style={{ content: { margin: '2rem', height: '50%' } }}
       >
         <div className='close-modal-x'>
           <Button onClick={props.onRequestClose}>

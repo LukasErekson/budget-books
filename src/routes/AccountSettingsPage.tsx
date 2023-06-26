@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../stores/store';
 import Account from '../features/Accounts/types/types';
 import { closeEditAccountModal } from '../stores/PageSlice';
+import { Button, TextField } from '@mui/material';
 
 function AccountSettingsPage(): JSX.Element {
   const editAccountModalIsOpen: boolean = useSelector(
@@ -34,9 +35,17 @@ function AccountSettingsPage(): JSX.Element {
         onRequestClose={() => dispatch(closeEditAccountModal())}
       />
 
-      <button onClick={() => setNewAccountModalIsOpen(true)}>
+      <TextField size='small' disabled={true} />
+
+      <Button
+        variant='contained'
+        onClick={() => setNewAccountModalIsOpen(true)}
+      >
         Add new account
-      </button>
+      </Button>
+
+      <Button variant='contained'>Add new Account Type</Button>
+
       <div className='center'>
         <AccountList />
       </div>
