@@ -17,7 +17,7 @@ function AccountForm(props: { account: Account }): JSX.Element {
       <td className={negativeBalance ? 'negative' : 'positive'}>
         {negativeBalance && '-'}${Math.abs(account.balance).toFixed(2)}{' '}
       </td>
-      <td>{account.debit_inc ? 'Yes' : 'No'}</td>
+      <td>{account.debit_inc ? 'Debit' : 'Credit'}</td>
       <td>{pyToJsDate(account.last_updated)}</td>
       <td>
         <button

@@ -126,7 +126,7 @@ function AccountList(): JSX.Element {
             Account Type
           </th>
           <th className={'account-table-header'}>Current Balance</th>
-          <th className={'account-table-header'}>Increases With Debits?</th>
+          <th className={'account-table-header'}>Normal Side</th>
           <th
             className={'account-table-header'}
             onClick={() => {
