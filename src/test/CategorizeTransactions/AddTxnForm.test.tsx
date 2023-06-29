@@ -48,12 +48,12 @@ describe('Add Transaction Form', () => {
       {
         id: 1,
         name: 'Checking Account',
-        group: 'Assets',
+        group_name: 'Assets',
       },
       {
         id: 2,
         name: 'Credit Card',
-        group: 'Liabilities',
+        group_name: 'Liabilities',
       },
     ];
 
@@ -61,7 +61,9 @@ describe('Add Transaction Form', () => {
       accounts: { accounts: fakeAccounts },
       accountTypes: {
         accountTypes: fakeAccountTypes,
-        accountGroups: fakeAccountTypes.map((accountType) => accountType.group),
+        accountGroups: fakeAccountTypes.map(
+          (accountType) => accountType.group_name
+        ),
       },
     });
   });

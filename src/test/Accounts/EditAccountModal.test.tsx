@@ -63,19 +63,21 @@ describe('EditAccountModal Component', () => {
       {
         id: 1,
         name: 'Checking Account',
-        group: 'Assets',
+        group_name: 'Assets',
       },
       {
         id: 2,
         name: 'Credit Card',
-        group: 'Liabilities',
+        group_name: 'Liabilities',
       },
     ];
     testStore = setupStore({
       accounts: { accounts: fakeAccounts },
       accountTypes: {
         accountTypes: fakeAccountTypes,
-        accountGroups: fakeAccountTypes.map((accountType) => accountType.group),
+        accountGroups: fakeAccountTypes.map(
+          (accountType) => accountType.group_name
+        ),
       },
       pageSlice: {
         accountSettingsPage: {

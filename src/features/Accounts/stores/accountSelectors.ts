@@ -45,7 +45,7 @@ export const selectAccountOptions = (
         currentValue: AccountType
       ) => {
         const accountType = currentValue.name;
-        const accountGroup = currentValue.group;
+        const accountGroup = currentValue.group_name;
         accumulator[accountType] = accountGroup;
         return accumulator;
       },

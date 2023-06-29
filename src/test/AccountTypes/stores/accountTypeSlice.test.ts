@@ -13,12 +13,12 @@ describe('accountTypeSlice Reduces', () => {
         {
           id: 1,
           name: 'Checking Account',
-          group: 'Assets',
+          group_name: 'Assets',
         },
         {
           id: 2,
           name: 'Credit Card',
-          group: 'Liabilities',
+          group_name: 'Liabilities',
         },
       ];
 

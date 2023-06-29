@@ -33,10 +33,10 @@ export const selectAccountTypeByGroups = (
     return [];
   }
   accountTypeRows.forEach((row: AccountType) => {
-    if (!(row.group in groupings)) {
-      groupings[row.group] = [];
+    if (!(row.group_name in groupings)) {
+      groupings[row.group_name] = [];
     }
-    groupings[row.group].push({ label: row.name, value: row.id });
+    groupings[row.group_name].push({ label: row.name, value: row.id });
   });
 
   const optionGroups: OptionsOrGroups<number, any> = orderedGroups.map(

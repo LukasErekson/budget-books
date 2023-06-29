@@ -14,8 +14,8 @@ describe('Account Type Thunks', () => {
   const dispatch = mockStore.dispatch;
 
   const mockAccountTypes: AccountType[] = [
-    { id: 1, name: 'Checking Account', group: 'Assets' },
-    { id: 2, name: 'Credit Card', group: 'Liabilities' },
+    { id: 1, name: 'Checking Account', group_name: 'Assets' },
+    { id: 2, name: 'Credit Card', group_name: 'Liabilities' },
   ];
 
   describe('fetchAccountTypes', () => {
@@ -71,7 +71,7 @@ describe('Account Type Thunks', () => {
         expect(setAccountTypes).toHaveBeenCalledWith({
           accountTypes: mockAccountTypes,
           accountGroups: mockAccountTypes.map(
-            (accountType) => accountType.group
+            (accountType) => accountType.group_name
           ),
         });
       });

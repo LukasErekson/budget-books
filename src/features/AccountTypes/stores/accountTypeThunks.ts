@@ -37,8 +37,8 @@ export const fetchAccountTypes =
         const accountGroups: string[] = [];
 
         accountTypes.forEach((currentValue: AccountType) => {
-          if (!accountGroups.includes(currentValue.group)) {
-            accountGroups.push(currentValue.group);
+          if (!accountGroups.includes(currentValue.group_name)) {
+            accountGroups.push(currentValue.group_name);
           }
         });
 
