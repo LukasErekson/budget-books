@@ -16,14 +16,39 @@ export const accountTypeSlice = createSlice({
       const accountGroups: string[] = action.payload.accountGroups;
 
       return {
-        state,
+        ...state,
         accountTypes: accountTypes,
         accountGroups: accountGroups,
+      };
+    },
+    createNewAccountType: (state, action) => {
+      const newAccountType: AccountType = action.payload;
+
+      const newAccountTypeList: AccountType[] = [
+        ...state.accountTypes,
+        newAccountType,
+      ];
+
+      const newAccountGroupList: string[] = [...state.accountGroups];
+
+      if (
+        !newAccountGroupList.some(
+          (groupName: string) => groupName === newAccountType.group_name
+        )
+      ) {
+        newAccountGroupList.push(newAccountType.group_name);
+      }
+
+      return {
+        ...state,
+        accountTypes: newAccountTypeList,
+        accountGroups: newAccountGroupList,
       };
     },
   },
 });
 
-export const { setAccountTypes } = accountTypeSlice.actions;
+export const { setAccountTypes, createNewAccountType } =
+  accountTypeSlice.actions;
 
 export default accountTypeSlice.reducer;
