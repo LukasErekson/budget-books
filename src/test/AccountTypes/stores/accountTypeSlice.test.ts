@@ -4,8 +4,6 @@ import {
 } from '../../../features/AccountTypes/stores/accountTypeSlice';
 import AccountType from '../../../features/AccountTypes/types/types';
 
-import { selectAccountNames } from '../../../features/Accounts/stores/accountSelectors';
-
 describe('accountTypeSlice Reduces', () => {
   describe('setAccountTypes', () => {
     it('Sets the accountTypes and accountGroups', async () => {
@@ -41,7 +39,6 @@ describe('accountTypeSlice Reduces', () => {
       );
 
       expect(newState).toEqual({
-        state: { accountGroups: [], accountTypes: [] },
         accountTypes: newAccountTypes,
         accountGroups: newAccountGroups,
       });
