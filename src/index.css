@@ -7,6 +7,7 @@
   --warn-color: rgb(197, 0, 46);
   --primary: #008cff;
   --dark-primary: #0a79eb;
+  --darker-primary: #0954a0;
   --dark-primary-alpha: rgba(0, 100, 182, 0.5);
   --selected: rgba(0, 0, 0, 0.2);
   --selected-dark: rgba(0, 0, 0, 0.25);
@@ -96,7 +97,11 @@ nav {
   flex-direction: column;
 
   background-color: var(--dark-primary);
+  background-image: linear-gradient(var(--primary), var(--dark-primary));
   padding: 0.5rem;
+  border: 2px inset var(--darker-primary);
+  border-left: 0px;
+  border-right: 0px;
 }
 
 nav a {
@@ -113,8 +118,8 @@ nav a {
 }
 
 nav a:hover {
-  text-shadow: 0px 0px 7px black;
-  transition: 0.5s;
+  text-shadow: 0px 0px 3px black;
+  transition: 1s;
 }
 
 .nav-list {
@@ -272,9 +277,11 @@ nav a:hover {
 
   display: grid;
   color: white;
-  text-shadow: 1px 1px 0px black;
+  text-shadow: 1px 1px 3px var(--half-shadow);
   grid-template-columns: 75px 1fr 75px;
   grid-template-areas: 'none modal-title close';
+
+  border-bottom: 2px solid var(--darker-primary);
 }
 
 .close-modal-x {
