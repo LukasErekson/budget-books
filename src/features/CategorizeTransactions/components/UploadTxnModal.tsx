@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import Modal from 'react-modal';
 import { BaseRow, Importer, ImporterField } from 'react-csv-importer';
 import 'react-csv-importer/dist/index.css';
 
@@ -10,11 +9,12 @@ import { AiOutlineClose } from 'react-icons/ai';
 import Account from '../../Accounts/types/types';
 import { UploadableTransaction } from '../types/types';
 
-import { yearMonthDay } from '../../../utils/TextFilters';
-import { RootState } from '../../../stores/store';
-import { useThunkDispatch } from '../../../hooks/hooks';
-import { uploadTransactions } from '../../Transactions/stores/transactionThunks';
 import { Button } from '@mui/material';
+import ModalBase from '../../../components/ModalBase';
+import { useThunkDispatch } from '../../../hooks/hooks';
+import { RootState } from '../../../stores/store';
+import { yearMonthDay } from '../../../utils/TextFilters';
+import { uploadTransactions } from '../../Transactions/stores/transactionThunks';
 
 type UploadTransactionModalProps = {
   isOpen: boolean;
@@ -94,13 +94,12 @@ function UploadTxnModal(props: UploadTransactionModalProps): JSX.Element {
   }
 
   return (
-    <Modal
+    <ModalBase
       isOpen={props.isOpen}
       onRequestClose={() => {
         setOneColumnAmounts(1);
         props.onRequestClose();
       }}
-      appElement={document.getElementById('root') || undefined}
       style={{
         content: {
           height: 'fit-content',
@@ -166,7 +165,7 @@ function UploadTxnModal(props: UploadTransactionModalProps): JSX.Element {
           </>
         )}
       </Importer>
-    </Modal>
+    </ModalBase>
   );
 }
 

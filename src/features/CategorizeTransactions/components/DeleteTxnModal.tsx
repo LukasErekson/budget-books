@@ -1,15 +1,14 @@
 import React from 'react';
 
-import Modal from 'react-modal';
-
-import { AiOutlineClose } from 'react-icons/ai';
 import { IoMdWarning } from 'react-icons/io';
 
 import Transaction from '../../Transactions/types/types';
 
-import { pyToJsDate } from '../../../utils/TextFilters';
+import ModalBase from '../../../components/ModalBase';
 import { useThunkDispatch } from '../../../hooks/hooks';
+import { pyToJsDate } from '../../../utils/TextFilters';
 import { deleteTransactions } from '../../Transactions/stores/transactionThunks';
+import { Button } from '@mui/material';
 
 interface deleteTxnModalProps {
   isOpen: boolean;
@@ -29,25 +28,12 @@ function DeleteTxnModal(props: deleteTxnModalProps): JSX.Element {
   }
 
   return (
-    <Modal
+    <ModalBase
       isOpen={props.isOpen}
       onRequestClose={props.onRequestClose}
-      appElement={document.getElementById('root') || undefined}
-      style={{
-        content: {
-          height: 'fit-content',
-          width: 'fit-content',
-          margin: 'auto',
-          marginRight: 'auto',
-        },
-      }}
+      title='Delete Transaction?'
       portalClassName='delete-txn-modal'
     >
-      <AiOutlineClose
-        onClick={props.onRequestClose}
-        className='close-modal-x'
-      />
-      <h3>Delete Transaction?</h3>
       <p>Are you sure you want to delete the following transaction?</p>
 
       <div className='delete-txn-txn-container muted'>
@@ -69,20 +55,21 @@ function DeleteTxnModal(props: deleteTxnModalProps): JSX.Element {
       <p className='warn center'>There is no undoing this action.</p>
 
       <div className='delete-modal-options'>
-        <button
+        <Button
+          variant='contained'
+          color='warning'
           onClick={() => {
             deleteTransaction();
             props.onRequestClose();
           }}
-          className='delete-modal-yes'
         >
           Yes
-        </button>
-        <button onClick={props.onRequestClose} className='delete-modal-no'>
+        </Button>
+        <Button variant='contained' onClick={props.onRequestClose}>
           No
-        </button>
+        </Button>
       </div>
-    </Modal>
+    </ModalBase>
   );
 }
 

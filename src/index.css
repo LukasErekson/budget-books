@@ -265,6 +265,46 @@ nav a:hover {
   transition: 1s;
 }
 
+/* MODAL STYLES */
+.modal-header {
+  background-image: linear-gradient(var(--dark-primary), var(--primary));
+  background-color: var(--dark-primary);
+
+  display: grid;
+  color: white;
+  text-shadow: 1px 1px 0px black;
+  grid-template-columns: 75px 1fr 75px;
+  grid-template-areas: 'none modal-title close';
+}
+
+.close-modal-x {
+  grid-area: close;
+  margin-top: 0.5rem;
+}
+
+.close-modal-x svg {
+  font-size: 1.25rem;
+}
+.modal-title {
+  grid-area: modal-title;
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.modal-content-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-form {
+  width: 80%;
+  margin: 1rem 0rem;
+}
+
 .modal-input {
   display: flex;
   align-items: center;
@@ -579,21 +619,14 @@ nav a:hover {
 
 /* Delete Txn Modal */
 
-.close-modal-x {
-  position: absolute;
-  right: 0.75rem;
-  top: 0.75rem;
-
-  font-size: 1.25rem;
-
-  cursor: pointer;
-}
-
 .delete-txn-modal .delete-txn-txn-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   padding: 0rem 2rem;
+  gap: 3rem;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .delete-modal-options {

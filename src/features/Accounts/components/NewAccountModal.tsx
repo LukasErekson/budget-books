@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 
-import Modal from 'react-modal';
-
 import { FiHelpCircle } from 'react-icons/fi';
 
-import { addNewAccount } from '../stores/accountThunks';
+import { Button, Checkbox, TextField } from '@mui/material';
+import ModalBase from '../../../components/ModalBase';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { AccountTypeDropdownSelect } from '../../AccountTypes';
-import { AiOutlineClose } from 'react-icons/ai';
-import { Button, Checkbox, TextField } from '@mui/material';
+import { addNewAccount } from '../stores/accountThunks';
 
 function NewAccountModal(props: {
   isOpen: boolean;
@@ -54,18 +52,11 @@ function NewAccountModal(props: {
 
   return (
     <>
-      <Modal
+      <ModalBase
+        title={'Add New Account'}
         isOpen={props.isOpen}
         onRequestClose={props.onRequestClose}
-        appElement={document.getElementById('root') || undefined}
-        style={{ content: { margin: '2rem', height: '50%' } }}
       >
-        <div className='close-modal-x'>
-          <Button onClick={props.onRequestClose}>
-            <AiOutlineClose />
-          </Button>
-        </div>
-        <h1 className='center'>Add New Account</h1>
         <form
           className='modal-form'
           onSubmit={(event: React.FormEvent<HTMLFormElement>) =>
@@ -130,7 +121,7 @@ function NewAccountModal(props: {
             </Button>
           </div>
         </form>
-      </Modal>
+      </ModalBase>
     </>
   );
 }

@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AiOutlineClose } from 'react-icons/ai';
 
-import Modal from 'react-modal';
-import Account from '../types/types';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../stores/store';
-import { AccountTypeDropdownSelect } from '../../AccountTypes';
-import { useThunkDispatch } from '../../../hooks/hooks';
-import { deleteAccount, putUpdatedAccountInfo } from '../stores/accountThunks';
-import { toast } from 'react-toastify';
-import { FiHelpCircle } from 'react-icons/fi';
 import {
   Button,
   Checkbox,
@@ -17,10 +7,17 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Input,
   TextField,
 } from '@mui/material';
-import { IoMdWarning } from 'react-icons/io';
+import { FiHelpCircle } from 'react-icons/fi';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import ModalBase from '../../../components/ModalBase';
+import { useThunkDispatch } from '../../../hooks/hooks';
+import { RootState } from '../../../stores/store';
+import { AccountTypeDropdownSelect } from '../../AccountTypes';
+import { deleteAccount, putUpdatedAccountInfo } from '../stores/accountThunks';
+import Account from '../types/types';
 function EditAccountModal(props: {
   isOpen: boolean;
   onRequestClose: any;
@@ -93,17 +90,11 @@ function EditAccountModal(props: {
 
   return (
     <>
-      <Modal
+      <ModalBase
+        title='Edit Account'
         isOpen={props.isOpen}
         onRequestClose={props.onRequestClose}
-        appElement={document.getElementById('root') || undefined}
-        style={{ content: { margin: '2rem', height: '50%' } }}
       >
-        <div className='close-modal-x'>
-          <Button onClick={props.onRequestClose}>
-            <AiOutlineClose />
-          </Button>
-        </div>
         <Dialog
           open={deleteDialogIsOpen}
           onClose={() => setDeleteDialogIsOpen(false)}
@@ -124,7 +115,6 @@ function EditAccountModal(props: {
             </Button>
           </DialogActions>
         </Dialog>
-        <h1 className='center'>Edit Account</h1>
 
         <form className={'modal-form'}>
           <label htmlFor='edit-account-name'>Account Name:</label>
@@ -207,7 +197,7 @@ function EditAccountModal(props: {
             Close
           </Button>
         </div>
-      </Modal>
+      </ModalBase>
     </>
   );
 }

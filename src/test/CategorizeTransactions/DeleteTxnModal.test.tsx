@@ -89,10 +89,8 @@ describe('Delete Transaction Modal', () => {
     const yesButton = await screen.findByText('Yes');
     const noButton = await screen.findByText('No');
 
-    expect(yesButton).toHaveClass('delete-modal-yes');
     expect(yesButton.tagName).toEqual('BUTTON');
 
-    expect(noButton).toHaveClass('delete-modal-no');
     expect(noButton.tagName).toEqual('BUTTON');
   });
 

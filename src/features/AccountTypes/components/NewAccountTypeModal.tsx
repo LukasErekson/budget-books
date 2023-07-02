@@ -13,6 +13,7 @@ import {
 } from '../stores/accountTypeSelectors';
 import { PostNewAccountType } from '../stores/accountTypeThunks';
 import AccountType from '../types/types';
+import ModalBase from '../../../components/ModalBase';
 
 function NewAccountTypeModal(props: {
   isOpen: boolean;
@@ -61,18 +62,11 @@ function NewAccountTypeModal(props: {
 
   return (
     <>
-      <Modal
+      <ModalBase
+        title={'Add New Account Type'}
         isOpen={props.isOpen}
         onRequestClose={props.onRequestClose}
-        appElement={document.getElementById('root') || undefined}
-        style={{ content: { margin: '2rem', height: '50%' } }}
       >
-        <div className='close-modal-x'>
-          <Button onClick={props.onRequestClose}>
-            <AiOutlineClose />
-          </Button>
-        </div>
-        <h1 className='center'>Add New Account Type</h1>
         <form
           className='modal-form'
           onSubmit={(event: React.FormEvent<HTMLFormElement>) =>
@@ -120,7 +114,7 @@ function NewAccountTypeModal(props: {
             </Button>
           </div>
         </form>
-      </Modal>
+      </ModalBase>
     </>
   );
 }

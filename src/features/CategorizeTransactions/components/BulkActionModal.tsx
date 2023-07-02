@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
 
-import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 
-import { AiOutlineClose } from 'react-icons/ai';
 import { IoMdWarning } from 'react-icons/io';
 
-import Transaction from '../../Transactions/types/types';
 import Account from '../../Accounts/types/types';
+import Transaction from '../../Transactions/types/types';
 
-import { RootState } from '../../../stores/store';
+import { Button } from '@mui/material';
+import ModalBase from '../../../components/ModalBase';
 import { useThunkDispatch } from '../../../hooks/hooks';
+import { RootState } from '../../../stores/store';
+import { AccountDropdownSelect } from '../../Accounts';
 import { addNewAccount } from '../../Accounts/stores/accountThunks';
 import {
   addManyTransactionCategories,
   deleteTransactions,
 } from '../../Transactions/stores/transactionThunks';
-import { AccountDropdownSelect } from '../../Accounts';
-import { Button } from '@mui/material';
 
 type BulkActionModalProps = {
   isOpen: boolean;
@@ -87,26 +86,12 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
   }
 
   return (
-    <Modal
+    <ModalBase
       isOpen={props.isOpen}
       onRequestClose={props.onRequestClose}
-      appElement={document.getElementById('root') || undefined}
-      style={{
-        content: {
-          height: '50%',
-          width: '50%',
-          margin: 'auto',
-          marginRight: 'auto',
-        },
-      }}
+      title='Bulk Actions'
       portalClassName='bulk-txn-modal'
     >
-      <div className='close-modal-x'>
-        <Button onClick={props.onRequestClose}>
-          <AiOutlineClose />
-        </Button>
-      </div>
-      <h3>Bulk Actions</h3>
       <h4>
         The following will apply the action to{' '}
         <span className='alert'>{relevantSelectedTransactions.length}</span>{' '}
@@ -161,7 +146,7 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
           </div>
         </div>
       </div>
-    </Modal>
+    </ModalBase>
   );
 }
 
