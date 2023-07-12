@@ -20,16 +20,15 @@ function ModalBase(props: {
   children: ReactNode;
   isOpen: boolean;
   onRequestClose: () => void;
-  style?: any;
+  style?: Modal.Styles;
   portalClassName?: string;
 }): JSX.Element {
-  console.log(Modal.defaultStyles);
   return (
     <Modal
       isOpen={props.isOpen}
       onRequestClose={props.onRequestClose}
       appElement={document.getElementById('root') || undefined}
-      style={{ ...Modal.defaultStyles.content, ...props.style }}
+      style={{ ...Modal.defaultStyles.content, ...props.style } as Modal.Styles}
       portalClassName={props.portalClassName}
     >
       <div className='modal-header'>
