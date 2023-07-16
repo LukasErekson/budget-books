@@ -508,6 +508,42 @@ nav a:hover {
   justify-content: flex-end;
   gap: 0.75rem;
   margin: 0.75rem;
+  align-items: center;
+}
+
+.num-transactions-option {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  align-items: center;
+}
+
+.num-transactions-option a {
+  text-decoration: underline;
+  cursor: pointer;
+  color: var(--primary);
+}
+
+.num-transactions-option a.active-txn-num {
+  color: var(--darker-primary);
+}
+
+.transactions-page {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.transactions-page a {
+  text-decoration: underline;
+  cursor: pointer;
+  color: var(--primary);
+}
+
+.transactions-page a.active-txn-page {
+  color: var(--darker-primary);
 }
 
 .categorize-transaction-control {

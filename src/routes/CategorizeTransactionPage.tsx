@@ -25,14 +25,41 @@ import {
 import Transaction from '../features/Transactions/types/types';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { selectUncategorizedTransactions } from '../features/Transactions/stores/transactionSelectors';
 
 function CategorizeTransactionsPage() {
   const activeAccount: Account = useSelector(
     (state: RootState) => state.pageSlice.categorizationPage.activeAccount
   );
+
+  const numUncategorizedTransactions: number = useSelector((state: RootState) =>
+    activeAccount.id
+      ? selectUncategorizedTransactions(state, activeAccount.id).length
+      : 0
+  );
+
   const possibleAccounts: Account[] = useSelector(
     (state: RootState) => state.accounts.accounts
   );
+
+  const [currentPage, setCurrentPage]: [
+    number,
+    React.Dispatch<React.SetStateAction<number>>
+  ] = useState(0);
+
+  const [numTransactionsToDisplay, setNumTransactionsToDisplay]: [
+    number,
+    React.Dispatch<React.SetStateAction<number>>
+  ] = useState(25);
+
+  const pages: number[] = [];
+  for (
+    let i = 0;
+    i < Math.ceil(numUncategorizedTransactions / numTransactionsToDisplay);
+    i++
+  ) {
+    pages.push(i);
+  }
 
   const [showaddNewTxn, setShowAddNewTxn]: [
     boolean,
@@ -85,6 +112,8 @@ function CategorizeTransactionsPage() {
       setSelectedTransactions={setSelectedTransactions}
       addSelectedTransaction={addSelectedTransaction}
       removeSelectedTransaction={removeSelectedTransaction}
+      startingPosition={currentPage * numTransactionsToDisplay}
+      numTransactionsToDisplay={numTransactionsToDisplay}
     />
   );
 
@@ -110,9 +139,16 @@ function CategorizeTransactionsPage() {
         setSelectedTransactions={setSelectedTransactions}
         addSelectedTransaction={addSelectedTransaction}
         removeSelectedTransaction={removeSelectedTransaction}
+        startingPosition={currentPage * numTransactionsToDisplay}
+        numTransactionsToDisplay={numTransactionsToDisplay}
       />
     );
-  }, [activeAccount, showaddNewTxn]);
+  }, [activeAccount, showaddNewTxn, currentPage, numTransactionsToDisplay]);
+
+  // Reset Page Number when active account changes
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [activeAccount]);
 
   function refreshTransactions(): void {
     const refreshIcon: Element =
@@ -128,11 +164,37 @@ function CategorizeTransactionsPage() {
     }, 750);
   }
 
+  function transactionsPerPageLink(perPageNum: number): JSX.Element {
+    return (
+      <a
+        key={`transactionsPerPage${perPageNum}`}
+        className={
+          numTransactionsToDisplay == perPageNum ? 'active-txn-num' : ''
+        }
+        onClick={() => {
+          setNumTransactionsToDisplay(perPageNum);
+          if (currentPage > numUncategorizedTransactions / perPageNum) {
+            setCurrentPage(
+              Math.floor(numUncategorizedTransactions / perPageNum)
+            );
+          }
+        }}
+      >
+        {perPageNum}
+      </a>
+    );
+  }
+
   return (
     <>
       <AccountCardContainer />
 
       <div className='categorize-table-controls'>
+        <div className='num-transactions-option'>
+          <p>Transactions per page:</p>
+          {[25, 50, 100].map((val) => transactionsPerPageLink(val))}
+        </div>
+
         <div className='search-categorize-txns-container'>
           <label htmlFor='search-cat-txns'>Search Transactions: </label>
           <input type='text' className='search-categorize-txns' />
@@ -184,6 +246,19 @@ function CategorizeTransactionsPage() {
         </ButtonWithToolTip>
       </div>
       {accountTransactions}
+
+      <p className='transactions-page'>
+        Page{' '}
+        {pages.map((val) => (
+          <a
+            key={val}
+            onClick={() => setCurrentPage(val)}
+            className={val === currentPage ? 'active-txn-page' : ''}
+          >
+            {val + 1}
+          </a>
+        ))}{' '}
+      </p>
 
       <UploadTxnModal
         isOpen={showUploadTxnModal}

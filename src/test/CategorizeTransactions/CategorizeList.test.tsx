@@ -101,6 +101,8 @@ describe('Categorize List Component', () => {
         setSelectedTransactions={setSelectedTransactions}
         addSelectedTransaction={addSelectedTransaction}
         removeSelectedTransaction={removeSelectedTransaction}
+        startingPosition={0}
+        numTransactionsToDisplay={25}
       />,
       {
         store: testStore,
@@ -135,6 +137,8 @@ describe('Categorize List Component', () => {
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
           removeSelectedTransaction={removeSelectedTransaction}
+          startingPosition={0}
+          numTransactionsToDisplay={25}
         />,
         {
           store: testStore,
@@ -169,6 +173,8 @@ describe('Categorize List Component', () => {
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
           removeSelectedTransaction={removeSelectedTransaction}
+          startingPosition={0}
+          numTransactionsToDisplay={25}
         />
       );
 
@@ -194,6 +200,8 @@ describe('Categorize List Component', () => {
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
           removeSelectedTransaction={removeSelectedTransaction}
+          startingPosition={0}
+          numTransactionsToDisplay={25}
         />,
         {
           store: testStore,
@@ -233,6 +241,8 @@ describe('Categorize List Component', () => {
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
           removeSelectedTransaction={removeSelectedTransaction}
+          startingPosition={0}
+          numTransactionsToDisplay={25}
         />
       );
 
@@ -258,6 +268,8 @@ describe('Categorize List Component', () => {
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
           removeSelectedTransaction={removeSelectedTransaction}
+          startingPosition={0}
+          numTransactionsToDisplay={25}
         />,
         {
           store: testStore,
@@ -300,6 +312,8 @@ describe('Categorize List Component', () => {
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
           removeSelectedTransaction={removeSelectedTransaction}
+          startingPosition={0}
+          numTransactionsToDisplay={25}
         />
       );
 
@@ -328,6 +342,8 @@ describe('Categorize List Component', () => {
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
           removeSelectedTransaction={removeSelectedTransaction}
+          startingPosition={0}
+          numTransactionsToDisplay={25}
         />,
         {
           store: testStore,
@@ -367,6 +383,8 @@ describe('Categorize List Component', () => {
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
           removeSelectedTransaction={removeSelectedTransaction}
+          startingPosition={0}
+          numTransactionsToDisplay={25}
         />
       );
 

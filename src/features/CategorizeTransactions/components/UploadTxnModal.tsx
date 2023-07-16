@@ -100,23 +100,16 @@ function UploadTxnModal(props: UploadTransactionModalProps): JSX.Element {
         setOneColumnAmounts(1);
         props.onRequestClose();
       }}
+      title='Upload Transactions'
       style={{
         content: {
           height: 'fit-content',
-          width: 'min(80%, 550px)',
           margin: 'auto',
           marginRight: 'auto',
         },
       }}
       portalClassName='delete-txn-modal'
     >
-      <div className='close-modal-x'>
-        <Button onClick={props.onRequestClose}>
-          <AiOutlineClose />
-        </Button>
-      </div>
-      <h3>Upload Transactions</h3>
-
       <label htmlFor='one-col-amt-checkbox'>Use one column for amount?</label>
       <input
         type='checkbox'

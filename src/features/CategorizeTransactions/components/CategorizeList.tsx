@@ -25,13 +25,14 @@ function CategorizeList(props: {
   setSelectedTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>;
   addSelectedTransaction: (arg0: Transaction) => void;
   removeSelectedTransaction: (arg0: Transaction) => void;
+  startingPosition: number;
+  numTransactionsToDisplay: number;
 }): JSX.Element {
   const transactions: Transaction[] = useSelector((state: RootState) =>
     props.account.id
       ? selectUncategorizedTransactions(state, props.account.id)
       : []
   );
-
   const isTransactionsLoaded: boolean = useSelector(
     (state: RootState) => state.transactions.isTransactionsLoaded
   );
@@ -213,6 +214,10 @@ function CategorizeList(props: {
         {isTransactionsLoaded ? (
           transactions
             .sort(sortTransactionsFunc(sortData.mode, sortData.ascending))
+            .slice(
+              props.startingPosition,
+              props.startingPosition + props.numTransactionsToDisplay
+            )
             .map((txn: Transaction) => (
               <CategorizeTxnForm
                 key={txn.id}
