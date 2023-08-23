@@ -10,7 +10,7 @@ import { addNewAccount } from '../stores/accountThunks';
 
 function NewAccountModal(props: {
   isOpen: boolean;
-  onRequestClose: any;
+  onRequestClose: () => void;
 }): JSX.Element {
   const [category, setCategory]: [
     { label: string; value: number },

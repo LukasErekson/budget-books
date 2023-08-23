@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 
-import Modal from 'react-modal';
-
 import { Button, MenuItem, Select, TextField } from '@mui/material';
-import { AiOutlineClose } from 'react-icons/ai';
 import { useSelector } from 'react-redux';
+import ModalBase from '../../../components/ModalBase';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { RootState } from '../../../stores/store';
 import {
@@ -13,7 +11,6 @@ import {
 } from '../stores/accountTypeSelectors';
 import { PostNewAccountType } from '../stores/accountTypeThunks';
 import AccountType from '../types/types';
-import ModalBase from '../../../components/ModalBase';
 
 function NewAccountTypeModal(props: {
   isOpen: boolean;
@@ -35,11 +32,11 @@ function NewAccountTypeModal(props: {
   const [groupName, setGroupName]: [
     string,
     React.Dispatch<React.SetStateAction<string>>
-  ] = useState(currentGroupNames[0]);
+  ] = useState(currentGroupNames[0] || '');
 
   const thunkDispatch = useThunkDispatch();
 
-  function postNewAccount(event: React.FormEvent<HTMLFormElement>) {
+  function postNewAccType(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (accountTypeName.length === 0) {
       alert('Please input an account type name!');
@@ -70,7 +67,7 @@ function NewAccountTypeModal(props: {
         <form
           className='modal-form'
           onSubmit={(event: React.FormEvent<HTMLFormElement>) =>
-            postNewAccount(event)
+            postNewAccType(event)
           }
         >
           <label htmlFor='accountTypeName'>Account Type Name:</label>

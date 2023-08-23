@@ -1,14 +1,15 @@
+import { changeCategorizationActiveAccount } from '../../../stores/PageSlice';
+import { AppDispatch } from '../../../stores/store';
+import BadResponseError from '../../../utils/BadResponseError';
+import DataFetch from '../../../utils/DataFetch';
+import { fetchAccountTypes } from '../../AccountTypes/stores/accountTypeThunks';
+import Account from '../types/types';
 import {
   loadAccounts,
   removeAccount,
   updateAccountBalances,
   updateAccountInfo,
 } from './accountSlice';
-import DataFetch from '../../../utils/DataFetch';
-import BadResponseError from '../../../utils/BadResponseError';
-import { fetchAccountTypes } from '../../AccountTypes/stores/accountTypeThunks';
-import Account from '../types/types';
-import { AppDispatch } from '../../../stores/store';
 
 export const fetchAccounts =
   (accountType = 'all') =>
@@ -40,6 +41,7 @@ export const fetchAccounts =
 
         const accounts: Account[] = responseData.accounts;
         dispatch(loadAccounts(accounts));
+        dispatch(changeCategorizationActiveAccount(accounts[0]));
       } else {
         throw new BadResponseError(
           response.status,

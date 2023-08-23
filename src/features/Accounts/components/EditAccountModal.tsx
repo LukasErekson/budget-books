@@ -18,9 +18,10 @@ import { RootState } from '../../../stores/store';
 import { AccountTypeDropdownSelect } from '../../AccountTypes';
 import { deleteAccount, putUpdatedAccountInfo } from '../stores/accountThunks';
 import Account from '../types/types';
+
 function EditAccountModal(props: {
   isOpen: boolean;
-  onRequestClose: any;
+  onRequestClose: () => void;
 }): JSX.Element {
   const editAccount: Account = useSelector(
     (state: RootState) => state.pageSlice.accountSettingsPage.activeAccount
@@ -29,20 +30,20 @@ function EditAccountModal(props: {
   const [accountName, setAccountName]: [
     string,
     React.Dispatch<React.SetStateAction<string>>
-  ] = useState(editAccount.name);
+  ] = useState(editAccount.name || '');
 
   const [accountType, setAccountType]: [
     { label: string; value: number },
     React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
   ] = useState({
-    label: editAccount.account_type,
-    value: editAccount.account_type_id,
+    label: editAccount.account_type || '',
+    value: editAccount.account_type_id || -1,
   });
 
   const [accountTypeInput, setAccountTypeInput]: [
     string,
     React.Dispatch<React.SetStateAction<string>>
-  ] = useState(editAccount.account_type);
+  ] = useState(editAccount.account_type || '');
 
   const [debitInc, setDebitInc]: [
     boolean,
@@ -124,7 +125,7 @@ function EditAccountModal(props: {
               variant='outlined'
               size='small'
               style={{ width: '100%' }}
-              value={accountName}
+              value={accountName || ''}
               onChange={(
                 event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
               ) => {
@@ -136,9 +137,17 @@ function EditAccountModal(props: {
           <label htmlFor='edit-account-account-type'>Account Type:</label>
           <AccountTypeDropdownSelect
             setCategory={setAccountType}
-            category={accountType}
+            category={
+              accountType == undefined
+                ? { label: '', value: -1 }
+                : accountType.label == undefined || accountType.value == -1
+                ? { label: '', value: -1 }
+                : accountType
+            }
             setInputCategory={setAccountTypeInput}
-            inputCategory={accountTypeInput}
+            inputCategory={
+              accountTypeInput == undefined ? '' : accountTypeInput
+            }
             id='edit-account-account-type'
           />
           <br />
@@ -158,7 +167,7 @@ function EditAccountModal(props: {
               <Checkbox
                 name='edit-account-debit-inc'
                 id='edit-account-debit-inc'
-                checked={debitInc}
+                checked={debitInc == undefined ? false : debitInc}
                 onChange={(event) => setDebitInc(event.target.checked)}
                 sx={{
                   color: '#008cff',

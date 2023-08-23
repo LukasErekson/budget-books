@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useThunkDispatch } from '../../../hooks/hooks';
 
 import { useSelector } from 'react-redux';
@@ -7,16 +7,26 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 
 import Account from '../types/types';
 
-import { RootState } from '../../../stores/store';
-import { selectBankAccounts } from '../stores/accountSelectors';
 import { changeCategorizationActiveAccount } from '../../../stores/PageSlice';
-import { fetchAccounts } from '../stores/accountThunks';
+import { RootState } from '../../../stores/store';
 import { fetchAccountTypes } from '../../AccountTypes/stores/accountTypeThunks';
 import { fetchBankAccountTransactions } from '../../Transactions/stores/transactionThunks';
+import { selectAccounts, selectBankAccounts } from '../stores/accountSelectors';
+import { fetchAccounts } from '../stores/accountThunks';
 
 import { AccountCard, NewAccountModal } from '../';
 
-function AccountCardContainer(): JSX.Element {
+function AccountCardContainer(props: {
+  activeAccountChangeCallback?: () => void;
+}): JSX.Element {
+  const bankAccounts: Account[] = useSelector((state: RootState) =>
+    selectBankAccounts(state)
+  );
+
+  const accounts: Account[] = useSelector((state: RootState) =>
+    selectAccounts(state)
+  );
+
   const [isAccountsLoaded, setIsAccountsLoaded]: [
     boolean,
     React.Dispatch<React.SetStateAction<boolean>>
@@ -30,11 +40,7 @@ function AccountCardContainer(): JSX.Element {
   const [isAccountsFetched, setIsAccountsFetched]: [
     boolean,
     React.Dispatch<React.SetStateAction<boolean>>
-  ] = useState(false);
-
-  const bankAccounts: Account[] = useSelector((state: RootState) =>
-    selectBankAccounts(state)
-  );
+  ] = useState(Boolean(accounts.length));
 
   const [modalIsOpen, setModalIsOpen]: [
     boolean,
@@ -87,6 +93,9 @@ function AccountCardContainer(): JSX.Element {
               accountData={acct}
               onClick={() => {
                 dispatch(changeCategorizationActiveAccount(acct));
+                if (props.activeAccountChangeCallback) {
+                  props.activeAccountChangeCallback();
+                }
               }}
             />
           ))

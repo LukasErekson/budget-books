@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import AccountList from '../features/Accounts/components/AccountList';
-import { NewAccountModal } from '../features/Accounts';
-import EditAccountModal from '../features/Accounts/components/EditAccountModal';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../stores/store';
-import { closeEditAccountModal } from '../stores/PageSlice';
 import { Button, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import NewAccountTypeModal from '../features/AccountTypes/components/NewAccountTypeModal';
+import { NewAccountModal } from '../features/Accounts';
+import AccountList from '../features/Accounts/components/AccountList';
+import EditAccountModal from '../features/Accounts/components/EditAccountModal';
+import { closeEditAccountModal } from '../stores/PageSlice';
+import { RootState } from '../stores/store';
 
 function AccountSettingsPage(): JSX.Element {
   const editAccountModalIsOpen: boolean = useSelector(

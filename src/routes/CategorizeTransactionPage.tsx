@@ -1,31 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import Account from '../features/Accounts/types/types';
 
-import { RootState } from '../stores/store';
-import { useAppDispatch, useThunkDispatch } from '../hooks/hooks';
 import { setTransactionsIsLoaded } from '../features/Transactions/stores/transactionSlice';
 import { fetchAccountTransactions } from '../features/Transactions/stores/transactionThunks';
-import { changeCategorizationActiveAccount } from '../stores/PageSlice';
+import { useAppDispatch, useThunkDispatch } from '../hooks/hooks';
+import { RootState } from '../stores/store';
 
 import { useSelector } from 'react-redux';
 
 import { AccountCardContainer } from '../features/Accounts';
 
-import { IoMdRefresh } from 'react-icons/io';
-import { FiPlusCircle } from 'react-icons/fi';
 import { BiUpload } from 'react-icons/bi';
+import { FiPlusCircle } from 'react-icons/fi';
+import { IoMdRefresh } from 'react-icons/io';
 import { RiCheckboxMultipleFill } from 'react-icons/ri';
-import ButtonWithToolTip from '../components/ButtonWithToolTip';
-import {
-  UploadTxnModal,
-  CategorizeList,
-  BulkActionModal,
-} from '../features/CategorizeTransactions';
-import Transaction from '../features/Transactions/types/types';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ButtonWithToolTip from '../components/ButtonWithToolTip';
+import {
+  BulkActionModal,
+  CategorizeList,
+  UploadTxnModal,
+} from '../features/CategorizeTransactions';
 import { selectUncategorizedTransactions } from '../features/Transactions/stores/transactionSelectors';
+import Transaction from '../features/Transactions/types/types';
 
 function CategorizeTransactionsPage() {
   const activeAccount: Account = useSelector(
@@ -38,14 +37,13 @@ function CategorizeTransactionsPage() {
       : 0
   );
 
-  const possibleAccounts: Account[] = useSelector(
-    (state: RootState) => state.accounts.accounts
-  );
-
   const [currentPage, setCurrentPage]: [
     number,
     React.Dispatch<React.SetStateAction<number>>
   ] = useState(0);
+
+  const dispatch = useAppDispatch();
+  const thunkDispatch = useThunkDispatch();
 
   const [numTransactionsToDisplay, setNumTransactionsToDisplay]: [
     number,
@@ -100,56 +98,6 @@ function CategorizeTransactionsPage() {
     );
   }
 
-  const [accountTransactions, setAccountTransactions]: [
-    JSX.Element,
-    React.Dispatch<React.SetStateAction<JSX.Element>>
-  ] = useState(
-    <CategorizeList
-      account={activeAccount}
-      showAddNewTxn={showaddNewTxn}
-      setShowAddNewTxn={setShowAddNewTxn}
-      selectedTransactions={selectedTransactions}
-      setSelectedTransactions={setSelectedTransactions}
-      addSelectedTransaction={addSelectedTransaction}
-      removeSelectedTransaction={removeSelectedTransaction}
-      startingPosition={currentPage * numTransactionsToDisplay}
-      numTransactionsToDisplay={numTransactionsToDisplay}
-    />
-  );
-
-  const dispatch = useAppDispatch();
-
-  const thunkDispatch = useThunkDispatch();
-
-  useEffect(() => {
-    if (Object.keys(activeAccount).length === 0 || activeAccount.id === 0) {
-      if (possibleAccounts.length > 0) {
-        dispatch(changeCategorizationActiveAccount(possibleAccounts[0]));
-      }
-    }
-  }, [dispatch, activeAccount, possibleAccounts]);
-
-  useEffect(() => {
-    setAccountTransactions(
-      <CategorizeList
-        account={activeAccount}
-        showAddNewTxn={showaddNewTxn}
-        setShowAddNewTxn={setShowAddNewTxn}
-        selectedTransactions={selectedTransactions}
-        setSelectedTransactions={setSelectedTransactions}
-        addSelectedTransaction={addSelectedTransaction}
-        removeSelectedTransaction={removeSelectedTransaction}
-        startingPosition={currentPage * numTransactionsToDisplay}
-        numTransactionsToDisplay={numTransactionsToDisplay}
-      />
-    );
-  }, [activeAccount, showaddNewTxn, currentPage, numTransactionsToDisplay]);
-
-  // Reset Page Number when active account changes
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [activeAccount]);
-
   function refreshTransactions(): void {
     const refreshIcon: Element =
       document.getElementsByClassName('refresh-icon')[0];
@@ -187,7 +135,9 @@ function CategorizeTransactionsPage() {
 
   return (
     <>
-      <AccountCardContainer />
+      <AccountCardContainer
+        activeAccountChangeCallback={() => setCurrentPage(0)}
+      />
 
       <div className='categorize-table-controls'>
         <div className='num-transactions-option'>
@@ -245,7 +195,17 @@ function CategorizeTransactionsPage() {
           <IoMdRefresh className='refresh-icon' />
         </ButtonWithToolTip>
       </div>
-      {accountTransactions}
+      <CategorizeList
+        account={activeAccount}
+        showAddNewTxn={showaddNewTxn}
+        setShowAddNewTxn={setShowAddNewTxn}
+        selectedTransactions={selectedTransactions}
+        setSelectedTransactions={setSelectedTransactions}
+        addSelectedTransaction={addSelectedTransaction}
+        removeSelectedTransaction={removeSelectedTransaction}
+        startingPosition={currentPage * numTransactionsToDisplay}
+        numTransactionsToDisplay={numTransactionsToDisplay}
+      />
 
       <p className='transactions-page'>
         Page{' '}
