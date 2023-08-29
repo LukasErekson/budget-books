@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button, MenuItem, Select, TextField } from '@mui/material';
 import { useSelector } from 'react-redux';
@@ -9,7 +9,10 @@ import {
   selectAccountTypeGroups,
   selectAccountTypes,
 } from '../stores/accountTypeSelectors';
-import { PostNewAccountType } from '../stores/accountTypeThunks';
+import {
+  PostNewAccountType,
+  fetchAccountTypes,
+} from '../stores/accountTypeThunks';
 import AccountType from '../types/types';
 
 function NewAccountTypeModal(props: {
@@ -32,9 +35,18 @@ function NewAccountTypeModal(props: {
   const [groupName, setGroupName]: [
     string,
     React.Dispatch<React.SetStateAction<string>>
-  ] = useState(currentGroupNames[0] || '');
+  ] = useState(currentGroupNames[0]);
 
   const thunkDispatch = useThunkDispatch();
+
+  useEffect(() => {
+    if (!groupName && currentGroupNames.length) {
+      setGroupName(currentGroupNames[0]);
+    } else if (!currentGroupNames.length) {
+      // Grab account types if not fetched yet.
+      thunkDispatch(fetchAccountTypes());
+    }
+  }, [currentGroupNames]);
 
   function postNewAccType(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

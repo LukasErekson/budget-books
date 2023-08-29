@@ -30,25 +30,25 @@ function EditAccountModal(props: {
   const [accountName, setAccountName]: [
     string,
     React.Dispatch<React.SetStateAction<string>>
-  ] = useState(editAccount.name || '');
+  ] = useState(editAccount.name);
 
   const [accountType, setAccountType]: [
     { label: string; value: number },
     React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
   ] = useState({
-    label: editAccount.account_type || '',
-    value: editAccount.account_type_id || -1,
+    label: editAccount.account_type,
+    value: editAccount.account_type_id,
   });
 
   const [accountTypeInput, setAccountTypeInput]: [
     string,
     React.Dispatch<React.SetStateAction<string>>
-  ] = useState(editAccount.account_type || '');
+  ] = useState(editAccount.account_type);
 
   const [debitInc, setDebitInc]: [
     boolean,
     React.Dispatch<React.SetStateAction<boolean>>
-  ] = useState(Boolean(editAccount.debit_inc) || false);
+  ] = useState(Boolean(editAccount.debit_inc));
 
   const [deleteDialogIsOpen, setDeleteDialogIsOpen]: [
     boolean,
