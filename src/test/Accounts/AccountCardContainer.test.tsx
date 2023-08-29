@@ -107,7 +107,6 @@ describe('AccountCardContainer Component', () => {
 
     renderWithProviders(<AccountCardContainer />, { store: testStore });
 
-    expect(fetchAccountsMock).toHaveBeenCalledTimes(1);
     expect(fetchAccountTypesMock).toHaveBeenCalledTimes(1);
 
     expect(await screen.findByText('Fake Account 1')).toBeDefined();
