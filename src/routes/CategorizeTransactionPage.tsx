@@ -207,18 +207,22 @@ function CategorizeTransactionsPage() {
         numTransactionsToDisplay={numTransactionsToDisplay}
       />
 
-      <p className='transactions-page'>
-        Page{' '}
-        {pages.map((val) => (
-          <a
-            key={val}
-            onClick={() => setCurrentPage(val)}
-            className={val === currentPage ? 'active-txn-page' : ''}
-          >
-            {val + 1}
-          </a>
-        ))}{' '}
-      </p>
+      {pages.length ? (
+        <p className='transactions-page'>
+          Page{' '}
+          {pages.map((val) => (
+            <a
+              key={val}
+              onClick={() => setCurrentPage(val)}
+              className={val === currentPage ? 'active-txn-page' : ''}
+            >
+              {val + 1}
+            </a>
+          ))}{' '}
+        </p>
+      ) : (
+        ''
+      )}
 
       <UploadTxnModal
         isOpen={showUploadTxnModal}

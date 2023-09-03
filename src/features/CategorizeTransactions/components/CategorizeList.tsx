@@ -12,6 +12,8 @@ import { CategorizeTxnForm } from '../';
 import { RootState } from '../../../stores/store';
 import { selectUncategorizedTransactions } from '../../Transactions/stores/transactionSelectors';
 
+import { BsHandThumbsUp } from 'react-icons/bs';
+
 type sortDataObj = {
   mode: string;
   ascending: boolean;
@@ -212,23 +214,41 @@ function CategorizeList(props: {
           ''
         )}
         {isTransactionsLoaded ? (
-          transactions
-            .sort(sortTransactionsFunc(sortData.mode, sortData.ascending))
-            .slice(
-              props.startingPosition,
-              props.startingPosition + props.numTransactionsToDisplay
-            )
-            .map((txn: Transaction) => (
-              <CategorizeTxnForm
-                key={txn.id}
-                transacitonData={txn}
-                debitInc={debitInc}
-                account={props.account}
-                isSelected={props.selectedTransactions.includes(txn) ? 1 : 0}
-                selectTransaction={props.addSelectedTransaction}
-                unSelectTransaction={props.removeSelectedTransaction}
-              />
-            ))
+          transactions.length ? (
+            transactions
+              .sort(sortTransactionsFunc(sortData.mode, sortData.ascending))
+              .slice(
+                props.startingPosition,
+                props.startingPosition + props.numTransactionsToDisplay
+              )
+              .map((txn: Transaction) => (
+                <CategorizeTxnForm
+                  key={txn.id}
+                  transacitonData={txn}
+                  debitInc={debitInc}
+                  account={props.account}
+                  isSelected={props.selectedTransactions.includes(txn) ? 1 : 0}
+                  selectTransaction={props.addSelectedTransaction}
+                  unSelectTransaction={props.removeSelectedTransaction}
+                />
+              ))
+          ) : (
+            <span
+              style={{
+                margin: '2rem',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <p>
+                No transactions to categorize for {props.account.name}. Great
+                work!
+              </p>
+              <BsHandThumbsUp size={'1.5rem'} />
+            </span>
+          )
         ) : (
           <p>Loading...</p>
         )}

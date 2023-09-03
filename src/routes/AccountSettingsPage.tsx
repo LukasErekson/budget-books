@@ -1,12 +1,17 @@
-import { Button, TextField } from '@mui/material';
 import React, { useState } from 'react';
+import {
+  HiOutlineDocumentDuplicate,
+  HiOutlineDocumentPlus,
+} from 'react-icons/hi2';
 import { useDispatch, useSelector } from 'react-redux';
+import ButtonWithToolTip from '../components/ButtonWithToolTip';
 import NewAccountTypeModal from '../features/AccountTypes/components/NewAccountTypeModal';
 import { NewAccountModal } from '../features/Accounts';
 import AccountList from '../features/Accounts/components/AccountList';
 import EditAccountModal from '../features/Accounts/components/EditAccountModal';
 import { closeEditAccountModal } from '../stores/PageSlice';
 import { RootState } from '../stores/store';
+import { TextField } from '@mui/material';
 
 function AccountSettingsPage(): JSX.Element {
   const editAccountModalIsOpen: boolean = useSelector(
@@ -45,21 +50,21 @@ function AccountSettingsPage(): JSX.Element {
         onRequestClose={() => setNewAccountTypeModalIsOpen(false)}
       />
 
-      <TextField size='small' disabled={true} />
-
-      <Button
-        variant='contained'
-        onClick={() => setNewAccountModalIsOpen(true)}
-      >
-        Add new account
-      </Button>
-
-      <Button
-        variant='contained'
-        onClick={() => setNewAccountTypeModalIsOpen(true)}
-      >
-        Add new Account Type
-      </Button>
+      <div className='acct-table-controls'>
+        <TextField size='small' disabled />
+        <ButtonWithToolTip
+          toolTipContent={'Add New Account'}
+          onClick={() => setNewAccountModalIsOpen(true)}
+        >
+          <HiOutlineDocumentPlus />
+        </ButtonWithToolTip>
+        <ButtonWithToolTip
+          toolTipContent={'Add New Account Type'}
+          onClick={() => setNewAccountTypeModalIsOpen(true)}
+        >
+          <HiOutlineDocumentDuplicate />
+        </ButtonWithToolTip>
+      </div>
 
       <div className='center'>
         <AccountList />
