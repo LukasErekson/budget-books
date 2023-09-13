@@ -4,12 +4,13 @@ import accountReducer from '../features/Accounts/stores/accountSlice';
 import accountTypeReducer from '../features/AccountTypes/stores/accountTypeSlice';
 import pageSliceReducer from './PageSlice';
 import transactionReducer from '../features/Transactions/stores/transactionSlice';
-
+import expenseReportReducer from '../features/Reports/ExpenseReport/stores/ExpenseReportSlice';
 const rootReducer: any = combineReducers({
   accounts: accountReducer,
   accountTypes: accountTypeReducer,
   pageSlice: pageSliceReducer,
   transactions: transactionReducer,
+  expenseReportSlice: expenseReportReducer,
 });
 
 export function setupStore(preloadedState?: PreloadedState<RootState>) {
