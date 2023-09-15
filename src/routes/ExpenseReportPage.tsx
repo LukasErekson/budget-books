@@ -3,6 +3,7 @@ import ExpenseReportForm from '../features/Reports/ExpenseReport/ExpenseReportFo
 import { useSelector } from 'react-redux';
 import { ExpenseReportResponse } from '../features/Reports/ExpenseReport/types/types';
 import { RootState } from '../stores/store';
+import ExpenseReport from '../features/Reports/ExpenseReport/ExpenseReport';
 
 function ExpenseReportPage(): JSX.Element {
   const currentReportData: ExpenseReportResponse | null = useSelector(
@@ -14,6 +15,8 @@ function ExpenseReportPage(): JSX.Element {
     <>
       <h1>Expense Report Page</h1>
       <ExpenseReportForm />
+
+      {currentReportData && <ExpenseReport reportData={currentReportData} />}
     </>
   );
 }

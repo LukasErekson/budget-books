@@ -736,3 +736,39 @@ nav a:hover {
 
   /* background-color: rgba(0, 0, 0, 0.075); */
 }
+
+.expense-report {
+  overflow: scroll;
+  width: 80%;
+  margin: 2rem auto;
+}
+
+.expense-report-group-name {
+  font-weight: bolder;
+  border-bottom: 1px solid black;
+  text-align: left;
+}
+
+.expense-report-account-type {
+  font-size: 1.1rem;
+  text-align: left;
+  margin-left: 2rem;
+  font-style: italic;
+}
+
+.expense-report-account-name {
+  font-size: 1rem;
+  font-weight: bold;
+  min-width: 20ch;
+  text-align: right;
+}
+
+.expense-report-balance-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.75rem 4rem;
+}
+
+.expense-report-account-balance {
+  min-width: 10ch;
+}
