@@ -4,7 +4,8 @@ export type ExpenseReportResponse = {
       [accountName: string]: number[];
     };
   };
-};
+} & { dates: string[] };
+
 export enum ReportFrequency {
   annually = 'year',
   monthly = 'month',

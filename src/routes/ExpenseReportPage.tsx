@@ -10,7 +10,6 @@ function ExpenseReportPage(): JSX.Element {
     (state: RootState) => state.expenseReportSlice.currentReport
   );
 
-  console.log(currentReportData);
   return (
     <>
       <h1>Expense Report Page</h1>

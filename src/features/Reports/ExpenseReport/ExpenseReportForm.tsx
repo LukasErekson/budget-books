@@ -12,7 +12,7 @@ const EXPENSE_REPORT_ACCOUNT_GROUPS = ['Income', 'Expenses', 'Misc.'];
 
 function ExpenseReportForm(): JSX.Element {
   const today: Date = new Date();
-  const currentMonth: number = today.getMonth();
+  const currentMonth: number = today.getMonth() + 1;
   const currentYear: number = today.getFullYear();
 
   const currentReportData: ExpenseReportResponse | null = useSelector(
@@ -51,24 +51,26 @@ function ExpenseReportForm(): JSX.Element {
     }
 
     dateRanges.push(startDate);
+    let startIndex = 0;
 
     for (let i = 0; i < timesToSkip; i++) {
-      dateRanges.push(dateRanges[i].add(1, frequency));
+      const nextStart: Dayjs = dateRanges[startIndex].add(1, frequency);
+      const currentEnd: Dayjs = nextStart.subtract(1, 'day');
+      dateRanges.push(currentEnd);
+      dateRanges.push(nextStart);
+      startIndex += 2;
     }
 
-    if (
-      endDate.isBefore(dateRanges[timesToSkip]) ||
-      endDate.isSame(dateRanges[timesToSkip])
-    ) {
+    if (endDate.isBefore(dateRanges.slice(-1)[0])) {
       dateRanges.pop();
     }
-    dateRanges.push(endDate);
 
+    if (dateRanges.length % 2 === 1) {
+      dateRanges.push(endDate);
+    }
     const stringDateRanges: string[] = dateRanges.map((date: Dayjs) =>
       date.format('YYYY-MM-DD')
     );
-
-    console.log(stringDateRanges);
 
     thunkDispatch(
       generateExpenseReport(stringDateRanges, EXPENSE_REPORT_ACCOUNT_GROUPS)

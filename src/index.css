@@ -731,21 +731,22 @@ nav a:hover {
   border: 1px solid black;
   border-radius: 5px;
   display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
   justify-content: center;
-
-  /* background-color: rgba(0, 0, 0, 0.075); */
 }
 
 .expense-report {
   overflow: scroll;
-  width: 80%;
+  width: fit-content;
+  min-width: 40%;
+  max-width: 80%;
   margin: 2rem auto;
 }
 
 .expense-report-group-name {
   font-weight: bolder;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid grey;
   text-align: left;
 }
 
@@ -759,7 +760,8 @@ nav a:hover {
 .expense-report-account-name {
   font-size: 1rem;
   font-weight: bold;
-  min-width: 20ch;
+  width: 182px;
+  min-width: 100px;
   text-align: right;
 }
 
@@ -770,5 +772,20 @@ nav a:hover {
 }
 
 .expense-report-account-balance {
-  min-width: 10ch;
+  min-width: 12ch;
+}
+
+.expense-report-date-header {
+  font-size: 0.75rem;
+  font-weight: bold;
+  width: 182px;
+  min-width: 100px;
+  text-align: right;
+}
+
+.expense-report-date {
+  font-size: 0.75rem;
+  min-width: 16ch; /*/ 12 / 0.75 = 16ch to match balance 12ch */
+  margin: 0;
+  font-weight: bolder;
 }
