@@ -39,7 +39,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "jest --maxWorkers 4",
     "eject": "react-scripts eject",
     "test-cov": "jest --coverage"
   },
