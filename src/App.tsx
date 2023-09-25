@@ -37,27 +37,29 @@ function App() {
 
   return (
     <>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <ThemeProvider theme={theme}>
-          <Navbar />
-          <div className='App'>
-            <Routes>
-              <Route path='/' element={<CategorizeTransactionsPage />} />
-              <Route
-                path='/categorize-transactions'
-                element={<CategorizeTransactionsPage />}
-              />
-              <Route path='/balance-sheet' element={<BalanceSheetPage />} />
-              <Route path='/expense-report' element={<ExpenseReportPage />} />
-              <Route
-                path='/account/settings'
-                element={<AccountSettingsPage />}
-              />
-            </Routes>
-            <ToastContainer />
-          </div>
-        </ThemeProvider>
-      </LocalizationProvider>
+      <React.StrictMode>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ThemeProvider theme={theme}>
+            <Navbar />
+            <div className='App'>
+              <Routes>
+                <Route path='/' element={<CategorizeTransactionsPage />} />
+                <Route
+                  path='/categorize-transactions'
+                  element={<CategorizeTransactionsPage />}
+                />
+                <Route path='/balance-sheet' element={<BalanceSheetPage />} />
+                <Route path='/expense-report' element={<ExpenseReportPage />} />
+                <Route
+                  path='/account/settings'
+                  element={<AccountSettingsPage />}
+                />
+              </Routes>
+              <ToastContainer />
+            </div>
+          </ThemeProvider>
+        </LocalizationProvider>
+      </React.StrictMode>
     </>
   );
 }
