@@ -15,6 +15,7 @@ import { selectAccounts, selectBankAccounts } from '../stores/accountSelectors';
 import { fetchAccounts } from '../stores/accountThunks';
 
 import { AccountCard, NewAccountModal } from '../';
+import { ThreeDots } from 'react-loader-spinner';
 
 function AccountCardContainer(props: {
   activeAccountChangeCallback?: () => void;
@@ -100,7 +101,23 @@ function AccountCardContainer(props: {
             />
           ))
         ) : (
-          <p>Loading Accounts...</p>
+          <div className='loading-screen'>
+            <ThreeDots
+              height='80'
+              width='80'
+              radius='5'
+              color='#cccccc'
+              ariaLabel='three-dots-loading'
+              wrapperStyle={{
+                width: '80px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: '5rem',
+              }}
+              visible={true}
+            />
+            <p>Loading accounts...</p>
+          </div>
         )}
         <div className='new-account-btn-card'>
           <button

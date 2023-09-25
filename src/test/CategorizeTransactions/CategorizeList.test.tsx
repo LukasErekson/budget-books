@@ -109,7 +109,7 @@ describe('Categorize List Component', () => {
       }
     );
 
-    const loadingText = await screen.findByText('Loading...');
+    const loadingText = await screen.findByText(/Loading/i);
     expect(loadingText).toBeVisible();
 
     act(() => {

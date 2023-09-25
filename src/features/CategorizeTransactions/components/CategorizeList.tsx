@@ -13,6 +13,7 @@ import { RootState } from '../../../stores/store';
 import { selectUncategorizedTransactions } from '../../Transactions/stores/transactionSelectors';
 
 import { BsHandThumbsUp } from 'react-icons/bs';
+import { ThreeDots } from 'react-loader-spinner';
 
 type sortDataObj = {
   mode: string;
@@ -250,7 +251,23 @@ function CategorizeList(props: {
             </span>
           )
         ) : (
-          <p>Loading...</p>
+          <div className='loading-screen'>
+            <ThreeDots
+              height='80'
+              width='80'
+              radius='5'
+              color='#cccccc'
+              ariaLabel='three-dots-loading'
+              wrapperStyle={{
+                width: '80px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: '5rem',
+              }}
+              visible={true}
+            />
+            <p>Loading transactions...</p>
+          </div>
         )}
       </div>
     </>
