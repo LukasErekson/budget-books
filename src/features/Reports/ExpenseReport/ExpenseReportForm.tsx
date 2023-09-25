@@ -4,20 +4,16 @@ import dayjs, { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { generateExpenseReport } from './stores/ExpenseReportThunks';
-import { ExpenseReportResponse, ReportFrequency } from './types/types';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../stores/store';
+import { ReportFrequency } from './types/types';
 
 const EXPENSE_REPORT_ACCOUNT_GROUPS = ['Income', 'Expenses', 'Misc.'];
 
-function ExpenseReportForm(): JSX.Element {
+function ExpenseReportForm(props: {
+  setLoading: (loading: boolean) => void;
+}): JSX.Element {
   const today: Date = new Date();
   const currentMonth: number = today.getMonth() + 1;
   const currentYear: number = today.getFullYear();
-
-  const currentReportData: ExpenseReportResponse | null = useSelector(
-    (state: RootState) => state.expenseReportSlice.currentReport
-  );
 
   const [startDate, setStartDate] = useState<Dayjs | null>(
     dayjs(`${currentYear}-${currentMonth}-01`)
@@ -51,7 +47,7 @@ function ExpenseReportForm(): JSX.Element {
     }
 
     dateRanges.push(startDate);
-    let startIndex = 0;
+    let startIndex: number = 0;
 
     for (let i = 0; i < timesToSkip; i++) {
       const nextStart: Dayjs = dateRanges[startIndex].add(1, frequency);
@@ -75,6 +71,8 @@ function ExpenseReportForm(): JSX.Element {
     thunkDispatch(
       generateExpenseReport(stringDateRanges, EXPENSE_REPORT_ACCOUNT_GROUPS)
     );
+
+    props.setLoading(true);
 
     return;
   }

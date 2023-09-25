@@ -1,10 +1,14 @@
-export type ExpenseReportResponse = {
+export type ExpenseReportResponse = AccountGroupsToBalances & {
+  dates: string[];
+};
+
+export type AccountGroupsToBalances = {
   [accountGroup: string]: {
     [accountType: string]: {
       [accountName: string]: number[];
     };
   };
-} & { dates: string[] };
+};
 
 export enum ReportFrequency {
   annually = 'year',

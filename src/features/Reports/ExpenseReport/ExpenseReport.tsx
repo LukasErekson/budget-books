@@ -1,15 +1,56 @@
 import React from 'react';
-import { ExpenseReportResponse } from './types/types';
+import { AccountGroupsToBalances, ExpenseReportResponse } from './types/types';
 import dayjs from 'dayjs';
 
-function ExpenseReport(props: { reportData: ExpenseReportResponse }) {
+function ExpenseReport(props: {
+  reportData: ExpenseReportResponse;
+}): JSX.Element {
   const { dates, ...accountGroupsToBalances } = props.reportData;
 
   const displayDates: string[] = [];
 
+  // Add Totals to Expense Report
+  const datesToTotals: number[] = [];
+
   for (let i = 1; i < dates.length; i += 2) {
     displayDates.push(dayjs(dates[i]).format('MMM. DD, YYYY'));
+    datesToTotals.push(0);
   }
+
+  displayDates.push('Total');
+  datesToTotals.push(0);
+
+  const accountGroupsToBalancesWithTotals: AccountGroupsToBalances = JSON.parse(
+    JSON.stringify(accountGroupsToBalances)
+  );
+
+  Object.keys(accountGroupsToBalances).forEach((groupName: string) => {
+    Object.keys(accountGroupsToBalances[groupName]).forEach(
+      (accountType: string) => {
+        Object.keys(accountGroupsToBalances[groupName][accountType]).forEach(
+          (accountName: string) => {
+            accountGroupsToBalancesWithTotals[groupName][accountType][
+              accountName
+            ].push(
+              accountGroupsToBalances[groupName][accountType][
+                accountName
+              ].reduce((prev: number, current: number) => prev + current),
+              0
+            );
+            accountGroupsToBalancesWithTotals[groupName][accountType][
+              accountName
+            ].forEach((balance: number, index: number) => {
+              datesToTotals[index] += balance;
+            });
+          }
+        );
+      }
+    );
+  });
+
+  accountGroupsToBalancesWithTotals['Totals'] = {};
+  accountGroupsToBalancesWithTotals['Totals'][''] = {};
+  accountGroupsToBalancesWithTotals['Totals']['']['Total'] = datesToTotals;
 
   return (
     <div className='expense-report'>
@@ -37,51 +78,55 @@ function ExpenseReport(props: { reportData: ExpenseReportResponse }) {
           );
         })}
       </div>
-      {Object.keys(accountGroupsToBalances).map((groupName: string) => {
-        return (
-          <>
-            <div key={groupName} className='expense-report-group-name'>
-              {groupName}
-            </div>
-            {Object.keys(accountGroupsToBalances[groupName]).map(
-              (accountType: string) => (
-                <>
-                  <div
-                    key={accountType}
-                    className='expense-report-account-type'
-                  >
-                    {accountType}
-                  </div>
-                  {Object.keys(
-                    accountGroupsToBalances[groupName][accountType]
-                  ).map((accountName: string) => (
-                    <>
-                      <div className='expense-report-balance-row'>
-                        <span
-                          key={accountName}
-                          className='expense-report-account-name'
-                        >
-                          {accountName}
-                        </span>
-                        {accountGroupsToBalances[groupName][accountType][
-                          accountName
-                        ].map((balance: number, index: number) => (
+      {Object.keys(accountGroupsToBalancesWithTotals).map(
+        (groupName: string) => {
+          return (
+            <>
+              <div key={groupName} className='expense-report-group-name'>
+                {groupName}
+              </div>
+              {Object.keys(accountGroupsToBalancesWithTotals[groupName]).map(
+                (accountType: string) => (
+                  <>
+                    <div
+                      key={accountType}
+                      className='expense-report-account-type'
+                    >
+                      {accountType}
+                    </div>
+                    {Object.keys(
+                      accountGroupsToBalancesWithTotals[groupName][accountType]
+                    ).map((accountName: string) => (
+                      <>
+                        <div className='expense-report-balance-row'>
                           <span
-                            key={`${accountName}-balance-${index}`}
-                            className='expense-report-account-balance'
+                            key={accountName}
+                            className='expense-report-account-name'
                           >
-                            ${balance.toFixed(2)}
+                            {accountName}
                           </span>
-                        ))}
-                      </div>
-                    </>
-                  ))}
-                </>
-              )
-            )}
-          </>
-        );
-      })}
+                          {accountGroupsToBalancesWithTotals[groupName][
+                            accountType
+                          ][accountName]
+                            .slice(0, -1) // TODO : Find out why an extra 0 gets tacked on the end
+                            .map((balance: number, index: number) => (
+                              <span
+                                key={`${accountName}-balance-${index}`}
+                                className='expense-report-account-balance'
+                              >
+                                ${balance.toFixed(2)}
+                              </span>
+                            ))}
+                        </div>
+                      </>
+                    ))}
+                  </>
+                )
+              )}
+            </>
+          );
+        }
+      )}
     </div>
   );
 }
