@@ -42,15 +42,9 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
         transaction.credit_account_id === activeAccount.id
     );
 
-  const [category, setCategory]: [
-    { label: string; value: number },
-    React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
-  ] = useState({ label: 'New Account', value: -1 });
+  const [category, setCategory] = useState<Account>({} as Account);
 
-  const [inputCategory, setInputCategory]: [
-    string,
-    React.Dispatch<React.SetStateAction<string>>
-  ] = useState('New Account');
+  const [inputCategory, setInputCategory] = useState<string>('New Account');
 
   // Clean up selected Transactions/close the modal on compelted
   // action.
@@ -64,15 +58,21 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
   }
 
   function postCategorizeTransactions() {
-    if (category.value === -1) {
-      thunkDispatch(addNewAccount(category.label, category, true));
+    if (category.id === -1) {
+      thunkDispatch(
+        addNewAccount(
+          category.name,
+          { label: category.name, value: category.id },
+          true
+        )
+      );
     }
 
     thunkDispatch(
       addManyTransactionCategories(
         activeAccount,
         relevantSelectedTransactions,
-        category.value
+        category.id
       )
     );
 
@@ -105,10 +105,10 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
           <h5 className='bulk-action-header'>Categorize:</h5>
           <div className='bulk-categorize-form'>
             <AccountDropdownSelect
-              setCategory={setCategory}
-              category={category}
-              setInputCategory={setInputCategory}
-              inputCategory={inputCategory}
+              value={category}
+              setValue={setCategory}
+              inputValue={inputCategory}
+              setInputValue={setInputCategory}
               excludeAccount={activeAccount}
             />
             <button

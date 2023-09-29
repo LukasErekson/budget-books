@@ -10,6 +10,7 @@ import { mockThunkReturn, renderWithProviders } from '../setupTests';
 import { CategorizeTxnForm } from '../../features/CategorizeTransactions';
 import * as AccountThunks from '../../features/Accounts/stores/accountThunks';
 import * as TransactionThunks from '../../features/Transactions/stores/transactionThunks';
+import { fakeAccounts, otherAccount } from '../Accounts/mockAccounts';
 
 describe('Categorize Transaction Form', () => {
   let testStore: RootState;
@@ -17,25 +18,7 @@ describe('Categorize Transaction Form', () => {
   const selectTransaction = jest.fn();
   const unSelectTransaction = jest.fn();
 
-  const activeAccount: Account = {
-    id: 1,
-    name: 'Fake Active Account',
-    account_type_id: 1,
-    account_type: 'Test',
-    debit_inc: false,
-    balance: 0.0,
-    last_updated: '03/03/2023',
-  };
-
-  const otherAccount: Account = {
-    id: 2,
-    name: 'Fake Other Account',
-    account_type_id: 1,
-    account_type: 'Test',
-    debit_inc: true,
-    balance: 10.0,
-    last_updated: '03/03/2023',
-  };
+  const activeAccount: Account = fakeAccounts[0];
 
   const transactionData: Transaction = {
     id: 1,
@@ -63,6 +46,8 @@ describe('Categorize Transaction Form', () => {
         isTransactionsLoaded: true,
       },
     });
+
+    jest.resetAllMocks();
   });
   it('Renders without error', async () => {
     renderWithProviders(
@@ -117,16 +102,12 @@ describe('Categorize Transaction Form', () => {
     const checkBox = (await screen.findByRole('checkbox')) as HTMLInputElement;
     expect(checkBox.value).toEqual('on');
 
-    await act(async () => {
-      await userEvent.click(checkBox);
-    });
+    await userEvent.click(checkBox);
 
     expect(checkBox.value).toEqual('on');
     expect(selectTransaction).toHaveBeenCalledWith(transactionData);
 
-    await act(async () => {
-      await userEvent.click(checkBox);
-    });
+    await userEvent.click(checkBox);
 
     expect(checkBox.value).toEqual('on');
     expect(unSelectTransaction).toHaveBeenCalledWith(transactionData);
@@ -229,7 +210,7 @@ describe('Categorize Transaction Form', () => {
     );
   });
 
-  it('Add button posts with new account categorizes transaction', async () => {
+  it('Add button posts with new account & categorizes transaction', async () => {
     const addNewAccount = jest.spyOn(AccountThunks, 'addNewAccount');
     addNewAccount.mockReturnValue(mockThunkReturn);
 
@@ -255,19 +236,15 @@ describe('Categorize Transaction Form', () => {
 
     const addButton = await screen.findByText('Add');
 
-    const accountDropdown = (await screen.findByRole(
-      'combobox'
+    const accountDropdown = (await screen.findByPlaceholderText(
+      'Account'
     )) as HTMLInputElement;
 
-    await act(async () => {
-      await userEvent.type(accountDropdown, 'New Account');
-    });
+    await userEvent.type(accountDropdown, 'New Account');
 
-    const newAccountSelection = await screen.findByText(
-      'Create new category: New Account'
-    );
+    const newAccountSelection = await screen.findByText('New Account');
 
-    fireEvent.click(newAccountSelection);
+    await userEvent.click(newAccountSelection);
 
     await userEvent.click(addButton);
 

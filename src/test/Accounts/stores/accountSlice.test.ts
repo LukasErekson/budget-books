@@ -18,6 +18,7 @@ describe('accountSlice Reducers', () => {
           debit_inc: true,
           balance: 0.0,
           last_updated: '01/01/2023',
+          account_group: 'Group 1',
         },
       ];
 
@@ -49,6 +50,7 @@ describe('accountSlice Reducers', () => {
           debit_inc: true,
           balance: 0.0,
           last_updated: '01/01/2023',
+          account_group: 'Group 1',
         },
         {
           id: 2,
@@ -58,6 +60,7 @@ describe('accountSlice Reducers', () => {
           debit_inc: true,
           balance: 0.0,
           last_updated: '01/01/2023',
+          account_group: 'Group 2',
         },
       ];
 

@@ -1,77 +1,100 @@
-import React from 'react';
-
+import React, { useState } from 'react';
+import { Autocomplete, TextField, createFilterOptions } from '@mui/material';
 import { useSelector } from 'react-redux';
-import Select, { OptionsOrGroups } from 'react-select';
 
 import Account from '../types/types';
 
 import { RootState } from '../../../stores/store';
-import {
-  selectAccountNames,
-  selectAccountOptions,
-} from '../stores/accountSelectors';
 
 function AccountDropdownSelect(props: {
-  setCategory: React.Dispatch<
-    React.SetStateAction<{ label: string; value: number }>
-  >;
-  category: { label: string; value: number };
-  setInputCategory: React.Dispatch<React.SetStateAction<string>>;
-  inputCategory: string;
   excludeAccount: Account;
+  value: Account;
+  setValue: (newValue: Account) => void;
+  inputValue: string;
+  setInputValue: (newInput: string) => void;
 }): JSX.Element {
-  const options: OptionsOrGroups<number, any> = useSelector(
-    (state: RootState) => selectAccountOptions(state, props.excludeAccount)
-  );
-
-  const accountNames: string[] = useSelector((state: RootState) =>
-    selectAccountNames(state)
-  );
-
   const accounts: Account[] = useSelector(
     (state: RootState) => state.accounts.accounts
   );
 
+  const defaultAccount = (
+    Object.keys(props.excludeAccount) as (keyof Account)[]
+  ).every(
+    (property: keyof Account) =>
+      props.excludeAccount[property] === accounts[0][property]
+  )
+    ? accounts[1]
+    : accounts[0];
+
+  const newAccount: Account = {
+    name: '',
+    id: -1,
+    account_group: 'Create New Account',
+    account_type: 'New',
+    account_type_id: -1,
+    debit_inc: true,
+    balance: 0,
+    last_updated: '',
+  };
+
+  // TODO : Custom options https://mui.com/material-ui/react-autocomplete/#creatable
+  // TODO : Add Dialog Logic? Maybe the new account modal? Could be good!
+
   return (
-    <Select
-      name={'account'}
-      options={options.concat({
-        label: 'New Category',
-        options: [
-          {
-            label: `Create new category: ${props.inputCategory}`,
-            value: -1,
-          },
-        ],
-      })}
-      onInputChange={(newValue: string) => props.setInputCategory(newValue)}
-      value={props.category}
-      onChange={(newCategory: any) => {
-        // Allow for a new category.
-        if (newCategory.value === -1) {
-          if (newCategory.label.includes('Create new category: ')) {
-            newCategory.label = newCategory.label.slice(21);
-          }
-          if (newCategory.label === '') {
-            return;
-          }
-          if (accountNames.includes(newCategory.label)) {
-            const matchingAccount: Account = accounts.filter(
-              (account: Account) => account.name === newCategory.label
-            )[0];
-            props.setCategory({
-              label: matchingAccount.name,
-              value: matchingAccount.id,
-            });
-            return;
-          }
+    <Autocomplete
+      size='small'
+      value={props.value || defaultAccount}
+      onChange={(event, newValue) => {
+        if (typeof newValue !== 'string' && newValue) {
+          props.setValue(newValue);
+        }
+      }}
+      selectOnFocus
+      clearOnBlur
+      handleHomeEndKeys
+      freeSolo
+      className='account-dropdown'
+      inputValue={props.inputValue}
+      onInputChange={(event, newValue) => props.setInputValue(newValue)}
+      options={accounts
+        .filter((account: Account) =>
+          (Object.keys(props.excludeAccount) as (keyof Account)[]).some(
+            (property: keyof Account) =>
+              props.excludeAccount[property] !== account[property]
+          )
+        )
+        .sort((account1: Account, account2: Account) =>
+          account1.account_group.localeCompare(account2.account_group)
+        )}
+      filterOptions={(options: Account[], params) => {
+        const filtered = createFilterOptions<Account>()(options, params);
+        const { inputValue } = params;
+
+        const accountExists = options.some(
+          (option) => inputValue === option.name
+        );
+
+        if (inputValue !== '' && !accountExists) {
+          filtered.push({ ...newAccount, name: `${inputValue}` });
         }
 
-        if (newCategory.value === props.excludeAccount.id) {
-          return;
-        }
-        props.setCategory(newCategory);
+        return filtered;
       }}
+      groupBy={(option: Account | string) =>
+        typeof option === 'string' ? '' : option.account_group || ''
+      }
+      getOptionLabel={(option: Account | string) =>
+        typeof option === 'string' ? option : option.name || ''
+      }
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          size='small'
+          placeholder='Account'
+          InputLabelProps={{ hidden: true }}
+          variant='outlined'
+        />
+      )}
     />
   );
 }

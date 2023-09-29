@@ -13,37 +13,18 @@ import { RootState, setupStore } from '../../stores/store';
 import { AddTxnForm } from '../../features/CategorizeTransactions';
 import { yearMonthDay } from '../../utils/TextFilters';
 import dayjs from 'dayjs';
+import { fakeAccounts } from '../Accounts/mockAccounts';
 
 describe('Add Transaction Form', () => {
   let testStore: RootState;
-  let fakeAccounts: Account[];
+  let testAccounts: Account[];
 
   const setShowMock: jest.Mock<any, any, any> = jest.fn(
     (show: boolean) => show
   );
 
   beforeAll(() => {
-    fakeAccounts = [
-      {
-        id: 1,
-        name: 'Fake Account 1',
-        account_type_id: 1,
-        account_type: 'Checking Account',
-        debit_inc: true,
-        balance: 10.27,
-        last_updated: '2022-02-22',
-      },
-      {
-        id: 2,
-        name: 'Fake Account 2',
-        account_type_id: 2,
-        account_type: 'Credit Card',
-        debit_inc: false,
-        balance: -10.27,
-        last_updated: '2022-02-22',
-      },
-    ];
-
+    testAccounts = JSON.parse(JSON.stringify(fakeAccounts));
     const fakeAccountTypes: AccountType[] = [
       {
         id: 1,
@@ -58,7 +39,7 @@ describe('Add Transaction Form', () => {
     ];
 
     testStore = setupStore({
-      accounts: { accounts: fakeAccounts },
+      accounts: { accounts: testAccounts },
       accountTypes: {
         accountTypes: fakeAccountTypes,
         accountGroups: fakeAccountTypes.map(
@@ -76,7 +57,7 @@ describe('Add Transaction Form', () => {
     renderWithProviders(
       <AddTxnForm
         debitInc={true}
-        account={fakeAccounts[0]}
+        account={testAccounts[0]}
         setShowAddNewTxn={setShowMock}
       />,
       { store: testStore }
@@ -87,7 +68,7 @@ describe('Add Transaction Form', () => {
     renderWithProviders(
       <AddTxnForm
         debitInc={true}
-        account={fakeAccounts[0]}
+        account={testAccounts[0]}
         setShowAddNewTxn={setShowMock}
       />,
       { store: testStore }
@@ -120,7 +101,7 @@ describe('Add Transaction Form', () => {
     renderWithProviders(
       <AddTxnForm
         debitInc={true}
-        account={fakeAccounts[0]}
+        account={testAccounts[0]}
         setShowAddNewTxn={setShowMock}
       />,
       { store: testStore }
@@ -140,7 +121,7 @@ describe('Add Transaction Form', () => {
     renderWithProviders(
       <AddTxnForm
         debitInc={true}
-        account={fakeAccounts[0]}
+        account={testAccounts[0]}
         setShowAddNewTxn={setShowMock}
       />,
       { store: testStore }
@@ -156,20 +137,18 @@ describe('Add Transaction Form', () => {
       'textbox'
     )[3] as HTMLInputElement;
 
-    await act(async () => {
-      await userEvent.type(transactionName, 'Fake Transaction');
-      await userEvent.type(
-        transactionDescription,
-        'This is an example of the add transaction form.'
-      );
-      await userEvent.type(transactionAmount, '-20.25');
-    });
+    await userEvent.type(transactionName, 'Fake Transaction');
+    await userEvent.type(
+      transactionDescription,
+      'This is an example of the add transaction form.'
+    );
+    await userEvent.type(transactionAmount, '-20.25');
 
     const postButton = (await screen.findAllByRole('button'))[1];
 
     await userEvent.click(postButton);
 
-    expect(addTransactionThunk).toHaveBeenCalledWith(fakeAccounts[0], {
+    expect(addTransactionThunk).toHaveBeenCalledWith(testAccounts[0], {
       amount: '20.25',
       credit_account_id: 1,
       debit_account_id: undefined,
@@ -183,7 +162,7 @@ describe('Add Transaction Form', () => {
     renderWithProviders(
       <AddTxnForm
         debitInc={true}
-        account={fakeAccounts[0]}
+        account={testAccounts[0]}
         setShowAddNewTxn={setShowMock}
       />,
       { store: testStore }

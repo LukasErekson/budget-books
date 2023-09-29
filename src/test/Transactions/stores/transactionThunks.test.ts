@@ -24,6 +24,7 @@ import {
   UploadableTransaction,
   TransactionData,
 } from '../../../features/CategorizeTransactions/types/types';
+import { fakeAccounts } from '../../Accounts/mockAccounts';
 
 describe('Transaction Thunks', () => {
   const DataFetchMock = jest.spyOn(DataFetch, 'default');
@@ -51,27 +52,6 @@ describe('Transaction Thunks', () => {
       credit_account_id: 1,
       transaction_date: '03/22/2023',
       date_entered: '04/13/2023',
-    },
-  ];
-
-  const fakeAccounts: Account[] = [
-    {
-      id: 1,
-      name: 'Account 1',
-      account_type_id: 1,
-      account_type: 'Test',
-      debit_inc: true,
-      balance: 0.0,
-      last_updated: '01/01/2023',
-    },
-    {
-      id: 2,
-      name: 'Account 22',
-      account_type_id: 1,
-      account_type: 'Test',
-      debit_inc: true,
-      balance: 0.0,
-      last_updated: '01/01/2023',
     },
   ];
 
@@ -187,7 +167,7 @@ describe('Transaction Thunks', () => {
 
       expect(DataFetchMock).toHaveBeenCalledWith(
         'GET',
-        '/api/transactions?account_ids=1,2&categorize_type=all'
+        '/api/transactions?account_ids=1,2,3&categorize_type=all'
       );
     });
 

@@ -8,11 +8,12 @@ import { RootState, setupStore } from '../../stores/store';
 import { renderWithProviders } from '../setupTests';
 import AccountType from '../../features/AccountTypes/types/types';
 import * as AccountTypeSelectors from '../../features/AccountTypes/stores/accountTypeSelectors';
+import { fakeAccounts } from '../Accounts/mockAccounts';
 
 describe('AccountDropdownSelect Component', () => {
   let testStore: RootState;
   let fakeAccountTypes: AccountType[];
-  let fakeAccounts: Account[];
+  let testAccounts: Account[];
 
   let category: { label: string; value: number } = {
     label: 'New Account',
@@ -31,35 +32,7 @@ describe('AccountDropdownSelect Component', () => {
   );
 
   beforeAll(() => {
-    fakeAccounts = [
-      {
-        id: 1,
-        name: 'Fake Account 1',
-        account_type_id: 1,
-        account_type: 'Checking Account',
-        debit_inc: true,
-        balance: 10.27,
-        last_updated: '2022-02-22',
-      },
-      {
-        id: 2,
-        name: 'Fake Account 2',
-        account_type_id: 2,
-        account_type: 'Credit Card',
-        debit_inc: false,
-        balance: -10.27,
-        last_updated: '2022-02-22',
-      },
-      {
-        id: 3,
-        name: 'Fake Account 3',
-        account_type_id: 2,
-        account_type: 'Credit Card',
-        debit_inc: false,
-        balance: 0.0,
-        last_updated: '2022-02-22',
-      },
-    ];
+    testAccounts = JSON.parse(JSON.stringify(fakeAccounts));
 
     fakeAccountTypes = [
       {
@@ -74,7 +47,7 @@ describe('AccountDropdownSelect Component', () => {
       },
     ];
     testStore = setupStore({
-      accounts: { accounts: fakeAccounts },
+      accounts: { accounts: testAccounts },
       accountTypes: {
         accountTypes: fakeAccountTypes,
         accountGroups: fakeAccountTypes.map(

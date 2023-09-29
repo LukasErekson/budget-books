@@ -18,6 +18,7 @@ const testAccount: Account = {
   debit_inc: 1,
   balance: -10.0,
   last_updated: '2022-02-22',
+  account_group: 'Group 1',
 };
 
 describe('AccountCard Component', () => {

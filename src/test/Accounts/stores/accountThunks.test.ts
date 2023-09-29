@@ -4,6 +4,7 @@ import {
   fetchAccountBalances,
 } from '../../../features/Accounts/stores/accountThunks';
 
+import { fakeAccounts } from '../mockAccounts';
 import * as AccountThunks from '../../../features/Accounts/stores/accountThunks';
 import * as AccountTypeThunks from '../../../features/AccountTypes/stores/accountTypeThunks';
 import { setupStore } from '../../../stores/store';
@@ -19,27 +20,6 @@ describe('Account Thunks', () => {
 
   const mockStore = setupStore();
   const dispatch = mockStore.dispatch;
-
-  const fakeAccounts: Account[] = [
-    {
-      id: 1,
-      name: 'Account 1',
-      account_type_id: 1,
-      account_type: 'Test',
-      debit_inc: true,
-      balance: 0.0,
-      last_updated: '01/01/2023',
-    },
-    {
-      id: 2,
-      name: 'Account 22',
-      account_type_id: 1,
-      account_type: 'Test',
-      debit_inc: true,
-      balance: 0.0,
-      last_updated: '01/01/2023',
-    },
-  ];
 
   afterEach(() => {
     jest.clearAllMocks();

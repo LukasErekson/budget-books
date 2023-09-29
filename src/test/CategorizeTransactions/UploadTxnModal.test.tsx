@@ -12,6 +12,7 @@ import { RootState, setupStore } from '../../stores/store';
 import { mockThunkReturn, renderWithProviders } from '../setupTests';
 
 import ReactModal from 'react-modal';
+import { fakeAccounts } from '../Accounts/mockAccounts';
 ReactModal.setAppElement('body');
 
 let dataHandler = jest.fn();
@@ -35,15 +36,7 @@ jest.mock('react-csv-importer', () => ({
 describe('Upload Transaction Modal', () => {
   let testStore: RootState;
   const onRequestClose = jest.fn();
-  const activeAccount: Account = {
-    id: 1,
-    name: 'Fake Active Account',
-    account_type_id: 1,
-    account_type: 'Test',
-    debit_inc: false,
-    balance: 0.0,
-    last_updated: '03/03/2023',
-  };
+  const activeAccount: Account = fakeAccounts[0];
 
   beforeAll(() => {
     testStore = setupStore({

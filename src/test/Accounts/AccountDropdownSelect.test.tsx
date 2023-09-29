@@ -1,80 +1,41 @@
 import React from 'react';
-import { fireEvent, screen } from '@testing-library/react';
+import { act, screen, waitForElementToBeRemoved } from '@testing-library/react';
 
 import Account from '../../features/Accounts/types/types';
+import { fakeAccounts } from './mockAccounts';
 import { AccountDropdownSelect } from '../../features/Accounts';
 
 import { RootState, setupStore } from '../../stores/store';
 import { renderWithProviders } from '../setupTests';
 import AccountType from '../../features/AccountTypes/types/types';
-import * as AccountSelectors from '../../features/Accounts/stores/accountSelectors';
+import userEvent from '@testing-library/user-event';
 
 describe('AccountDropdownSelect Component', () => {
   let testStore: RootState;
   let fakeAccountTypes: AccountType[];
-  let fakeAccounts: Account[];
+  let testAccounts: Account[];
 
-  let category: { label: string; value: number } = {
-    label: 'New Account',
-    value: -1,
-  };
-  const setCategoryMock: jest.Mock<any, any, any> = jest.fn(
-    (newValue: { label: string; value: number }) => {
-      category = newValue;
-    }
-  );
-  let input: string = category.label;
-  const setInputCategoryMock: jest.Mock<any, any, any> = jest.fn(
-    (newValue: string) => {
-      input = newValue;
-    }
-  );
+  let mockValue: Account = {} as Account;
+  const setMockValue = jest.fn((newValue: Account) => {
+    mockValue = newValue;
+  });
+  let mockInput: string = '';
+  const setMockInput = jest.fn((newValue: string) => {
+    mockInput = newValue;
+  });
 
   beforeAll(() => {
-    fakeAccounts = [
-      {
-        id: 1,
-        name: 'Fake Account 1',
-        account_type_id: 1,
-        account_type: 'Checking Account',
-        debit_inc: true,
-        balance: 10.27,
-        last_updated: '2022-02-22',
-      },
-      {
-        id: 2,
-        name: 'Fake Account 2',
-        account_type_id: 2,
-        account_type: 'Credit Card',
-        debit_inc: false,
-        balance: -10.27,
-        last_updated: '2022-02-22',
-      },
-      {
-        id: 3,
-        name: 'Fake Account 3',
-        account_type_id: 2,
-        account_type: 'Credit Card',
-        debit_inc: false,
-        balance: 0.0,
-        last_updated: '2022-02-22',
-      },
-    ];
+    testAccounts = JSON.parse(JSON.stringify(fakeAccounts));
 
-    fakeAccountTypes = [
-      {
-        id: 1,
-        name: 'Checking Account',
-        group_name: 'Assets',
-      },
-      {
-        id: 2,
-        name: 'Credit Card',
-        group_name: 'Liabilities',
-      },
-    ];
+    fakeAccountTypes = fakeAccounts.map((account: Account) => {
+      return {
+        id: account.account_type_id,
+        group_name: account.account_group,
+        name: account.account_type,
+      };
+    });
     testStore = setupStore({
-      accounts: { accounts: fakeAccounts },
+      accounts: { accounts: testAccounts },
       accountTypes: {
         accountTypes: fakeAccountTypes,
         accountGroups: fakeAccountTypes.map(
@@ -91,171 +52,90 @@ describe('AccountDropdownSelect Component', () => {
   it('Renders without error', async () => {
     renderWithProviders(
       <AccountDropdownSelect
-        category={category}
-        setCategory={setCategoryMock}
-        inputCategory={input}
-        setInputCategory={setInputCategoryMock}
-        excludeAccount={fakeAccounts[2]}
+        value={mockValue}
+        setValue={setMockValue}
+        inputValue={mockInput}
+        setInputValue={setMockInput}
+        excludeAccount={testAccounts[2]}
       />,
       { store: testStore }
     );
 
-    expect(await screen.findByText('New Account')).toBeDefined();
+    expect(await screen.findByPlaceholderText('Account')).toBeDefined();
   });
 
   it('Displays all options on click', async () => {
-    const selectMock = jest.spyOn(AccountSelectors, 'selectAccountOptions');
-
     renderWithProviders(
       <AccountDropdownSelect
-        category={category}
-        setCategory={setCategoryMock}
-        inputCategory={input}
-        setInputCategory={setInputCategoryMock}
-        excludeAccount={fakeAccounts[2]}
+        value={mockValue}
+        setValue={setMockValue}
+        inputValue={mockInput}
+        setInputValue={setMockInput}
+        excludeAccount={testAccounts[1]}
       />,
       { store: testStore }
     );
 
-    const dropdown = await screen.findByRole('combobox');
+    const dropdown = await screen.findByPlaceholderText('Account');
 
-    expect(selectMock).toHaveBeenCalled();
-
-    fireEvent.input(dropdown, { target: { value: ' ' } });
+    userEvent.click(dropdown);
 
     expect(await screen.findByText('Fake Account 1')).toBeVisible();
-    expect(await screen.findByText('Fake Account 2')).toBeVisible();
-    expect(await screen.findByText('Assets')).toBeVisible();
-    expect(await screen.findByText('Liabilities')).toBeVisible();
-  });
-
-  it('Updates category on click', async () => {
-    renderWithProviders(
-      <AccountDropdownSelect
-        category={category}
-        setCategory={setCategoryMock}
-        inputCategory={input}
-        setInputCategory={setInputCategoryMock}
-        excludeAccount={fakeAccounts[2]}
-      />,
-      { store: testStore }
-    );
-
-    const dropdown = await screen.findByRole('combobox');
-
-    fireEvent.input(dropdown, { target: { value: ' ' } });
-
-    const account = await screen.findByText(fakeAccounts[0].name);
-
-    fireEvent.click(account);
-
-    expect(setCategoryMock).toHaveBeenCalledWith({
-      label: 'Fake Account 1',
-      value: 1,
-    });
-    expect(setCategoryMock).toHaveBeenCalledTimes(1);
+    expect(await screen.findByText('Fake Account 3')).toBeVisible();
+    expect(await screen.findByText('Group 1')).toBeVisible();
   });
 
   it('Updates input on typing', async () => {
     renderWithProviders(
       <AccountDropdownSelect
-        category={category}
-        setCategory={setCategoryMock}
-        inputCategory={input}
-        setInputCategory={setInputCategoryMock}
-        excludeAccount={fakeAccounts[2]}
+        value={mockValue}
+        setValue={setMockValue}
+        inputValue={mockInput}
+        setInputValue={setMockInput}
+        excludeAccount={testAccounts[2]}
       />,
       { store: testStore }
     );
 
-    const dropdown = await screen.findByRole('combobox');
+    const dropdown = (await screen.findByPlaceholderText(
+      'Account'
+    )) as HTMLInputElement;
 
-    fireEvent.input(dropdown, { target: { value: 'Fake Account 1' } });
+    await userEvent.type(dropdown, 'Fake Account');
 
-    expect(setInputCategoryMock).toHaveBeenCalledWith('Fake Account 1');
+    expect(setMockInput).toHaveBeenCalled();
+
+    expect(await screen.findByText('Fake Account 1')).toBeVisible();
   });
 
-  it('Assigns a category with a new label', async () => {
-    const { rerender } = renderWithProviders(
+  it('Matches "new" category with existing one', async () => {
+    renderWithProviders(
       <AccountDropdownSelect
-        category={category}
-        setCategory={setCategoryMock}
-        inputCategory={input}
-        setInputCategory={setInputCategoryMock}
-        excludeAccount={fakeAccounts[2]}
+        value={mockValue}
+        setValue={setMockValue}
+        inputValue={mockInput}
+        setInputValue={setMockInput}
+        excludeAccount={testAccounts[2]}
       />,
       { store: testStore }
     );
 
-    const dropdown = await screen.findByRole('combobox');
+    const dropdown = (await screen.findByPlaceholderText(
+      'Account'
+    )) as HTMLInputElement;
 
-    fireEvent.click(dropdown);
-    fireEvent.input(dropdown, { target: { value: 'My New Account' } });
+    await userEvent.type(dropdown, 'Fake Account', { delay: 2 });
 
-    expect(setInputCategoryMock).toHaveBeenCalledWith('My New Account');
+    const newAccount = await screen.findByText('Fake Account 1');
 
-    rerender(
-      <AccountDropdownSelect
-        category={category}
-        setCategory={setCategoryMock}
-        inputCategory={'My New Account'}
-        setInputCategory={setInputCategoryMock}
-        excludeAccount={fakeAccounts[2]}
-      />
+    await userEvent.click(newAccount);
+
+    expect(setMockInput).toHaveBeenCalledWith(
+      expect.stringMatching('Fake Account')
     );
 
-    const newAccount = await screen.findByText(
-      'Create new category: My New Account'
+    expect(setMockValue).toHaveBeenCalledWith(
+      expect.objectContaining({ name: 'Fake Account 1' })
     );
-
-    fireEvent.click(newAccount);
-
-    expect(setCategoryMock).toHaveBeenCalledWith({
-      label: 'My New Account',
-      value: -1,
-    });
-    expect(setCategoryMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('Matches "new" cateogry with existing one', async () => {
-    const { rerender } = renderWithProviders(
-      <AccountDropdownSelect
-        category={category}
-        setCategory={setCategoryMock}
-        inputCategory={input}
-        setInputCategory={setInputCategoryMock}
-        excludeAccount={fakeAccounts[2]}
-      />,
-      { store: testStore }
-    );
-
-    const dropdown = await screen.findByRole('combobox');
-
-    fireEvent.click(dropdown);
-    fireEvent.input(dropdown, { target: { value: 'Fake Account 1' } });
-
-    expect(setInputCategoryMock).toHaveBeenCalledWith('Fake Account 1');
-
-    rerender(
-      <AccountDropdownSelect
-        category={category}
-        setCategory={setCategoryMock}
-        inputCategory={'Fake Account 1'}
-        setInputCategory={setInputCategoryMock}
-        excludeAccount={fakeAccounts[2]}
-      />
-    );
-
-    const newAccount = await screen.findByText(
-      'Create new category: Fake Account 1'
-    );
-
-    fireEvent.click(newAccount);
-
-    expect(setCategoryMock).toHaveBeenCalledWith({
-      label: 'Fake Account 1',
-      value: 1,
-    });
-    expect(setCategoryMock).toHaveBeenCalledTimes(1);
   });
 });

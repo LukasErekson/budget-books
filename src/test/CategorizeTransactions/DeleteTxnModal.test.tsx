@@ -12,6 +12,7 @@ import { fakePromise, renderWithProviders } from '../setupTests';
 import * as TransactionThunks from '../../features/Transactions/stores/transactionThunks';
 
 import ReactModal from 'react-modal';
+import { fakeAccounts, otherAccount } from '../Accounts/mockAccounts';
 ReactModal.setAppElement('body');
 
 describe('Delete Transaction Modal', () => {
@@ -19,25 +20,7 @@ describe('Delete Transaction Modal', () => {
 
   const onRequestClose = jest.fn();
 
-  const activeAccount: Account = {
-    id: 1,
-    name: 'Fake Active Account',
-    account_type_id: 1,
-    account_type: 'Test',
-    debit_inc: false,
-    balance: 0.0,
-    last_updated: '03/03/2023',
-  };
-
-  const otherAccount: Account = {
-    id: 2,
-    name: 'Fake Other Account',
-    account_type_id: 1,
-    account_type: 'Test',
-    debit_inc: true,
-    balance: 10.0,
-    last_updated: '03/03/2023',
-  };
+  const activeAccount: Account = fakeAccounts[0];
 
   const transactionData: Transaction = {
     id: 1,

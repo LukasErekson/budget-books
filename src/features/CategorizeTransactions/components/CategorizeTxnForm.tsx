@@ -51,40 +51,19 @@ function CategorizeTxnForm(props: {
     firstAccountIdx = 1;
   }
 
-  const [isSelected, setIsSelected]: [
-    number,
-    React.Dispatch<React.SetStateAction<number>>
-  ] = useState(props.isSelected);
+  const [isSelected, setIsSelected] = useState<number>(props.isSelected);
 
-  const [category, setCategory]: [
-    { label: string; value: number },
-    React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
-  ] = useState({
-    label: accounts[firstAccountIdx].name,
-    value: accounts[firstAccountIdx].id,
-  });
+  const [category, setCategory] = useState<Account>(accounts[firstAccountIdx]);
 
-  const [inputCategory, setInputCategory]: [
-    string,
-    React.Dispatch<React.SetStateAction<string>>
-  ] = useState('');
+  const [inputCategory, setInputCategory] = useState<string>('');
 
-  const [displayDeleteModal, setDisplayDeleteModal]: [
-    boolean,
-    React.Dispatch<React.SetStateAction<boolean>>
-  ] = useState(false);
+  const [displayDeleteModal, setDisplayDeleteModal] = useState<boolean>(false);
 
   const nameCell = useRef<HTMLSpanElement>(null);
-  const [nameCharWidth, setNameCharWidth]: [
-    number,
-    React.Dispatch<React.SetStateAction<number>>
-  ] = useState(16);
+  const [nameCharWidth, setNameCharWidth] = useState<number>(16);
 
   const descriptionCell = useRef<HTMLSpanElement>(null);
-  const [descriptionCellWidth, setDescriptionCellWidth]: [
-    number,
-    React.Dispatch<React.SetStateAction<number>>
-  ] = useState(32);
+  const [descriptionCellWidth, setDescriptionCellWidth] = useState<number>(32);
 
   const getCellWidths = () => {
     const newNameWidth: number | undefined = nameCell.current?.offsetWidth;
@@ -112,7 +91,13 @@ function CategorizeTxnForm(props: {
     category_id: number
   ) {
     if (category_id === -1) {
-      thunkDispatch(addNewAccount(category.label, category, true));
+      thunkDispatch(
+        addNewAccount(
+          category.name,
+          { label: category.name, value: category.id },
+          true
+        )
+      );
     }
 
     thunkDispatch(
@@ -206,17 +191,17 @@ function CategorizeTxnForm(props: {
       </span>
       <span className='categorize-txn-item'>
         <AccountDropdownSelect
-          setCategory={setCategory}
-          category={category}
-          setInputCategory={setInputCategory}
-          inputCategory={inputCategory}
+          value={category}
+          setValue={setCategory}
+          inputValue={inputCategory}
+          setInputValue={setInputCategory}
           excludeAccount={props.account}
         />
       </span>
       <span className='categorize-txn-item'>
         <button
           className='categorize-txn-btn'
-          onClick={() => postCategorizeTransaction(id, category.value)}
+          onClick={() => postCategorizeTransaction(id, category.id)}
         >
           Add
         </button>

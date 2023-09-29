@@ -47,6 +47,7 @@ describe('EditAccountModal Component', () => {
         debit_inc: true,
         balance: 10.27,
         last_updated: '2022-02-22',
+        account_group: 'Group 1',
       },
       {
         id: 2,
@@ -56,6 +57,7 @@ describe('EditAccountModal Component', () => {
         debit_inc: false,
         balance: -10.27,
         last_updated: '2022-02-22',
+        account_group: 'Group 2',
       },
     ];
 

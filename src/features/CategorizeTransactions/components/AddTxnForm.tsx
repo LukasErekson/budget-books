@@ -29,25 +29,13 @@ function AddTxnForm(props: {
   setShowAddNewTxn: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element {
   const id = -1;
-  const [formData, setFormData]: [
-    TransactionData,
-    React.Dispatch<React.SetStateAction<TransactionData>>
-  ] = useState(initialFormData);
+  const [formData, setFormData] = useState<TransactionData>(initialFormData);
 
   const thunkDispatch = useThunkDispatch();
 
-  const [category, setCategory]: [
-    { label: string; value: number },
-    React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
-  ] = useState({
-    label: '',
-    value: -1,
-  });
+  const [category, setCategory] = useState<Account>({} as Account);
 
-  const [inputCategory, setInputCategory]: [
-    string,
-    React.Dispatch<React.SetStateAction<string>>
-  ] = useState('');
+  const [inputCategory, setInputCategory] = useState<string>('');
 
   function postTransaction() {
     for (const val of Object.values(formData)) {
@@ -65,13 +53,13 @@ function AddTxnForm(props: {
 
     if (newTransactionData.amount < 0) {
       newTransactionData.credit_account_id = props.account.id;
-      newTransactionData.debit_account_id = category.label
-        ? category.value
+      newTransactionData.debit_account_id = category.name
+        ? category.id
         : undefined;
     } else {
       newTransactionData.debit_account_id = props.account.id;
-      newTransactionData.credit_account_id = category.label
-        ? category.value
+      newTransactionData.credit_account_id = category.name
+        ? category.id
         : undefined;
     }
 
@@ -167,10 +155,10 @@ function AddTxnForm(props: {
       </span>
       <span className='categorize-txn-item'>
         <AccountDropdownSelect
-          setCategory={setCategory}
-          category={category}
-          setInputCategory={setInputCategory}
-          inputCategory={inputCategory}
+          value={category}
+          setValue={setCategory}
+          inputValue={inputCategory}
+          setInputValue={setInputCategory}
           excludeAccount={props.account}
         />
       </span>

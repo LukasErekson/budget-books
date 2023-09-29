@@ -2,6 +2,7 @@ import React from 'react';
 import { act, screen } from '@testing-library/react';
 
 import Account from '../../features/Accounts/types/types';
+import { fakeAccounts } from './mockAccounts';
 import { AccountCardContainer } from '../../features/Accounts';
 import * as AccountThunks from '../../features/Accounts/stores/accountThunks';
 import * as AccountTypeThunks from '../../features/AccountTypes/stores/accountTypeThunks';
@@ -30,27 +31,6 @@ describe('AccountCardContainer Component', () => {
         };
       }
     );
-
-    const fakeAccounts: Account[] = [
-      {
-        id: 1,
-        name: 'Fake Account 1',
-        account_type_id: 1,
-        account_type: 'Checking Account',
-        debit_inc: true,
-        balance: 10.27,
-        last_updated: '2022-02-22',
-      },
-      {
-        id: 2,
-        name: 'Fake Account 2',
-        account_type_id: 2,
-        account_type: 'Credit Card',
-        debit_inc: false,
-        balance: -10.27,
-        last_updated: '2022-02-22',
-      },
-    ];
 
     const fakeAccountTypes: AccountType[] = [
       {
@@ -126,15 +106,9 @@ describe('AccountCardContainer Component', () => {
 
     state = testStore.getState();
 
-    expect(state.pageSlice.categorizationPage.activeAccount).toEqual({
-      id: 1,
-      name: 'Fake Account 1',
-      account_type_id: 1,
-      account_type: 'Checking Account',
-      debit_inc: true,
-      balance: 10.27,
-      last_updated: '2022-02-22',
-    });
+    expect(state.pageSlice.categorizationPage.activeAccount).toEqual(
+      fakeAccounts[0]
+    );
   });
 
   it('Opens the new account modal on click', async () => {

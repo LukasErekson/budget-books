@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { act, screen } from '@testing-library/react';
+import { waitFor, screen } from '@testing-library/react';
+
 import userEvent from '@testing-library/user-event';
 import { mockThunkReturn, renderWithProviders } from '../setupTests';
 
@@ -14,21 +15,14 @@ import * as AccountThunks from '../../features/Accounts/stores/accountThunks';
 import * as CategorizeThunks from '../../features/Transactions/stores/transactionThunks';
 
 import ReactModal from 'react-modal';
+import { fakeAccounts } from '../Accounts/mockAccounts';
 
 ReactModal.setAppElement('body');
 
 describe('Bulk Action Modal', () => {
   let testState: RootState;
 
-  const activeAccount: Account = {
-    id: 1,
-    name: 'Fake Active Account',
-    account_type_id: 1,
-    account_type: 'Test',
-    debit_inc: false,
-    balance: 0.0,
-    last_updated: '03/03/2023',
-  };
+  const activeAccount: Account = fakeAccounts[0];
   const onRequestClose = jest.fn();
   const selectedTransactions: Transaction[] = [
     {
@@ -62,7 +56,7 @@ describe('Bulk Action Modal', () => {
         },
       },
       accounts: {
-        accounts: [activeAccount],
+        accounts: fakeAccounts,
       },
     };
   });
@@ -148,24 +142,24 @@ describe('Bulk Action Modal', () => {
         { preloadedState: testState }
       );
 
+      const accountDropdown = await screen.findByPlaceholderText('Account');
+
+      await userEvent.click(accountDropdown);
+
+      const categoryAccount = await screen.findByText('Fake Account 2');
+
+      await userEvent.click(categoryAccount);
+
       const categorizeButton = await screen.findByText('Categorize');
 
       expect(categorizeButton).toBeVisible();
 
-      await act(async () => {
-        await userEvent.click(categorizeButton);
-      });
-
-      expect(addNewAccount).toHaveBeenCalledWith(
-        'New Account',
-        { label: 'New Account', value: -1 },
-        true
-      );
+      await userEvent.click(categorizeButton);
 
       expect(addManyTransactionCategories).toHaveBeenCalledWith(
         activeAccount,
         [selectedTransactions[0]],
-        -1
+        2
       );
     });
 
@@ -186,9 +180,7 @@ describe('Bulk Action Modal', () => {
 
       expect(categorizeButton).toBeVisible();
 
-      await act(async () => {
-        await userEvent.click(categorizeButton);
-      });
+      await userEvent.click(categorizeButton);
 
       expect(removeSelectedTransactions).toHaveBeenCalledWith(
         selectedTransactions[0]
@@ -212,9 +204,7 @@ describe('Bulk Action Modal', () => {
 
       expect(categorizeButton).toBeVisible();
 
-      await act(async () => {
-        await userEvent.click(categorizeButton);
-      });
+      await userEvent.click(categorizeButton);
 
       expect(onRequestClose).toHaveBeenCalled();
     });
@@ -248,9 +238,7 @@ describe('Bulk Action Modal', () => {
 
       expect(deleteButton).toBeVisible();
 
-      await act(async () => {
-        await userEvent.click(deleteButton);
-      });
+      await userEvent.click(deleteButton);
 
       expect(deleteTransactions).toHaveBeenCalledWith([
         selectedTransactions[0],
@@ -274,9 +262,7 @@ describe('Bulk Action Modal', () => {
 
       expect(deleteButton).toBeVisible();
 
-      await act(async () => {
-        await userEvent.click(deleteButton);
-      });
+      await userEvent.click(deleteButton);
 
       expect(removeSelectedTransactions).toHaveBeenCalledWith(
         selectedTransactions[0]
@@ -300,9 +286,7 @@ describe('Bulk Action Modal', () => {
 
       expect(deleteButton).toBeVisible();
 
-      await act(async () => {
-        await userEvent.click(deleteButton);
-      });
+      await userEvent.click(deleteButton);
 
       expect(onRequestClose).toHaveBeenCalled();
     });
