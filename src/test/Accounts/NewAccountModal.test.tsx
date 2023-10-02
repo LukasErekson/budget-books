@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { fakeAccounts } from './mockAccounts';
 import { NewAccountModal } from '../../features/Accounts';
@@ -80,12 +80,14 @@ describe('NewAccountModal Component', () => {
         expect(formLabel).toBeDefined();
       }
     );
-    // New category defaults to "Misc. Accounts"
-    expect(await screen.findByText('Misc. Accounts')).toBeDefined();
+
+    const accountType = await screen.findByPlaceholderText('Account Type');
+
+    expect(accountType).toBeDefined();
   });
 
   // TODO : Fix when implmenting AccountType Dropdown
-  it.skip('Populates the AccountType dropdown select correctly', async () => {
+  it('Populates the AccountType dropdown select correctly', async () => {
     renderWithProviders(
       <div id='root'>
         <NewAccountModal isOpen={true} onRequestClose={() => null} />
@@ -93,11 +95,15 @@ describe('NewAccountModal Component', () => {
       { store: testStore }
     );
 
-    const accountTypeDropdown = await screen.findByText('Misc. Accounts');
+    const accountTypeDropdown = await screen.findByPlaceholderText(
+      'Account Type'
+    );
     await userEvent.click(accountTypeDropdown);
 
-    fakeAccountTypes.forEach(async (accountType: AccountType) => {
-      expect(await screen.findByText(accountType.name)).toBeVisible();
+    await waitFor(async () => {
+      fakeAccountTypes.forEach(async (accountType: AccountType) => {
+        expect(await screen.findByText(accountType.name)).toBeDefined();
+      });
     });
   });
 
@@ -144,6 +150,12 @@ describe('NewAccountModal Component', () => {
 
     expect(accountName.value).toEqual('Jest Testing Fees');
 
+    const accountType = await screen.findByPlaceholderText('Account Type');
+
+    await userEvent.click(accountType);
+
+    await userEvent.click(await screen.findByText('Checking Account'));
+
     const submitButton = await screen.findByText('Add Account');
     await userEvent.click(submitButton);
 
@@ -151,7 +163,7 @@ describe('NewAccountModal Component', () => {
 
     expect(addNewAccount).toHaveBeenCalledWith(
       'Jest Testing Fees',
-      { label: 'Misc. Accounts', value: -1 },
+      { name: 'Checking Account', id: 1, group_name: 'Assets' },
       true
     );
   });

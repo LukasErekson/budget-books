@@ -8,31 +8,17 @@ import { useThunkDispatch } from '../../../hooks/hooks';
 import { AccountTypeDropdownSelect } from '../../AccountTypes';
 import { addNewAccount } from '../stores/accountThunks';
 
+import AccountType from '../../AccountTypes/types/types';
+
 function NewAccountModal(props: {
   isOpen: boolean;
   onRequestClose: () => void;
 }): JSX.Element {
-  const [category, setCategory]: [
-    { label: string; value: number },
-    React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
-  ] = useState({ label: 'Misc. Accounts', value: -1 } as {
-    label: string;
-    value: number;
-  });
-  const [inputCategory, setInputCategory]: [
-    string,
-    React.Dispatch<React.SetStateAction<string>>
-  ] = useState('Misc. Accounts');
+  const [category, setCategory] = useState<AccountType | null>(null);
 
-  const [accountName, setAccountName]: [
-    string,
-    React.Dispatch<React.SetStateAction<string>>
-  ] = useState('');
+  const [accountName, setAccountName] = useState<string>('');
 
-  const [debitInc, setDebitInc]: [
-    boolean,
-    React.Dispatch<React.SetStateAction<boolean>>
-  ] = useState(true);
+  const [debitInc, setDebitInc] = useState<boolean>(true);
 
   const thunkDispatch = useThunkDispatch();
 
@@ -40,6 +26,11 @@ function NewAccountModal(props: {
     event.preventDefault();
     if (accountName.length === 0) {
       alert('Please input an account name!');
+      return;
+    }
+
+    if (!category) {
+      alert('Please ensure you have an account type!');
       return;
     }
 
@@ -80,10 +71,8 @@ function NewAccountModal(props: {
           <br />
           <label htmlFor='accountType'>Category:</label>
           <AccountTypeDropdownSelect
-            setCategory={setCategory}
-            category={category}
-            setInputCategory={setInputCategory}
-            inputCategory={inputCategory}
+            setValue={setCategory}
+            value={category}
             id='accountType'
           />
           <br />

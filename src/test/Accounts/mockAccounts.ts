@@ -29,7 +29,7 @@ export const fakeAccounts: Account[] = [
     debit_inc: false,
     balance: 0.0,
     last_updated: '2022-02-22',
-    account_group: 'Group 1',
+    account_group: 'Group 2',
   },
 ];
 

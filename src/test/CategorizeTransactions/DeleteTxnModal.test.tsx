@@ -118,9 +118,7 @@ describe('Delete Transaction Modal', () => {
 
     const yesButton = await screen.findByText('Yes');
 
-    await act(async () => {
-      await userEvent.click(yesButton);
-    });
+    await userEvent.click(yesButton);
 
     expect(deleteTransaction).toHaveBeenCalledWith([transactionData]);
   });
@@ -139,9 +137,7 @@ describe('Delete Transaction Modal', () => {
 
     const noButton = await screen.findByText('No');
 
-    await act(async () => {
-      await userEvent.click(noButton);
-    });
+    await userEvent.click(noButton);
 
     expect(onRequestClose).toBeCalled();
   });

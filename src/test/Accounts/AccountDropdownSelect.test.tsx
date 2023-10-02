@@ -34,6 +34,7 @@ describe('AccountDropdownSelect Component', () => {
         name: account.account_type,
       };
     });
+
     testStore = setupStore({
       accounts: { accounts: testAccounts },
       accountTypes: {

@@ -257,7 +257,7 @@ describe('Categorize Transaction Form', () => {
 
     expect(addNewAccount).toHaveBeenCalledWith(
       'New Account',
-      { label: 'New Account', value: -1 },
+      { name: 'New Account', id: -1, group_name: 'Misc.' },
       true
     );
   });

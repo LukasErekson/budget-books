@@ -100,9 +100,7 @@ describe('AccountCardContainer Component', () => {
     expect(state.pageSlice.categorizationPage.activeAccount).toEqual({});
 
     const firstAccount = await screen.findByText('Fake Account 1');
-    await act(async () => {
-      await userEvent.click(firstAccount);
-    });
+    await userEvent.click(firstAccount);
 
     state = testStore.getState();
 
@@ -135,9 +133,7 @@ describe('AccountCardContainer Component', () => {
     );
 
     const newAccountButton = await screen.findByText(/Add New Account/i);
-    await act(async () => {
-      await userEvent.click(newAccountButton);
-    });
+    await userEvent.click(newAccountButton);
 
     // Expect to find the modal title
     expect(await screen.findAllByText(/Add New Account/i)).toBeDefined();

@@ -62,7 +62,11 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
       thunkDispatch(
         addNewAccount(
           category.name,
-          { label: category.name, value: category.id },
+          {
+            name: category.account_type,
+            id: category.account_type_id,
+            group_name: 'Misc.',
+          },
           true
         )
       );

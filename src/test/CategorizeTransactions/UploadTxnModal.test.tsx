@@ -84,9 +84,7 @@ describe('Upload Transaction Modal', () => {
         'Use one column for amount?'
       )) as HTMLInputElement;
 
-      await act(async () => {
-        await userEvent.click(checkbox);
-      });
+      await userEvent.click(checkbox);
 
       expect(checkbox.value).toEqual('0');
 

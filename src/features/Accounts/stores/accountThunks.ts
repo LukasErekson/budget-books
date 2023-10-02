@@ -3,6 +3,7 @@ import { AppDispatch } from '../../../stores/store';
 import BadResponseError from '../../../utils/BadResponseError';
 import DataFetch from '../../../utils/DataFetch';
 import { fetchAccountTypes } from '../../AccountTypes/stores/accountTypeThunks';
+import AccountType from '../../AccountTypes/types/types';
 import Account from '../types/types';
 import {
   loadAccounts,
@@ -55,11 +56,7 @@ export const fetchAccounts =
   };
 
 export const addNewAccount =
-  (
-    name: string,
-    account_type: { label: string; value: number },
-    debit_inc: boolean
-  ) =>
+  (name: string, account_type: AccountType, debit_inc: boolean) =>
   async (dispatch: AppDispatch) => {
     try {
       const {
@@ -69,7 +66,7 @@ export const addNewAccount =
         '/api/accounts',
         {
           name,
-          account_type,
+          account_type: { label: account_type.name, value: account_type.id },
           debit_inc,
         }
       );

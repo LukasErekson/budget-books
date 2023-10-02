@@ -137,7 +137,7 @@ describe('Account Thunks', () => {
         await dispatch(
           addNewAccount(
             'My New Account',
-            { label: 'Misc. Accounts', value: 1 },
+            { name: 'Misc. Accounts', id: 1, group_name: 'Group 1' },
             true
           )
         );
@@ -166,7 +166,7 @@ describe('Account Thunks', () => {
         await dispatch(
           addNewAccount(
             'My New Account',
-            { label: 'Misc. Accounts', value: 1 },
+            { name: 'Misc. Accounts', id: 1, group_name: 'Group 1' },
             true
           )
         );
@@ -192,7 +192,7 @@ describe('Account Thunks', () => {
         await dispatch(
           addNewAccount(
             'My New Account',
-            { label: 'Misc. Accounts', value: 1 },
+            { name: 'Misc. Accounts', id: 1, group_name: 'Group 1' },
             true
           )
         );

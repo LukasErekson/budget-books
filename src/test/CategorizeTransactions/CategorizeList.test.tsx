@@ -144,9 +144,7 @@ describe('Categorize List Component', () => {
       expect(dateOrder).toEqual(['03/02/2023', '03/03/2023']);
 
       // Ascending to Descending
-      await act(async () => {
-        await userEvent.click(dateHeader);
-      });
+      await userEvent.click(dateHeader);
 
       rerender(
         <CategorizeList
@@ -195,9 +193,7 @@ describe('Categorize List Component', () => {
       expect(nameHeader).toBeDefined();
 
       // Ascending by name
-      await act(async () => {
-        await userEvent.click(nameHeader);
-      });
+      await userEvent.click(nameHeader);
 
       let transactionNames = await screen.findAllByText(/Transaction \d$/);
 
@@ -212,9 +208,7 @@ describe('Categorize List Component', () => {
       expect(nameOrder).toEqual(['Transaction 1', 'Transaction 2']);
 
       // Descending by name
-      await act(async () => {
-        await userEvent.click(nameHeader);
-      });
+      await userEvent.click(nameHeader);
 
       rerender(
         <CategorizeList
@@ -263,9 +257,7 @@ describe('Categorize List Component', () => {
       expect(descriptionHeader).toBeDefined();
 
       // Ascending by description
-      await act(async () => {
-        await userEvent.click(descriptionHeader);
-      });
+      await userEvent.click(descriptionHeader);
 
       let descriptionNames = await screen.findAllByText(/Transaction \d's .*/);
 
@@ -283,9 +275,7 @@ describe('Categorize List Component', () => {
       ]);
 
       // Descending by description
-      await act(async () => {
-        await userEvent.click(descriptionHeader);
-      });
+      await userEvent.click(descriptionHeader);
 
       rerender(
         <CategorizeList
@@ -337,9 +327,7 @@ describe('Categorize List Component', () => {
       expect(amountHeader).toBeDefined();
 
       // Ascending by amount
-      await act(async () => {
-        await userEvent.click(amountHeader);
-      });
+      await userEvent.click(amountHeader);
 
       let amountValues = await screen.findAllByText(/\$-\d{2}.\d{2}/);
 
@@ -354,9 +342,7 @@ describe('Categorize List Component', () => {
       expect(amountOrder).toEqual(['$-25.23', '$-20.23']);
 
       // Descending by amount
-      await act(async () => {
-        await userEvent.click(amountHeader);
-      });
+      await userEvent.click(amountHeader);
 
       rerender(
         <CategorizeList

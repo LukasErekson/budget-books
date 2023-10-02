@@ -1,3 +1,3 @@
-import AccountTypeDropdownSelect from './components/accountTypeDropdownSelect';
+import AccountTypeDropdownSelect from './components/AccountTypeDropdownSelect';
 
 export { AccountTypeDropdownSelect };

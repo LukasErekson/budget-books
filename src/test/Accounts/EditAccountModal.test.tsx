@@ -65,12 +65,12 @@ describe('EditAccountModal Component', () => {
       {
         id: 1,
         name: 'Checking Account',
-        group_name: 'Assets',
+        group_name: 'Group 1',
       },
       {
         id: 2,
         name: 'Credit Card',
-        group_name: 'Liabilities',
+        group_name: 'Group 2',
       },
     ];
     testStore = setupStore({
@@ -124,9 +124,7 @@ describe('EditAccountModal Component', () => {
     )) as HTMLInputElement;
     expect(accountName.value).toEqual(activeStateAccount.name);
 
-    const accountType = await screen.findByText(
-      activeStateAccount.account_type
-    );
+    const accountType = await screen.findByPlaceholderText('Account Type');
     expect(accountType).toBeDefined();
 
     const debitInc = (await screen.findByLabelText(

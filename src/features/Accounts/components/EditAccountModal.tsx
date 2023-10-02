@@ -18,6 +18,7 @@ import { RootState } from '../../../stores/store';
 import { AccountTypeDropdownSelect } from '../../AccountTypes';
 import { deleteAccount, putUpdatedAccountInfo } from '../stores/accountThunks';
 import Account from '../types/types';
+import AccountType from '../../AccountTypes/types/types';
 
 function EditAccountModal(props: {
   isOpen: boolean;
@@ -27,33 +28,15 @@ function EditAccountModal(props: {
     (state: RootState) => state.pageSlice.accountSettingsPage.activeAccount
   );
 
-  const [accountName, setAccountName]: [
-    string,
-    React.Dispatch<React.SetStateAction<string>>
-  ] = useState(editAccount.name);
+  const [accountName, setAccountName] = useState<string>(editAccount.name);
 
-  const [accountType, setAccountType]: [
-    { label: string; value: number },
-    React.Dispatch<React.SetStateAction<{ label: string; value: number }>>
-  ] = useState({
-    label: editAccount.account_type,
-    value: editAccount.account_type_id,
-  });
+  const [accountType, setAccountType] = useState<AccountType | null>(null);
 
-  const [accountTypeInput, setAccountTypeInput]: [
-    string,
-    React.Dispatch<React.SetStateAction<string>>
-  ] = useState(editAccount.account_type);
+  const [debitInc, setDebitInc] = useState<boolean>(
+    Boolean(editAccount.debit_inc)
+  );
 
-  const [debitInc, setDebitInc]: [
-    boolean,
-    React.Dispatch<React.SetStateAction<boolean>>
-  ] = useState(Boolean(editAccount.debit_inc));
-
-  const [deleteDialogIsOpen, setDeleteDialogIsOpen]: [
-    boolean,
-    React.Dispatch<React.SetStateAction<boolean>>
-  ] = useState(false);
+  const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState<boolean>(false);
 
   const thunkDispatch = useThunkDispatch();
 
@@ -62,11 +45,17 @@ function EditAccountModal(props: {
       toast.error('Cannot save an empty Account Name');
       return;
     }
+
+    if (!accountType) {
+      toast.error('Must have a valid account type');
+      return;
+    }
+
     const editedAccount: Account = {
       ...editAccount,
       name: accountName,
-      account_type: accountType.label,
-      account_type_id: accountType.value,
+      account_type: accountType.name,
+      account_type_id: +accountType.id,
       debit_inc: debitInc,
     };
     thunkDispatch(putUpdatedAccountInfo(editedAccount));
@@ -82,10 +71,10 @@ function EditAccountModal(props: {
   useEffect(() => {
     setAccountName(editAccount.name);
     setAccountType({
-      label: editAccount.account_type,
-      value: editAccount.account_type_id,
+      name: editAccount.account_type,
+      id: editAccount.account_type_id,
+      group_name: editAccount.account_group,
     });
-    setAccountTypeInput(editAccount.account_type);
     setDebitInc(Boolean(editAccount.debit_inc));
   }, [editAccount]);
 
@@ -136,18 +125,8 @@ function EditAccountModal(props: {
           <br />
           <label htmlFor='edit-account-account-type'>Account Type:</label>
           <AccountTypeDropdownSelect
-            setCategory={setAccountType}
-            category={
-              accountType == undefined
-                ? { label: '', value: -1 }
-                : accountType.label == undefined || accountType.value == -1
-                ? { label: '', value: -1 }
-                : accountType
-            }
-            setInputCategory={setAccountTypeInput}
-            inputCategory={
-              accountTypeInput == undefined ? '' : accountTypeInput
-            }
+            setValue={setAccountType}
+            value={accountType}
             id='edit-account-account-type'
           />
           <br />
