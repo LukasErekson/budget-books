@@ -14,6 +14,7 @@ import {
   fetchAccountTypes,
 } from '../stores/accountTypeThunks';
 import AccountType from '../types/types';
+import { toast } from 'react-toastify';
 
 function NewAccountTypeModal(props: {
   isOpen: boolean;
@@ -51,7 +52,7 @@ function NewAccountTypeModal(props: {
   function postNewAccType(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (accountTypeName.length === 0) {
-      alert('Please input an account type name!');
+      toast.error('Please input an account type name!');
       return;
     }
 

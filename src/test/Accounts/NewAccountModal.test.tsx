@@ -16,6 +16,7 @@ import AccountType from '../../features/AccountTypes/types/types';
 
 import ReactModal from 'react-modal';
 import userEvent from '@testing-library/user-event';
+import { toast } from 'react-toastify';
 ReactModal.setAppElement('body');
 
 describe('NewAccountModal Component', () => {
@@ -108,8 +109,7 @@ describe('NewAccountModal Component', () => {
   });
 
   it('Reports a problem if Account Name is blank', async () => {
-    const alertMock = jest.spyOn(window, 'alert');
-    alertMock.mockImplementation((message: string) => message);
+    const alertMock = jest.spyOn(toast, 'error');
 
     renderWithProviders(
       <div id='root'>

@@ -9,6 +9,7 @@ import { AccountTypeDropdownSelect } from '../../AccountTypes';
 import { addNewAccount } from '../stores/accountThunks';
 
 import AccountType from '../../AccountTypes/types/types';
+import { toast } from 'react-toastify';
 
 function NewAccountModal(props: {
   isOpen: boolean;
@@ -25,12 +26,12 @@ function NewAccountModal(props: {
   function postNewAccount(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (accountName.length === 0) {
-      alert('Please input an account name!');
+      toast.error('Please input an account name!');
       return;
     }
 
     if (!category) {
-      alert('Please ensure you have an account type!');
+      toast.error('Please ensure you have an account type!');
       return;
     }
 
