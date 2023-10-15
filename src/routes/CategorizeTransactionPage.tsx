@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 
 import Account from '../features/Accounts/types/types';
 
-import { setTransactionsIsLoaded } from '../features/Transactions/stores/transactionSlice';
+import {
+  selectTransactions,
+  setTransactionsIsLoaded,
+} from '../features/Transactions/stores/transactionSlice';
 import { fetchAccountTransactions } from '../features/Transactions/stores/transactionThunks';
 import { useAppDispatch, useThunkDispatch } from '../hooks/hooks';
 import { RootState } from '../stores/store';
@@ -31,24 +34,31 @@ function CategorizeTransactionsPage() {
     (state: RootState) => state.pageSlice.categorizationPage.activeAccount
   );
 
-  const numUncategorizedTransactions: number = useSelector((state: RootState) =>
-    activeAccount.id
-      ? selectUncategorizedTransactions(state, activeAccount.id).length
-      : 0
+  const uncategorizedTransactions: Transaction[] = useSelector(
+    (state: RootState) =>
+      activeAccount.id
+        ? selectUncategorizedTransactions(state, activeAccount.id)
+        : []
+  );
+  const selectedTransactions: Transaction[] = useSelector(
+    (state: RootState) => state.transactions.selectedTransactions
   );
 
-  const [currentPage, setCurrentPage]: [
-    number,
-    React.Dispatch<React.SetStateAction<number>>
-  ] = useState(0);
+  const numUncategorizedTransactions: number = uncategorizedTransactions.length;
+
+  const [lastSelectedIndex, setLastSelectedIndex] = useState<number>();
 
   const dispatch = useAppDispatch();
   const thunkDispatch = useThunkDispatch();
 
-  const [numTransactionsToDisplay, setNumTransactionsToDisplay]: [
-    number,
-    React.Dispatch<React.SetStateAction<number>>
-  ] = useState(25);
+  const setSelectedTransactions = (
+    callback: (prev: Transaction[]) => Transaction[]
+  ) => dispatch(selectTransactions(callback([...selectedTransactions])));
+
+  const [currentPage, setCurrentPage] = useState<number>(0);
+
+  const [numTransactionsToDisplay, setNumTransactionsToDisplay] =
+    useState<number>(25);
 
   const pages: number[] = [];
   for (
@@ -59,43 +69,108 @@ function CategorizeTransactionsPage() {
     pages.push(i);
   }
 
-  const [showaddNewTxn, setShowAddNewTxn]: [
-    boolean,
-    React.Dispatch<React.SetStateAction<boolean>>
-  ] = useState(false);
+  const [showaddNewTxn, setShowAddNewTxn] = useState<boolean>(false);
 
-  const [showUploadTxnModal, setShowUploadTxnModal]: [
-    boolean,
-    React.Dispatch<React.SetStateAction<boolean>>
-  ] = useState(false);
+  const [showUploadTxnModal, setShowUploadTxnModal] = useState<boolean>(false);
 
-  const [showBulkActionModal, setShowBulkActionModal]: [
-    boolean,
-    React.Dispatch<React.SetStateAction<boolean>>
-  ] = useState(false);
+  const [showBulkActionModal, setShowBulkActionModal] =
+    useState<boolean>(false);
 
-  const [selectedTransactions, setSelectedTransactions]: [
-    Transaction[],
-    React.Dispatch<React.SetStateAction<Transaction[]>>
-  ] = useState([] as Transaction[]);
+  function transactionIndexRange(
+    newIndex: number | undefined,
+    sortedTransactions: Transaction[]
+  ): Transaction[] {
+    if (newIndex === undefined || lastSelectedIndex === undefined) {
+      return [];
+    }
 
-  function addSelectedTransaction(newTransaction: Transaction): void {
-    if (
-      !selectedTransactions
-        .map((txn: Transaction) => txn.id)
-        .includes(newTransaction.id)
-    ) {
-      setSelectedTransactions((prev: Transaction[]) => {
-        prev.push(newTransaction);
-        return prev;
-      });
+    if (newIndex >= lastSelectedIndex) {
+      return sortedTransactions.slice(lastSelectedIndex, newIndex + 1);
+    } else {
+      return sortedTransactions.slice(newIndex, lastSelectedIndex + 1);
     }
   }
 
-  function removeSelectedTransaction(removeTransaction: Transaction): void {
-    setSelectedTransactions((prev: Transaction[]) =>
-      prev.filter((txn: Transaction) => txn.id !== removeTransaction.id)
-    );
+  function addSelectedTransaction(
+    newTransaction: Transaction,
+    index: number,
+    keyPressed: boolean = false,
+    sortedTransactions: Transaction[]
+  ): void {
+    if (!keyPressed) {
+      // Closure problem!!!
+      if (
+        !selectedTransactions
+          .map((txn: Transaction) => txn.id)
+          .includes(newTransaction.id)
+      ) {
+        setSelectedTransactions((prev: Transaction[]) => {
+          prev.push(newTransaction);
+          return prev;
+        });
+      }
+    } else {
+      const transactionRange: Transaction[] = transactionIndexRange(
+        index,
+        sortedTransactions
+      );
+
+      const transactionsToSelect: Transaction[] = [];
+
+      transactionRange.forEach((transaction: Transaction) => {
+        if (
+          !selectedTransactions
+            .map((txn: Transaction) => txn.id)
+            .includes(transaction.id)
+        ) {
+          transactionsToSelect.push(transaction);
+        }
+      });
+      setSelectedTransactions((prev: Transaction[]) => {
+        return prev.concat(transactionsToSelect);
+      });
+    }
+    setLastSelectedIndex(index);
+  }
+
+  function removeSelectedTransaction(
+    removeTransaction: Transaction,
+    index: number,
+    keyPressed: boolean = false,
+    sortedTransactions: Transaction[]
+  ): void {
+    if (!keyPressed) {
+      setSelectedTransactions((prev: Transaction[]) =>
+        prev.filter((txn: Transaction) => txn.id !== removeTransaction.id)
+      );
+      setLastSelectedIndex(index);
+    } else {
+      const transactionRange: Transaction[] = transactionIndexRange(
+        index,
+        sortedTransactions
+      );
+
+      const transactionsToDeselect: Transaction[] = [];
+
+      transactionRange.forEach((transaction: Transaction) => {
+        if (
+          selectedTransactions
+            .map((txn: Transaction) => txn.id)
+            .includes(transaction.id)
+        ) {
+          transactionsToDeselect.push(transaction);
+        }
+      });
+
+      const deselectIds: number[] = transactionsToDeselect.map(
+        (txn: Transaction) => txn.id
+      );
+
+      setSelectedTransactions((prev: Transaction[]) =>
+        prev.filter((txn: Transaction) => !deselectIds.includes(txn.id))
+      );
+    }
+    setLastSelectedIndex(index);
   }
 
   function refreshTransactions(): void {
@@ -106,6 +181,8 @@ function CategorizeTransactionsPage() {
 
     dispatch(setTransactionsIsLoaded({ loaded: false }));
     thunkDispatch(fetchAccountTransactions(activeAccount, 'uncategorized'));
+
+    setSelectedTransactions((prev: Transaction[]) => []);
 
     setTimeout(() => {
       refreshIcon.classList.toggle('rotate');
@@ -132,6 +209,9 @@ function CategorizeTransactionsPage() {
       </a>
     );
   }
+
+  console.log('Selected Transations:');
+  console.log(selectedTransactions);
 
   return (
     <>

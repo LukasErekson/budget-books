@@ -3,11 +3,14 @@ import Transaction from '../types/types';
 
 const initialTransactionList: { [accountID: number]: Transaction[] } = {};
 
+const initialSelectedTransactions: Transaction[] = [];
+
 export const transactionSlice = createSlice({
   name: 'transactions',
   initialState: {
     transactionList: initialTransactionList,
     isTransactionsLoaded: false,
+    selectedTransactions: initialSelectedTransactions,
   },
   reducers: {
     setTransactions: (state, action) => {
@@ -136,6 +139,26 @@ export const transactionSlice = createSlice({
         isTransactionsLoaded: true,
       };
     },
+
+    selectTransactions: (state, action) => {
+      const selectedTransactions: Transaction[] = action.payload;
+
+      return { ...state, selectedTransactions: selectedTransactions };
+    },
+
+    deSelectTransactions: (state, action) => {
+      const deSelectedTransactions: Transaction[] = action.payload;
+      const deSelectIDs: number[] = deSelectedTransactions.map(
+        (txn: Transaction) => txn.id
+      );
+
+      const newSelectedTransactions: Transaction[] =
+        state.selectedTransactions.filter(
+          (trxn: Transaction) => !deSelectIDs.includes(trxn.id)
+        );
+
+      return { ...state, selectedTransactions: newSelectedTransactions };
+    },
   },
 });
 
@@ -145,6 +168,8 @@ export const {
   categorizeTransaction,
   categorizeManyTransactions,
   deleteTransaction,
+  selectTransactions,
+  deSelectTransactions,
 } = transactionSlice.actions;
 
 export default transactionSlice.reducer;

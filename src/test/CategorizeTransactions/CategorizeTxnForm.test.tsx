@@ -55,9 +55,10 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={0}
+        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
+        listIndex={0}
       />,
       {
         store: testStore,
@@ -90,9 +91,10 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={0}
+        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
+        listIndex={0}
       />,
       {
         store: testStore,
@@ -105,12 +107,16 @@ describe('Categorize Transaction Form', () => {
     await userEvent.click(checkBox);
 
     expect(checkBox.value).toEqual('on');
-    expect(selectTransaction).toHaveBeenCalledWith(transactionData);
+    expect(selectTransaction).toHaveBeenCalledWith(
+      transactionData,
+      0,
+      false,
+      []
+    );
 
     await userEvent.click(checkBox);
 
     expect(checkBox.value).toEqual('on');
-    expect(unSelectTransaction).toHaveBeenCalledWith(transactionData);
   });
 
   it('Transaction Description truncates if too long', async () => {
@@ -119,9 +125,10 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={0}
+        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
+        listIndex={0}
       />,
       {
         store: testStore,
@@ -143,9 +150,10 @@ describe('Categorize Transaction Form', () => {
         }}
         debitInc={true}
         account={activeAccount}
-        isSelected={0}
+        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
+        listIndex={0}
       />,
       {
         store: testStore,
@@ -164,9 +172,10 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={0}
+        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
+        listIndex={0}
       />,
       {
         store: testStore,
@@ -189,9 +198,10 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={0}
+        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
+        listIndex={0}
       />,
       {
         store: testStore,
@@ -225,9 +235,10 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={0}
+        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
+        listIndex={0}
       />,
       {
         store: testStore,
@@ -268,9 +279,10 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={0}
+        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
+        listIndex={0}
       />,
       {
         store: testStore,

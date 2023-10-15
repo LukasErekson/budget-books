@@ -25,7 +25,12 @@ type BulkActionModalProps = {
     | React.KeyboardEvent<Element>
     | any;
   selectedTransactions: Transaction[];
-  removeSelectedTransactions: (arg0: Transaction) => void; // For cleaning up upon submit.
+  removeSelectedTransactions: (
+    arg0: Transaction,
+    index: number,
+    keyPressed: boolean,
+    sortedTransactions: Transaction[]
+  ) => void; // For cleaning up upon submit.
 };
 
 function BulkActionModal(props: BulkActionModalProps): JSX.Element {
@@ -51,7 +56,7 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
   function bulkActionComplete() {
     // Remove transactions that have been posted
     relevantSelectedTransactions.forEach((transaction: Transaction) => {
-      props.removeSelectedTransactions(transaction);
+      props.removeSelectedTransactions(transaction, 0, false, []);
     });
 
     props.onRequestClose();

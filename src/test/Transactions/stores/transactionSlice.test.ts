@@ -34,7 +34,11 @@ describe('transactionSlice Reducers', () => {
       expect(type).toEqual('transactions/setTransactions');
 
       const newState = transactionSlice(
-        { transactionList: {}, isTransactionsLoaded: false },
+        {
+          transactionList: {},
+          isTransactionsLoaded: false,
+          selectedTransactions: [],
+        },
         { payload, type }
       );
 
@@ -44,6 +48,7 @@ describe('transactionSlice Reducers', () => {
           '1': [newTransactions[0]],
           undefined: [],
         },
+        selectedTransactions: [],
       });
     });
   });
@@ -59,13 +64,18 @@ describe('transactionSlice Reducers', () => {
       expect(type).toEqual('transactions/setTransactionsIsLoaded');
 
       const newState = transactionSlice(
-        { transactionList: {}, isTransactionsLoaded: false },
+        {
+          transactionList: {},
+          isTransactionsLoaded: false,
+          selectedTransactions: [],
+        },
         { payload, type }
       );
 
       expect(newState).toEqual({
         isTransactionsLoaded: true,
         transactionList: {},
+        selectedTransactions: [],
       });
     });
 
@@ -79,13 +89,18 @@ describe('transactionSlice Reducers', () => {
       expect(type).toEqual('transactions/setTransactionsIsLoaded');
 
       const newState = transactionSlice(
-        { transactionList: {}, isTransactionsLoaded: true },
+        {
+          transactionList: {},
+          isTransactionsLoaded: true,
+          selectedTransactions: [],
+        },
         { payload, type }
       );
 
       expect(newState).toEqual({
         isTransactionsLoaded: false,
         transactionList: {},
+        selectedTransactions: [],
       });
     });
   });
@@ -115,6 +130,7 @@ describe('transactionSlice Reducers', () => {
             },
           ],
         },
+        selectedTransactions: [],
       };
 
       const { type } = categorizeTransaction(payload);
@@ -139,6 +155,7 @@ describe('transactionSlice Reducers', () => {
             },
           ],
         },
+        selectedTransactions: [],
       });
     });
     it('Properly updates the state by setting isTransactionsLoaded to true', () => {
@@ -165,6 +182,7 @@ describe('transactionSlice Reducers', () => {
             },
           ],
         },
+        selectedTransactions: [],
       };
 
       const { type } = categorizeTransaction(payload);
@@ -189,6 +207,7 @@ describe('transactionSlice Reducers', () => {
             },
           ],
         },
+        selectedTransactions: [],
       });
     });
   });
@@ -230,6 +249,7 @@ describe('transactionSlice Reducers', () => {
             },
           ],
         },
+        selectedTransactions: [],
       };
 
       const { type } = categorizeManyTransactions(payload);
@@ -264,6 +284,7 @@ describe('transactionSlice Reducers', () => {
             },
           ],
         },
+        selectedTransactions: [],
       });
     });
   });
@@ -302,6 +323,7 @@ describe('transactionSlice Reducers', () => {
               },
             ],
           },
+          selectedTransactions: [],
         };
 
         const { type } = deleteTransaction(payload);
@@ -324,6 +346,7 @@ describe('transactionSlice Reducers', () => {
               },
             ],
           },
+          selectedTransactions: [],
         });
       });
       it('Removes multiple transaction from state', () => {
@@ -358,6 +381,7 @@ describe('transactionSlice Reducers', () => {
               },
             ],
           },
+          selectedTransactions: [],
         };
 
         const { type } = deleteTransaction(payload);
@@ -369,6 +393,7 @@ describe('transactionSlice Reducers', () => {
           transactionList: {
             1: [],
           },
+          selectedTransactions: [],
         });
       });
     });
@@ -418,6 +443,7 @@ describe('transactionSlice Reducers', () => {
             },
           ],
         },
+        selectedTransactions: [],
       };
 
       const { type } = deleteTransaction(payload);
@@ -441,6 +467,7 @@ describe('transactionSlice Reducers', () => {
           ],
           2: [],
         },
+        selectedTransactions: [],
       });
     });
     it('Removes multiple transaction from state', () => {
@@ -497,6 +524,7 @@ describe('transactionSlice Reducers', () => {
             },
           ],
         },
+        selectedTransactions: [],
       };
 
       const { type } = deleteTransaction(payload);
@@ -509,6 +537,7 @@ describe('transactionSlice Reducers', () => {
           1: [],
           2: [],
         },
+        selectedTransactions: [],
       });
     });
   });

@@ -183,7 +183,10 @@ describe('Bulk Action Modal', () => {
       await userEvent.click(categorizeButton);
 
       expect(removeSelectedTransactions).toHaveBeenCalledWith(
-        selectedTransactions[0]
+        selectedTransactions[0],
+        0,
+        false,
+        []
       );
     });
 
@@ -265,7 +268,10 @@ describe('Bulk Action Modal', () => {
       await userEvent.click(deleteButton);
 
       expect(removeSelectedTransactions).toHaveBeenCalledWith(
-        selectedTransactions[0]
+        selectedTransactions[0],
+        0,
+        false,
+        []
       );
     });
 

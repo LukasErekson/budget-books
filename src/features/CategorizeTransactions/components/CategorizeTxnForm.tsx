@@ -23,9 +23,21 @@ function CategorizeTxnForm(props: {
   transacitonData: Transaction;
   debitInc: boolean;
   account: Account;
-  isSelected: number;
-  selectTransaction: (arg0: Transaction) => void;
-  unSelectTransaction: (arg0: Transaction) => void;
+  isSelected: boolean;
+  selectTransaction: (
+    arg0: Transaction,
+    index: number,
+    keyPressed: boolean,
+    sortedTransactions: Transaction[]
+  ) => void;
+  unSelectTransaction: (
+    arg0: Transaction,
+    index: number,
+    keyPressed: boolean,
+    sortedTransactions: Transaction[]
+  ) => void;
+  listIndex: number;
+  sortedTransactions?: Transaction[];
 }): JSX.Element {
   const {
     id,
@@ -45,13 +57,7 @@ function CategorizeTxnForm(props: {
     selectAccounts(state)
   );
 
-  let firstAccountIdx = 0;
-
-  if (accounts.indexOf(props.account) === 0) {
-    firstAccountIdx = 1;
-  }
-
-  const [isSelected, setIsSelected] = useState<number>(props.isSelected);
+  const firstAccountIdx: number = accounts.indexOf(props.account) === 0 ? 1 : 0;
 
   const [category, setCategory] = useState<Account>(accounts[firstAccountIdx]);
 
@@ -150,7 +156,7 @@ function CategorizeTxnForm(props: {
     <div
       className={
         'categorize-txn-form ' +
-        (isSelected === 1 ? 'categorize-txn-form-selected' : '')
+        (props.isSelected ? 'categorize-txn-form-selected' : '')
       }
       key={id}
       onClick={toggleDetailVisibility}
@@ -160,14 +166,27 @@ function CategorizeTxnForm(props: {
           name='selected'
           id={'$checkbox-{id}'}
           style={{ width: '1rem', height: '1rem' }}
-          checked={isSelected === 1}
-          onChange={() => {
-            setIsSelected((prev: number) => (prev + 1) % 2);
-            if (isSelected === 1) {
-              props.unSelectTransaction(props.transacitonData);
+          checked={props.isSelected}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            let shiftPressed: boolean = false;
+            if ('shiftKey' in event.nativeEvent) {
+              shiftPressed = Boolean(event.nativeEvent.shiftKey);
+            }
+            if (props.isSelected) {
+              props.unSelectTransaction(
+                props.transacitonData,
+                props.listIndex,
+                shiftPressed,
+                props.sortedTransactions || []
+              );
               return;
             }
-            props.selectTransaction(props.transacitonData);
+            props.selectTransaction(
+              props.transacitonData,
+              props.listIndex,
+              shiftPressed,
+              props.sortedTransactions || []
+            );
           }}
         />
       </span>{' '}

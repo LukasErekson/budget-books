@@ -15,7 +15,7 @@ import { selectUncategorizedTransactions } from '../../Transactions/stores/trans
 import { BsHandThumbsUp } from 'react-icons/bs';
 import { ThreeDots } from 'react-loader-spinner';
 
-type sortDataObj = {
+type SortDataObj = {
   mode: string;
   ascending: boolean;
 };
@@ -23,11 +23,23 @@ type sortDataObj = {
 function CategorizeList(props: {
   account: Account;
   showAddNewTxn?: boolean;
-  setShowAddNewTxn: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowAddNewTxn: (show: boolean) => void;
   selectedTransactions: Transaction[];
-  setSelectedTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>;
-  addSelectedTransaction: (arg0: Transaction) => void;
-  removeSelectedTransaction: (arg0: Transaction) => void;
+  setSelectedTransactions: (
+    callback: (prev: Transaction[]) => Transaction[]
+  ) => void;
+  addSelectedTransaction: (
+    transactionToAdd: Transaction,
+    index: number,
+    keyPressed: boolean,
+    sortedTransactions: Transaction[]
+  ) => void;
+  removeSelectedTransaction: (
+    transactionToRemove: Transaction,
+    index: number,
+    keyPressed: boolean,
+    sortedTransactions: Transaction[]
+  ) => void;
   startingPosition: number;
   numTransactionsToDisplay: number;
 }): JSX.Element {
@@ -40,13 +52,10 @@ function CategorizeList(props: {
     (state: RootState) => state.transactions.isTransactionsLoaded
   );
 
-  const [sortData, setSortData]: [
-    sortDataObj,
-    React.Dispatch<React.SetStateAction<sortDataObj>>
-  ] = useState({
+  const [sortData, setSortData] = useState<SortDataObj>({
     mode: 'date',
     ascending: true,
-  } as sortDataObj);
+  });
 
   const debitInc = props.account.debit_inc === 1;
 
@@ -114,7 +123,7 @@ function CategorizeList(props: {
 
   function sortBy(mode: string): void {
     if (mode === sortData.mode) {
-      setSortData((prev: sortDataObj) => ({
+      setSortData((prev: SortDataObj) => ({
         mode,
         ascending: !prev.ascending,
       }));
@@ -222,17 +231,25 @@ function CategorizeList(props: {
                 props.startingPosition,
                 props.startingPosition + props.numTransactionsToDisplay
               )
-              .map((txn: Transaction) => (
-                <CategorizeTxnForm
-                  key={txn.id}
-                  transacitonData={txn}
-                  debitInc={debitInc}
-                  account={props.account}
-                  isSelected={props.selectedTransactions.includes(txn) ? 1 : 0}
-                  selectTransaction={props.addSelectedTransaction}
-                  unSelectTransaction={props.removeSelectedTransaction}
-                />
-              ))
+              .map(
+                (
+                  txn: Transaction,
+                  index: number,
+                  sortedTransactions: Transaction[]
+                ) => (
+                  <CategorizeTxnForm
+                    key={txn.id}
+                    transacitonData={txn}
+                    debitInc={debitInc}
+                    account={props.account}
+                    isSelected={props.selectedTransactions.includes(txn)}
+                    selectTransaction={props.addSelectedTransaction}
+                    unSelectTransaction={props.removeSelectedTransaction}
+                    listIndex={index}
+                    sortedTransactions={sortedTransactions}
+                  />
+                )
+              )
           ) : (
             <span
               style={{
@@ -247,7 +264,7 @@ function CategorizeList(props: {
                 No transactions to categorize for {props.account.name}. Great
                 work!
               </p>
-              <BsHandThumbsUp size={'1.5rem'} />
+              <BsHandThumbsUp size={24} />
             </span>
           )
         ) : (

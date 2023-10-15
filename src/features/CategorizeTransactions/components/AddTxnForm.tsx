@@ -26,7 +26,7 @@ const initialFormData: TransactionData = {
 function AddTxnForm(props: {
   debitInc: boolean;
   account: Account;
-  setShowAddNewTxn: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowAddNewTxn: (show: boolean) => void;
 }): JSX.Element {
   const id = -1;
   const [formData, setFormData] = useState<TransactionData>(initialFormData);
