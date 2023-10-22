@@ -314,7 +314,14 @@ function CategorizeTransactionsPage() {
           setShowBulkActionModal(false);
         }}
         selectedTransactions={selectedTransactions}
-        removeSelectedTransactions={removeSelectedTransaction}
+        removeSelectedTransactions={(deselectTransactions: Transaction[]) => {
+          const deselectIds: number[] = deselectTransactions.map(
+            (txn: Transaction) => txn.id
+          );
+          setSelectedTransactions((prev: Transaction[]) =>
+            prev.filter((txn: Transaction) => !deselectIds.includes(txn.id))
+          );
+        }}
       />
     </>
   );
