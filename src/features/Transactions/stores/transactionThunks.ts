@@ -15,6 +15,7 @@ import {
 import Account from '../../Accounts/types/types';
 import { fetchAccountBalances } from '../../Accounts/stores/accountThunks';
 import { AppDispatch } from '../../../stores/store';
+import { Id, toast } from 'react-toastify';
 
 export const fetchAccountTransactions =
   (account: Account, categorized_status = 'all') =>
@@ -167,6 +168,11 @@ export const addManyTransactionCategories =
           transaction.debit_account_id !== 'undefined' ? 'credit' : 'debit',
       }));
 
+      const toastID: Id = toast.loading(
+        `Categorizing ${postableTransactions.length} transactions...`,
+        { closeButton: true }
+      );
+
       const {
         responsePromise,
       }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
@@ -184,6 +190,13 @@ export const addManyTransactionCategories =
           await response.json();
 
         if (responseData.message !== 'SUCCESS') {
+          toast.update(toastID, {
+            type: toast.TYPE.ERROR,
+            render: `${response.status} : ${
+              responseData.serverError || 'Server Error'
+            }`,
+            isLoading: false,
+          });
           throw new BadResponseError(
             response.status,
             responseData.message,
@@ -205,6 +218,13 @@ export const addManyTransactionCategories =
         );
 
         dispatch(fetchAccountBalances([account.id, category_id]));
+
+        toast.update(toastID, {
+          render: 'Transactions successfully categorized.',
+          type: toast.TYPE.SUCCESS,
+          autoClose: 3000,
+          isLoading: false,
+        });
       } else {
         throw new BadResponseError(
           response.status,
@@ -298,6 +318,11 @@ export const deleteTransactions =
         (txn: Transaction) => txn.id
       );
 
+      const toastID: Id = toast.loading(
+        `Removing ${transactionsToDelete.length} transactions...`,
+        { closeButton: true }
+      );
+
       const {
         responsePromise,
       }: { cancel: () => void; responsePromise: Promise<Response> } = DataFetch(
@@ -315,6 +340,13 @@ export const deleteTransactions =
           await response.json();
 
         if (responseData.message !== 'SUCCESS') {
+          toast.update(toastID, {
+            type: toast.TYPE.ERROR,
+            isLoading: false,
+            render: `${response.status} : ${
+              responseData.serverError || 'Server Error'
+            }`,
+          });
           throw new BadResponseError(
             response.status,
             responseData.message,
@@ -351,6 +383,12 @@ export const deleteTransactions =
       dispatch(setTransactionsIsLoaded({ loaded: false }));
       dispatch(deleteTransaction({ idsToDelete, changedAccountIds }));
       dispatch(fetchAccountBalances(changedAccountIds));
+
+      toast.update(toastID, {
+        type: toast.TYPE.SUCCESS,
+        isLoading: false,
+        render: 'Transactions successfully deleted.',
+      });
     } catch (error: any) {
       if (error.name === 'AbortError') {
         console.log('Aborted');

@@ -210,9 +210,6 @@ function CategorizeTransactionsPage() {
     );
   }
 
-  console.log('Selected Transations:');
-  console.log(selectedTransactions);
-
   return (
     <>
       <AccountCardContainer

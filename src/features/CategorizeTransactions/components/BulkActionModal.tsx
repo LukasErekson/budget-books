@@ -53,7 +53,7 @@ function BulkActionModal(props: BulkActionModalProps): JSX.Element {
 
   // Clean up selected Transactions/close the modal on compelted
   // action.
-  function bulkActionComplete() {
+  function bulkActionComplete(toastId?: number) {
     // Remove transactions that have been posted
     relevantSelectedTransactions.forEach((transaction: Transaction) => {
       props.removeSelectedTransactions(transaction, 0, false, []);
