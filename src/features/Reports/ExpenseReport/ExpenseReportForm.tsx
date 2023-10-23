@@ -1,10 +1,10 @@
-import { Button, MenuItem, TextField } from '@mui/material';
+import { Button, Checkbox, FormControlLabel } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
 import React, { useState } from 'react';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { generateExpenseReport } from './stores/ExpenseReportThunks';
-import { ReportFrequency } from './types/types';
+import { toast } from 'react-toastify';
 
 const EXPENSE_REPORT_ACCOUNT_GROUPS = ['Income', 'Expenses', 'Misc.'];
 
@@ -23,47 +23,31 @@ function ExpenseReportForm(props: {
     dayjs(`${currentYear}-${currentMonth}-${startDate?.daysInMonth()}`)
   );
 
-  const [frequency, setFrequency] = useState<ReportFrequency>(
-    ReportFrequency.weekly
-  );
+  const [comparePreviousYear, setComparePreviousYear] = useState<boolean>(true);
 
   const thunkDispatch = useThunkDispatch();
 
   function generateReport(): void {
-    // TODO : Form validations that startDate < endDate
     if (!startDate) {
       return;
     }
     if (!endDate) {
       return;
     }
-
-    const dateRanges: Dayjs[] = [];
-
-    let timesToSkip: number = endDate.diff(startDate, frequency);
-
-    if (timesToSkip < 1) {
-      timesToSkip = 1;
+    if (startDate.isAfter(endDate)) {
+      toast.error('Start Date must come before End Date.');
+      return;
     }
 
-    dateRanges.push(startDate);
-    let startIndex: number = 0;
+    let dateRanges: Dayjs[] = [startDate, endDate];
 
-    for (let i = 0; i < timesToSkip; i++) {
-      const nextStart: Dayjs = dateRanges[startIndex].add(1, frequency);
-      const currentEnd: Dayjs = nextStart.subtract(1, 'day');
-      dateRanges.push(currentEnd);
-      dateRanges.push(nextStart);
-      startIndex += 2;
+    if (comparePreviousYear) {
+      dateRanges = dateRanges.concat([
+        startDate.subtract(1, 'year'),
+        endDate.subtract(1, 'year'),
+      ]);
     }
 
-    if (endDate.isBefore(dateRanges.slice(-1)[0])) {
-      dateRanges.pop();
-    }
-
-    if (dateRanges.length % 2 === 1) {
-      dateRanges.push(endDate);
-    }
     const stringDateRanges: string[] = dateRanges.map((date: Dayjs) =>
       date.format('YYYY-MM-DD')
     );
@@ -99,27 +83,18 @@ function ExpenseReportForm(props: {
           setEndDate(dayjs(value));
         }}
       />
-      <TextField
-        select
-        label='Frequency'
-        value={frequency}
-        size='small'
-        style={{ width: '15ch' }}
-        onChange={(event) => {
-          if (
-            (Object.values(ReportFrequency) as string[]).includes(
-              event.target.value
-            )
-          ) {
-            setFrequency(event.target.value as ReportFrequency);
-          }
-        }}
-      >
-        <MenuItem value={ReportFrequency.annually}>Annually</MenuItem>
-        <MenuItem value={ReportFrequency.monthly}>Monthly</MenuItem>
-        <MenuItem value={ReportFrequency.weekly}>Weekly</MenuItem>
-        <MenuItem value={ReportFrequency.daily}>Daily</MenuItem>
-      </TextField>
+
+      <FormControlLabel
+        control={
+          <Checkbox
+            inputProps={{ 'aria-label': 'controlled' }}
+            checked={comparePreviousYear}
+            value={comparePreviousYear}
+            onChange={() => setComparePreviousYear((prev: boolean) => !prev)}
+          />
+        }
+        label={'Compare Previous Year'}
+      />
 
       <Button variant='contained' onClick={generateReport}>
         Generate Report
