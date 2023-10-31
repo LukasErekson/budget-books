@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { FiTrash2 } from 'react-icons/fi';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
 import Account from '../../Accounts/types/types';
 import Transaction from '../../Transactions/types/types';
@@ -17,7 +17,8 @@ import { pyToJsDate } from '../../../utils/TextFilters';
 import { AccountDropdownSelect } from '../../Accounts';
 import ButtonWithToolTip from '../../../components/ButtonWithToolTip';
 import { DeleteTxnModal } from '../';
-import { Checkbox } from '@mui/material';
+import { Button, Checkbox } from '@mui/material';
+import { EditTransactionModal } from '../../Transactions';
 
 function CategorizeTxnForm(props: {
   transacitonData: Transaction;
@@ -64,6 +65,8 @@ function CategorizeTxnForm(props: {
   const [inputCategory, setInputCategory] = useState<string>('');
 
   const [displayDeleteModal, setDisplayDeleteModal] = useState<boolean>(false);
+
+  const [displayEditModal, setDisplayEditModal] = useState<boolean>(false);
 
   const nameCell = useRef<HTMLSpanElement>(null);
   const [nameCharWidth, setNameCharWidth] = useState<number>(16);
@@ -236,18 +239,30 @@ function CategorizeTxnForm(props: {
           <p>{description}</p>
 
           <p className='muted'>
-            Transaction entered on {pyToJsDate(date_entered)}
+            Transaction updated on {pyToJsDate(date_entered)}
           </p>
         </div>
-        <ButtonWithToolTip
-          onClick={() => {
-            setDisplayDeleteModal(true);
-          }}
-          toolTipContent={'Delete Transaction'}
-          className='delete-transaction'
+        <div
+          className='transction-form-btn-container'
+          style={{ gap: 10, display: 'flex', justifyContent: 'flex-end' }}
         >
-          <FiTrash2 />
-        </ButtonWithToolTip>
+          <ButtonWithToolTip
+            onClick={() => setDisplayEditModal(true)}
+            toolTipContent={'Edit Transaction'}
+            className='edit-transaction'
+          >
+            <FiEdit />
+          </ButtonWithToolTip>
+          <ButtonWithToolTip
+            onClick={() => {
+              setDisplayDeleteModal(true);
+            }}
+            toolTipContent={'Delete Transaction'}
+            className='delete-transaction'
+          >
+            <FiTrash2 />
+          </ButtonWithToolTip>
+        </div>
 
         <DeleteTxnModal
           isOpen={displayDeleteModal}
@@ -256,6 +271,14 @@ function CategorizeTxnForm(props: {
           }}
           transactionData={props.transacitonData}
           amountIsNegative={amountIsNegative}
+        />
+
+        <EditTransactionModal
+          isOpen={displayEditModal}
+          onRequestClose={() => {
+            setDisplayEditModal(false);
+          }}
+          transaction={props.transacitonData}
         />
       </div>
     </div>

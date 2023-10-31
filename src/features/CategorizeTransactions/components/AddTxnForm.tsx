@@ -134,7 +134,9 @@ function AddTxnForm(props: {
           type='text'
           inputProps={{
             inputMode: 'numeric',
-            pattern: '^-?[d(d,)]*.{0,1}[d]{0,2}$',
+            'aria-invalid': !/^-?[\d,]*\.{0,1}[\d]{0,2}$/.test(
+              formData.amount.toString()
+            ),
           }}
           size='small'
           style={{ width: '80%', marginBottom: '10px' }}
@@ -144,7 +146,7 @@ function AddTxnForm(props: {
             event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
           ) => {
             const newAmount: string = event.target.value;
-            if (/^-?[\d(\d,)]*\.{0,1}[\d]{0,2}$/.test(newAmount)) {
+            if (/^-?[\d,]*\.{0,1}[\d]{0,2}$/.test(newAmount)) {
               setFormData((prevState: TransactionData) => ({
                 ...prevState,
                 amount: newAmount,

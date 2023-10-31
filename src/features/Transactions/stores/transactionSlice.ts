@@ -116,6 +116,29 @@ export const transactionSlice = createSlice({
       };
     },
 
+    editSingleTransaction: (state, action) => {
+      const editTransaction: Transaction = action.payload.transaction;
+      const changedAccountIds: number[] = action.payload.changedAccountIds;
+
+      // Deep copy of the state's transactions
+      const stateTransactions: { [id: number | string]: Transaction[] } =
+        JSON.parse(JSON.stringify(state.transactionList));
+
+      changedAccountIds.forEach((accountID: number) => {
+        const indexOfTransaction = stateTransactions[accountID]
+          .map((trxn: Transaction) => trxn.id)
+          .indexOf(editTransaction.id);
+
+        stateTransactions[accountID][indexOfTransaction] = editTransaction;
+      });
+
+      return {
+        ...state,
+        transactionList: stateTransactions,
+        isTransactionsLoaded: true,
+      };
+    },
+
     deleteTransaction: (state, action) => {
       const {
         idsToDelete,
@@ -167,6 +190,7 @@ export const {
   setTransactionsIsLoaded,
   categorizeTransaction,
   categorizeManyTransactions,
+  editSingleTransaction,
   deleteTransaction,
   selectTransactions,
   deSelectTransactions,

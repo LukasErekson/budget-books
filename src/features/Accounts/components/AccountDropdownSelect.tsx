@@ -87,6 +87,7 @@ function AccountDropdownSelect(props: {
         renderInput={(params) => (
           <TextField
             {...params}
+            label={'Account'}
             size='small'
             placeholder='Account'
             InputLabelProps={{ hidden: true }}
