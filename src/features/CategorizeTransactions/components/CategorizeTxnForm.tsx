@@ -24,7 +24,6 @@ function CategorizeTxnForm(props: {
   transacitonData: Transaction;
   debitInc: boolean;
   account: Account;
-  isSelected: boolean;
   selectTransaction: (
     arg0: Transaction,
     index: number,
@@ -67,6 +66,10 @@ function CategorizeTxnForm(props: {
   const [displayDeleteModal, setDisplayDeleteModal] = useState<boolean>(false);
 
   const [displayEditModal, setDisplayEditModal] = useState<boolean>(false);
+
+  const isSelected = useSelector(
+    (state: RootState) => state.transactions.selectedTransactions || []
+  ).includes(props.transacitonData);
 
   const nameCell = useRef<HTMLSpanElement>(null);
   const [nameCharWidth, setNameCharWidth] = useState<number>(16);
@@ -159,7 +162,7 @@ function CategorizeTxnForm(props: {
     <div
       className={
         'categorize-txn-form ' +
-        (props.isSelected ? 'categorize-txn-form-selected' : '')
+        (isSelected ? 'categorize-txn-form-selected' : '')
       }
       key={id}
       onClick={toggleDetailVisibility}
@@ -169,13 +172,13 @@ function CategorizeTxnForm(props: {
           name='selected'
           id={'$checkbox-{id}'}
           style={{ width: '1rem', height: '1rem' }}
-          checked={props.isSelected}
+          checked={isSelected}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             let shiftPressed: boolean = false;
             if ('shiftKey' in event.nativeEvent) {
               shiftPressed = Boolean(event.nativeEvent.shiftKey);
             }
-            if (props.isSelected) {
+            if (isSelected) {
               props.unSelectTransaction(
                 props.transacitonData,
                 props.listIndex,

@@ -44,6 +44,7 @@ describe('Categorize Transaction Form', () => {
       transactions: {
         transactionList: { 1: transactionData },
         isTransactionsLoaded: true,
+        selectedTransactions: [],
       },
     });
 
@@ -55,7 +56,6 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
         listIndex={0}
@@ -91,7 +91,6 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
         listIndex={0}
@@ -125,7 +124,6 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
         listIndex={0}
@@ -150,7 +148,6 @@ describe('Categorize Transaction Form', () => {
         }}
         debitInc={true}
         account={activeAccount}
-        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
         listIndex={0}
@@ -172,7 +169,6 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
         listIndex={0}
@@ -198,7 +194,6 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
         listIndex={0}
@@ -235,7 +230,6 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
         listIndex={0}
@@ -279,7 +273,6 @@ describe('Categorize Transaction Form', () => {
         transacitonData={transactionData}
         debitInc={true}
         account={activeAccount}
-        isSelected={false}
         selectTransaction={selectTransaction}
         unSelectTransaction={unSelectTransaction}
         listIndex={0}

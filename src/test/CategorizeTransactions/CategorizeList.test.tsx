@@ -59,6 +59,8 @@ describe('Categorize List Component', () => {
         isTransactionsLoaded: true,
       },
     });
+
+    jest.clearAllMocks();
   });
 
   it('Renders without error', async () => {
@@ -79,7 +81,6 @@ describe('Categorize List Component', () => {
     renderWithProviders(
       <CategorizeList
         account={activeAccount}
-        selectedTransactions={[]}
         setShowAddNewTxn={setShowAddNewTxn}
         setSelectedTransactions={setSelectedTransactions}
         addSelectedTransaction={addSelectedTransaction}
@@ -108,14 +109,67 @@ describe('Categorize List Component', () => {
     const transactionForm2 = await screen.findAllByText('Transaction 2');
     expect(transactionForm2).toBeDefined();
   });
-  // Loading screen displays, check for headers and rendered transaction(s)
+
+  describe('Selecting Transactions', () => {
+    describe('Select All checkbox', () => {
+      it('Selects all transactions on the page', async () => {
+        renderWithProviders(
+          <CategorizeList
+            account={activeAccount}
+            setShowAddNewTxn={setShowAddNewTxn}
+            setSelectedTransactions={setSelectedTransactions}
+            addSelectedTransaction={addSelectedTransaction}
+            removeSelectedTransaction={removeSelectedTransaction}
+            startingPosition={0}
+            numTransactionsToDisplay={25}
+          />,
+          {
+            store: testStore,
+          }
+        );
+
+        const selectAllCheckbox = await screen.findByLabelText(
+          'Select All Checkbox'
+        );
+
+        await userEvent.click(selectAllCheckbox);
+
+        expect(setSelectedTransactions).toHaveBeenCalled();
+      });
+
+      it('Deselects all transactions on double click', async () => {
+        renderWithProviders(
+          <CategorizeList
+            account={activeAccount}
+            setShowAddNewTxn={setShowAddNewTxn}
+            setSelectedTransactions={setSelectedTransactions}
+            addSelectedTransaction={addSelectedTransaction}
+            removeSelectedTransaction={removeSelectedTransaction}
+            startingPosition={0}
+            numTransactionsToDisplay={25}
+          />,
+          {
+            store: testStore,
+          }
+        );
+
+        const selectAllCheckbox = await screen.findByLabelText(
+          'Select All Checkbox'
+        );
+
+        await userEvent.click(selectAllCheckbox);
+        await userEvent.click(selectAllCheckbox);
+
+        expect(setSelectedTransactions).toHaveBeenCalledTimes(2);
+      });
+    });
+  });
 
   describe('Sorting', () => {
     it('Sorting by date works', async () => {
       const { rerender } = renderWithProviders(
         <CategorizeList
           account={activeAccount}
-          selectedTransactions={[]}
           setShowAddNewTxn={setShowAddNewTxn}
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
@@ -149,7 +203,6 @@ describe('Categorize List Component', () => {
       rerender(
         <CategorizeList
           account={activeAccount}
-          selectedTransactions={[]}
           setShowAddNewTxn={setShowAddNewTxn}
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
@@ -176,7 +229,6 @@ describe('Categorize List Component', () => {
       const { rerender } = renderWithProviders(
         <CategorizeList
           account={activeAccount}
-          selectedTransactions={[]}
           setShowAddNewTxn={setShowAddNewTxn}
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
@@ -213,7 +265,6 @@ describe('Categorize List Component', () => {
       rerender(
         <CategorizeList
           account={activeAccount}
-          selectedTransactions={[]}
           setShowAddNewTxn={setShowAddNewTxn}
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
@@ -240,7 +291,6 @@ describe('Categorize List Component', () => {
       const { rerender } = renderWithProviders(
         <CategorizeList
           account={activeAccount}
-          selectedTransactions={[]}
           setShowAddNewTxn={setShowAddNewTxn}
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
@@ -280,7 +330,6 @@ describe('Categorize List Component', () => {
       rerender(
         <CategorizeList
           account={activeAccount}
-          selectedTransactions={[]}
           setShowAddNewTxn={setShowAddNewTxn}
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
@@ -310,7 +359,6 @@ describe('Categorize List Component', () => {
       const { rerender } = renderWithProviders(
         <CategorizeList
           account={activeAccount}
-          selectedTransactions={[]}
           setShowAddNewTxn={setShowAddNewTxn}
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}
@@ -347,7 +395,6 @@ describe('Categorize List Component', () => {
       rerender(
         <CategorizeList
           account={activeAccount}
-          selectedTransactions={[]}
           setShowAddNewTxn={setShowAddNewTxn}
           setSelectedTransactions={setSelectedTransactions}
           addSelectedTransaction={addSelectedTransaction}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import Account from '../../Accounts/types/types';
@@ -14,6 +14,7 @@ import { selectUncategorizedTransactions } from '../../Transactions/stores/trans
 
 import { BsHandThumbsUp } from 'react-icons/bs';
 import { ThreeDots } from 'react-loader-spinner';
+import { Checkbox, FormControl, InputLabel, Tooltip } from '@mui/material';
 
 type SortDataObj = {
   mode: string;
@@ -24,7 +25,6 @@ function CategorizeList(props: {
   account: Account;
   showAddNewTxn?: boolean;
   setShowAddNewTxn: (show: boolean) => void;
-  selectedTransactions: Transaction[];
   setSelectedTransactions: (
     callback: (prev: Transaction[]) => Transaction[]
   ) => void;
@@ -57,12 +57,26 @@ function CategorizeList(props: {
     ascending: true,
   });
 
+  const [selectAllTransactions, setSelectAllTransactions] =
+    useState<boolean>(false);
+
   const debitInc = props.account.debit_inc === 1;
 
-  function sortTransactionsFunc(
-    mode: string,
-    ascending = true
-  ): (a: Transaction, b: Transaction) => number {
+  const sortedTransactions = useMemo<Transaction[]>(() => {
+    return transactions.sort(sortTransactionsFunc());
+  }, [transactions, sortTransactionsFunc, sortData]);
+
+  const pageTransactions = useMemo<Transaction[]>(
+    () =>
+      sortedTransactions.slice(
+        props.startingPosition,
+        props.startingPosition + props.numTransactionsToDisplay
+      ),
+    [sortedTransactions]
+  );
+
+  function sortTransactionsFunc(): (a: Transaction, b: Transaction) => number {
+    const { mode, ascending } = sortData;
     let compareFn: (a: Transaction, b: Transaction) => number;
     switch (mode) {
       case 'amount':
@@ -142,7 +156,56 @@ function CategorizeList(props: {
     <>
       <div className='txn-form-container'>
         <div className='categorize-txn-form txn-form-header-row'>
-          <span></span>
+          <span>
+            <Tooltip
+              title={
+                selectAllTransactions
+                  ? 'Deselect all on page'
+                  : 'Select all on page'
+              }
+              placement='top'
+              arrow
+            >
+              <FormControl>
+                <InputLabel
+                  htmlFor='select-all-transactions-checkbox'
+                  style={{ display: 'none' }}
+                >
+                  Select All Checkbox
+                </InputLabel>
+                <Checkbox
+                  id='select-all-transactions-checkbox'
+                  value={selectAllTransactions}
+                  onChange={(event) => {
+                    setSelectAllTransactions(event.target.checked);
+                    if (event.target.checked) {
+                      props.setSelectedTransactions((prev: Transaction[]) => {
+                        const prevIds: number[] = prev.map(
+                          (transaction: Transaction) => transaction.id
+                        );
+                        pageTransactions.forEach((transaction: Transaction) => {
+                          if (!prevIds.includes(transaction.id)) {
+                            prev.push(transaction);
+                          }
+                        });
+                        return [...prev];
+                      });
+                      return;
+                    }
+                    props.setSelectedTransactions((prev: Transaction[]) => {
+                      const removeIds: number[] = pageTransactions.map(
+                        (transaction: Transaction) => transaction.id
+                      );
+                      return prev.filter(
+                        (transaction: Transaction) =>
+                          !removeIds.includes(transaction.id)
+                      );
+                    });
+                  }}
+                />
+              </FormControl>
+            </Tooltip>
+          </span>
           <span
             className='categorize-txn-item txn-form-header'
             onClick={() => sortBy('date')}
@@ -225,31 +288,24 @@ function CategorizeList(props: {
         )}
         {isTransactionsLoaded ? (
           transactions.length ? (
-            transactions
-              .sort(sortTransactionsFunc(sortData.mode, sortData.ascending))
-              .slice(
-                props.startingPosition,
-                props.startingPosition + props.numTransactionsToDisplay
+            pageTransactions.map(
+              (
+                txn: Transaction,
+                index: number,
+                sortedTransactions: Transaction[]
+              ) => (
+                <CategorizeTxnForm
+                  key={txn.id}
+                  transacitonData={txn}
+                  debitInc={debitInc}
+                  account={props.account}
+                  selectTransaction={props.addSelectedTransaction}
+                  unSelectTransaction={props.removeSelectedTransaction}
+                  listIndex={index}
+                  sortedTransactions={sortedTransactions}
+                />
               )
-              .map(
-                (
-                  txn: Transaction,
-                  index: number,
-                  sortedTransactions: Transaction[]
-                ) => (
-                  <CategorizeTxnForm
-                    key={txn.id}
-                    transacitonData={txn}
-                    debitInc={debitInc}
-                    account={props.account}
-                    isSelected={props.selectedTransactions.includes(txn)}
-                    selectTransaction={props.addSelectedTransaction}
-                    unSelectTransaction={props.removeSelectedTransaction}
-                    listIndex={index}
-                    sortedTransactions={sortedTransactions}
-                  />
-                )
-              )
+            )
           ) : (
             <span
               style={{

@@ -217,6 +217,19 @@ function CategorizeTransactionsPage() {
       />
 
       <div className='categorize-table-controls'>
+        <div
+          className={
+            ' num-transactions-option selected-transactions-space ' +
+            (selectedTransactions.length ? 'unhide' : 'hide')
+          }
+          style={{ marginRight: 'auto' }}
+        >
+          <p>
+            You have <b className='alert'>{selectedTransactions.length}</b>{' '}
+            currently selected transaction{''}
+            {selectedTransactions.length === 1 ? '' : 's'}
+          </p>
+        </div>
         <div className='num-transactions-option'>
           <p>Transactions per page:</p>
           {[25, 50, 100].map((val) => transactionsPerPageLink(val))}
@@ -272,6 +285,7 @@ function CategorizeTransactionsPage() {
           <IoMdRefresh className='refresh-icon' />
         </ButtonWithToolTip>
       </div>
+
       <CategorizeList
         account={activeAccount}
         showAddNewTxn={showaddNewTxn}
