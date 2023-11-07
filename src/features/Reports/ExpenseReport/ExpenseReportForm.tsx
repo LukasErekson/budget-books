@@ -25,6 +25,8 @@ function ExpenseReportForm(props: {
 
   const [comparePreviousYear, setComparePreviousYear] = useState<boolean>(true);
 
+  const [compareYearToDate, setCompareYearToDate] = useState<boolean>(false);
+
   const thunkDispatch = useThunkDispatch();
 
   function generateReport(): void {
@@ -48,12 +50,29 @@ function ExpenseReportForm(props: {
       ]);
     }
 
+    if (compareYearToDate) {
+      dateRanges = dateRanges.concat([
+        dayjs(`01/01/${endDate.year()}`),
+        endDate,
+      ]);
+
+      if (comparePreviousYear) {
+        dateRanges = dateRanges.concat([
+          dayjs(`01/01/${endDate.year() - 1}`),
+          endDate.subtract(1, 'year'),
+        ]);
+      }
+    }
+
     const stringDateRanges: string[] = dateRanges.map((date: Dayjs) =>
       date.format('YYYY-MM-DD')
     );
 
     thunkDispatch(
-      generateExpenseReport(stringDateRanges, EXPENSE_REPORT_ACCOUNT_GROUPS)
+      generateExpenseReport(stringDateRanges, EXPENSE_REPORT_ACCOUNT_GROUPS, {
+        comparePreviousYear,
+        compareYearToDate,
+      })
     );
 
     props.setLoading(true);
@@ -94,6 +113,17 @@ function ExpenseReportForm(props: {
           />
         }
         label={'Compare Previous Year'}
+      />
+      <FormControlLabel
+        control={
+          <Checkbox
+            inputProps={{ 'aria-label': 'controlled' }}
+            checked={compareYearToDate}
+            value={compareYearToDate}
+            onChange={() => setCompareYearToDate((prev: boolean) => !prev)}
+          />
+        }
+        label={'Compare Year To Date'}
       />
 
       <Button variant='contained' onClick={generateReport}>

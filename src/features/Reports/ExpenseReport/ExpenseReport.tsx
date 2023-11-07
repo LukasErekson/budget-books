@@ -1,6 +1,12 @@
 import React from 'react';
-import { AccountGroupsToBalances, ExpenseReportResponse } from './types/types';
+import {
+  AccountGroupsToBalances,
+  ExpenseReportOptions,
+  ExpenseReportResponse,
+} from './types/types';
 import dayjs from 'dayjs';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
 
 function ExpenseReport(props: {
   reportData: ExpenseReportResponse;
@@ -12,8 +18,26 @@ function ExpenseReport(props: {
   // Add Totals to Expense Report
   const datesToTotals: number[] = [];
 
+  const reportOptions: ExpenseReportOptions | null = useSelector(
+    (state: RootState) => state.expenseReportSlice.currentReportOptions
+  );
+
   for (let i = 1; i < dates.length; i += 2) {
-    displayDates.push(dayjs(dates[i]).format('MMM. DD, YYYY'));
+    if (
+      reportOptions?.compareYearToDate &&
+      reportOptions?.comparePreviousYear &&
+      i > 3
+    ) {
+      displayDates.push(`YTD ${dayjs(dates[i]).format('YYYY')}`);
+    } else if (
+      reportOptions?.compareYearToDate &&
+      !reportOptions?.comparePreviousYear &&
+      i > 1
+    ) {
+      displayDates.push(`YTD ${dayjs(dates[i]).format('YYYY')}`);
+    } else {
+      displayDates.push(dayjs(dates[i]).format('MMM. DD, YYYY'));
+    }
     datesToTotals.push(0);
   }
 

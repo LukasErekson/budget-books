@@ -382,7 +382,7 @@ nav a:hover {
   cursor: pointer;
   display: grid;
   grid-template-columns: 5ch 18ch 1fr 2fr 0.5fr 1fr 0.5fr;
-  gap: 2rem;
+  gap: 1rem;
   row-gap: 0.5rem;
   padding: 0.5rem 1rem 0rem 1rem;
   align-items: center;

@@ -1,17 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ExpenseReportResponse } from '../types/types';
+import { ExpenseReportOptions, ExpenseReportResponse } from '../types/types';
 
 export const expenseReportSlice = createSlice({
   name: 'expenseReportSlice',
   initialState: {
     currentReport: null as ExpenseReportResponse | null,
+    currentReportOptions: null as ExpenseReportOptions | null,
   },
   reducers: {
     storeGeneratedReport: (state, action) => {
-      const reportResponse: ExpenseReportResponse = action.payload;
+      const reportResponse: ExpenseReportResponse = action.payload.reportData;
+      const reportOptions: ExpenseReportOptions = action.payload.options;
       return {
         ...state,
         currentReport: reportResponse,
+        currentReportOptions: reportOptions,
       };
     },
   },

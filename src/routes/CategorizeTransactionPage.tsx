@@ -290,7 +290,6 @@ function CategorizeTransactionsPage() {
         account={activeAccount}
         showAddNewTxn={showaddNewTxn}
         setShowAddNewTxn={setShowAddNewTxn}
-        selectedTransactions={selectedTransactions}
         setSelectedTransactions={setSelectedTransactions}
         addSelectedTransaction={addSelectedTransaction}
         removeSelectedTransaction={removeSelectedTransaction}

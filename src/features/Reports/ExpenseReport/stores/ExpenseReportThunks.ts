@@ -1,11 +1,15 @@
 import { AppDispatch } from '../../../../stores/store';
 import BadResponseError from '../../../../utils/BadResponseError';
 import DataFetch from '../../../../utils/DataFetch';
-import { ExpenseReportResponse } from '../types/types';
+import { ExpenseReportOptions, ExpenseReportResponse } from '../types/types';
 import { storeGeneratedReport } from './ExpenseReportSlice';
 
 export const generateExpenseReport =
-  (dateRanges: string[], accountGroups: string[]) =>
+  (
+    dateRanges: string[],
+    accountGroups: string[],
+    options: ExpenseReportOptions
+  ) =>
   async (dispatch: AppDispatch) => {
     try {
       const { responsePromise } = DataFetch(
@@ -37,7 +41,7 @@ export const generateExpenseReport =
         // Remove message when storing
         const { message, ...reportData } = responseData;
 
-        dispatch(storeGeneratedReport(reportData));
+        dispatch(storeGeneratedReport({ reportData, options }));
       }
     } catch (error) {
       console.log(error);

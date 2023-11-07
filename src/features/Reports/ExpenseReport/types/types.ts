@@ -10,6 +10,11 @@ export type AccountGroupsToBalances = {
   };
 };
 
+export type ExpenseReportOptions = {
+  comparePreviousYear: boolean;
+  compareYearToDate: boolean;
+};
+
 export enum ReportFrequency {
   annually = 'year',
   monthly = 'month',
