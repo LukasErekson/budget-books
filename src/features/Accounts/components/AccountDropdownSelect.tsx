@@ -7,23 +7,27 @@ import Account from '../types/types';
 import { RootState } from '../../../stores/store';
 
 function AccountDropdownSelect(props: {
-  excludeAccount: Account;
-  value: Account;
+  value: Account | null;
   setValue: (newValue: Account) => void;
   inputValue: string;
   setInputValue: (newInput: string) => void;
+  excludeAccount?: Account | null;
+  label?: string;
+  useDefaultAccount?: boolean;
 }): JSX.Element {
   const accounts: Account[] = useSelector(
     (state: RootState) => state.accounts.accounts
   );
 
-  const defaultAccount = (
-    Object.keys(props.excludeAccount) as (keyof Account)[]
-  ).every(
-    (property: keyof Account) =>
-      props.excludeAccount[property] === accounts[0][property]
-  )
-    ? accounts[1]
+  const defaultAccount = props.excludeAccount
+    ? (Object.keys(props.excludeAccount) as (keyof Account)[]).every(
+        (property: keyof Account) =>
+          props.excludeAccount
+            ? props.excludeAccount[property] === accounts[0][property]
+            : false
+      )
+      ? accounts[1]
+      : accounts[0]
     : accounts[0];
 
   const newAccount: Account = {
@@ -44,7 +48,7 @@ function AccountDropdownSelect(props: {
     <div>
       <Autocomplete
         size='small'
-        value={props.value || defaultAccount}
+        value={props.value || (props.useDefaultAccount ? defaultAccount : null)}
         onChange={(event, newValue) => {
           if (typeof newValue !== 'string' && newValue) {
             props.setValue(newValue);
@@ -57,16 +61,18 @@ function AccountDropdownSelect(props: {
         className='account-dropdown'
         inputValue={props.inputValue}
         onInputChange={(event, newValue) => props.setInputValue(newValue)}
-        options={accounts
-          .filter((account: Account) =>
-            (Object.keys(props.excludeAccount) as (keyof Account)[]).some(
-              (property: keyof Account) =>
-                props.excludeAccount[property] !== account[property]
-            )
-          )
-          .sort((account1: Account, account2: Account) =>
-            account1.account_group.localeCompare(account2.account_group)
-          )}
+        options={(props.excludeAccount
+          ? accounts.filter((account: Account) => {
+              const excludeAccount = props.excludeAccount || ({} as Account);
+              return (Object.keys(excludeAccount) as (keyof Account)[]).some(
+                (property: keyof Account) =>
+                  excludeAccount[property] !== account[property]
+              );
+            })
+          : accounts
+        ).sort((account1: Account, account2: Account) =>
+          account1.account_group.localeCompare(account2.account_group)
+        )}
         filterOptions={(options: Account[], params) => {
           const filtered = createFilterOptions<Account>()(options, params);
           const { inputValue } = params;
@@ -87,7 +93,7 @@ function AccountDropdownSelect(props: {
         renderInput={(params) => (
           <TextField
             {...params}
-            label={'Account'}
+            label={props.label || 'Account'}
             size='small'
             placeholder='Account'
             InputLabelProps={{ hidden: true }}

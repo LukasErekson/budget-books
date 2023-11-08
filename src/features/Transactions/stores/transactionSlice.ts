@@ -125,11 +125,16 @@ export const transactionSlice = createSlice({
         JSON.parse(JSON.stringify(state.transactionList));
 
       changedAccountIds.forEach((accountID: number) => {
-        const indexOfTransaction = stateTransactions[accountID]
-          .map((trxn: Transaction) => trxn.id)
-          .indexOf(editTransaction.id);
+        if (stateTransactions[accountID]) {
+          const indexOfTransaction = stateTransactions[accountID]
+            .map((trxn: Transaction) => trxn.id)
+            .indexOf(editTransaction.id);
 
-        stateTransactions[accountID][indexOfTransaction] = editTransaction;
+          stateTransactions[accountID][indexOfTransaction] = editTransaction;
+        } else {
+          // Need to define the account ID's list
+          stateTransactions[accountID] = [editTransaction];
+        }
       });
 
       return {

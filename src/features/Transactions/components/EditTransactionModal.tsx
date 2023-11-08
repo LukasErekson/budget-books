@@ -1,13 +1,27 @@
 import React, { useState } from 'react';
 import Transaction from '../types/types';
 import ModalBase from '../../../components/ModalBase';
-import { Button, TextField } from '@mui/material';
+import { Button, FormControl, InputLabel, TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs, { Dayjs } from 'dayjs';
 import { useThunkDispatch } from '../../../hooks/hooks';
 import { editTransaction } from '../stores/transactionThunks';
 import { AccountDropdownSelect } from '../../Accounts';
 import Account from '../../Accounts/types/types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/store';
+import { selectAccounts } from '../../Accounts/stores/accountSelectors';
+
+const newAccount: Account = {
+  name: '',
+  id: -1,
+  account_group: 'Create New Account',
+  account_type: 'New Account',
+  account_type_id: -1,
+  debit_inc: true,
+  balance: 0,
+  last_updated: '',
+};
 
 function EditTransactionModal(props: {
   isOpen: boolean;
@@ -15,6 +29,22 @@ function EditTransactionModal(props: {
   transaction: Transaction;
 }): JSX.Element {
   const transactionToEdit: Transaction = props.transaction;
+
+  const accounts: Account[] = useSelector((state: RootState) =>
+    selectAccounts(state)
+  );
+
+  const debitAccount: Account | null = transactionToEdit.debit_account_id
+    ? accounts.filter(
+        (acc: Account) => acc.id === transactionToEdit.debit_account_id
+      )[0]
+    : null;
+
+  const creditAccount: Account | null = transactionToEdit.credit_account_id
+    ? accounts.filter(
+        (acc: Account) => acc.id === transactionToEdit.credit_account_id
+      )[0]
+    : null;
 
   const [date, setDate] = useState<string>(transactionToEdit.transaction_date);
   const [name, setName] = useState<string>(transactionToEdit.name);
@@ -25,6 +55,17 @@ function EditTransactionModal(props: {
     transactionToEdit.amount.toString() || '0'
   );
 
+  const [transactionDebitAccount, setTransactionDebitAccount] =
+    useState<Account | null>(debitAccount);
+  const [debitAccountInput, setDebitAccountInput] = useState<string>(
+    debitAccount?.name || ''
+  );
+
+  const [transactionCreditAccount, setTransactionCreditAccount] =
+    useState<Account | null>(creditAccount);
+  const [creditAccountInput, setCreditAccountInput] = useState<string>(
+    creditAccount?.name || ''
+  );
   const dispatch = useThunkDispatch();
 
   function saveUpdates() {
@@ -33,13 +74,17 @@ function EditTransactionModal(props: {
       name: name,
       transaction_date: date,
       description: description,
+      debit_account_id: transactionDebitAccount
+        ? +transactionDebitAccount.id
+        : 'undefined',
+      credit_account_id: transactionCreditAccount
+        ? +transactionCreditAccount.id
+        : 'undefined',
     };
 
     updatedTransaction.amount = +amount.toString().replace(/[^0-9\-.]/g, '');
 
     dispatch(editTransaction(updatedTransaction));
-
-    console.log(updatedTransaction);
 
     props.onRequestClose();
   }
@@ -95,18 +140,27 @@ function EditTransactionModal(props: {
         />
         <div className='edit-transaction-accounts'>
           <AccountDropdownSelect
-            excludeAccount={{} as Account}
-            value={{} as Account}
-            setValue={() => {}}
-            setInputValue={() => {}}
-            inputValue=''
+            excludeAccount={transactionCreditAccount || ({} as Account)}
+            value={transactionDebitAccount}
+            setValue={(newAccount: Account) =>
+              setTransactionDebitAccount(newAccount)
+            }
+            inputValue={debitAccountInput}
+            setInputValue={(newValue: string) => setDebitAccountInput(newValue)}
+            label='Debit Account'
           />
+
           <AccountDropdownSelect
-            excludeAccount={{} as Account}
-            value={{} as Account}
-            setValue={() => {}}
-            setInputValue={() => {}}
-            inputValue=''
+            excludeAccount={transactionDebitAccount || ({} as Account)}
+            value={transactionCreditAccount}
+            setValue={(newAccount: Account) =>
+              setTransactionCreditAccount(newAccount)
+            }
+            setInputValue={(newValue: string) =>
+              setCreditAccountInput(newValue)
+            }
+            inputValue={creditAccountInput}
+            label='Credit Account'
           />
         </div>
         <div className='edit-transaction-buttons'>

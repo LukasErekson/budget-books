@@ -804,3 +804,9 @@ nav a:hover {
   justify-content: flex-end;
   gap: 2rem;
 }
+
+.edit-transaction-accounts {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

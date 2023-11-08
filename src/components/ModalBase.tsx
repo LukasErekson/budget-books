@@ -12,7 +12,7 @@ Modal.defaultStyles = {
     height: 'fit-content',
     margin: '2rem auto',
   },
-  overlay: { ...Modal.defaultStyles.overlay },
+  overlay: { ...Modal.defaultStyles.overlay, zIndex: '1' },
 };
 
 function ModalBase(props: {
