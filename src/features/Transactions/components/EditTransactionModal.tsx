@@ -140,7 +140,7 @@ function EditTransactionModal(props: {
         />
         <div className='edit-transaction-accounts'>
           <AccountDropdownSelect
-            excludeAccount={transactionCreditAccount || ({} as Account)}
+            excludeAccount={transactionCreditAccount}
             value={transactionDebitAccount}
             setValue={(newAccount: Account) =>
               setTransactionDebitAccount(newAccount)
@@ -151,7 +151,7 @@ function EditTransactionModal(props: {
           />
 
           <AccountDropdownSelect
-            excludeAccount={transactionDebitAccount || ({} as Account)}
+            excludeAccount={transactionDebitAccount}
             value={transactionCreditAccount}
             setValue={(newAccount: Account) =>
               setTransactionCreditAccount(newAccount)

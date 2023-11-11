@@ -58,7 +58,10 @@ describe('Edit Transaction Modal', () => {
           onRequestClose={onRequestClose}
           transaction={fakeTransaction}
         />
-      </div>
+      </div>,
+      {
+        store: testStore,
+      }
     );
 
     const header = await screen.findByText('Edit Transaction');

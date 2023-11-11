@@ -122,11 +122,11 @@ function ExpenseReport(props: {
                       accountGroupsToBalancesWithTotals[groupName][accountType]
                     ).map((accountName: string) => (
                       <>
-                        <div className='expense-report-balance-row'>
-                          <span
-                            key={accountName}
-                            className='expense-report-account-name'
-                          >
+                        <div
+                          className='expense-report-balance-row'
+                          key={accountName}
+                        >
+                          <span className='expense-report-account-name'>
                             {accountName}
                           </span>
                           {accountGroupsToBalancesWithTotals[groupName][

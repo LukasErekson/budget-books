@@ -19,11 +19,14 @@ function AccountDropdownSelect(props: {
     (state: RootState) => state.accounts.accounts
   );
 
-  const defaultAccount = props.excludeAccount
-    ? (Object.keys(props.excludeAccount) as (keyof Account)[]).every(
+  const excludeAccount: Account =
+    props.excludeAccount || ({ id: -1 } as Account); // This will never match an account
+
+  const defaultAccount = excludeAccount
+    ? (Object.keys(excludeAccount) as (keyof Account)[]).every(
         (property: keyof Account) =>
-          props.excludeAccount
-            ? props.excludeAccount[property] === accounts[0][property]
+          excludeAccount
+            ? excludeAccount[property] === accounts[0][property]
             : false
       )
       ? accounts[1]
@@ -63,13 +66,14 @@ function AccountDropdownSelect(props: {
         onInputChange={(event, newValue) => props.setInputValue(newValue)}
         options={(props.excludeAccount
           ? accounts.filter((account: Account) => {
-              const excludeAccount = props.excludeAccount || ({} as Account);
+              const excludeAccount =
+                props.excludeAccount || ({ id: -1 } as Account);
               return (Object.keys(excludeAccount) as (keyof Account)[]).some(
                 (property: keyof Account) =>
                   excludeAccount[property] !== account[property]
               );
             })
-          : accounts
+          : [...accounts]
         ).sort((account1: Account, account2: Account) =>
           account1.account_group.localeCompare(account2.account_group)
         )}
