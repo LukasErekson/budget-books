@@ -14,10 +14,14 @@ import { toast } from 'react-toastify';
 function NewAccountModal(props: {
   isOpen: boolean;
   onRequestClose: () => void;
+  accountName?: string;
+  onPostCallback?: Function;
 }): JSX.Element {
   const [category, setCategory] = useState<AccountType | null>(null);
 
-  const [accountName, setAccountName] = useState<string>('');
+  const [accountName, setAccountName] = useState<string>(
+    props.accountName || ''
+  );
 
   const [debitInc, setDebitInc] = useState<boolean>(true);
 
@@ -38,6 +42,10 @@ function NewAccountModal(props: {
     thunkDispatch(addNewAccount(accountName, category, debitInc));
 
     setAccountName('');
+
+    if (props.onPostCallback) {
+      props.onPostCallback(accountName, category, debitInc);
+    }
 
     props.onRequestClose();
   }

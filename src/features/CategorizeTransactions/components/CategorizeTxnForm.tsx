@@ -14,11 +14,12 @@ import { selectAccounts } from '../../Accounts/stores/accountSelectors';
 import { addTransactionCategory } from '../../Transactions/stores/transactionThunks';
 
 import { pyToJsDate } from '../../../utils/TextFilters';
-import { AccountDropdownSelect } from '../../Accounts';
+import { AccountDropdownSelect, NewAccountModal } from '../../Accounts';
 import ButtonWithToolTip from '../../../components/ButtonWithToolTip';
 import { DeleteTxnModal } from '../';
-import { Button, Checkbox } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import { EditTransactionModal } from '../../Transactions';
+import AccountType from '../../AccountTypes/types/types';
 
 function CategorizeTxnForm(props: {
   transacitonData: Transaction;
@@ -63,9 +64,12 @@ function CategorizeTxnForm(props: {
 
   const [inputCategory, setInputCategory] = useState<string>('');
 
-  const [displayDeleteModal, setDisplayDeleteModal] = useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
 
-  const [displayEditModal, setDisplayEditModal] = useState<boolean>(false);
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+
+  const [showNewAccountModal, setShowNewAccountModal] =
+    useState<boolean>(false);
 
   const isSelected = useSelector(
     (state: RootState) => state.transactions.selectedTransactions || []
@@ -103,17 +107,8 @@ function CategorizeTxnForm(props: {
     category_id: number
   ) {
     if (category_id === -1) {
-      thunkDispatch(
-        addNewAccount(
-          category.name,
-          {
-            name: category.account_type,
-            id: category.account_type_id,
-            group_name: 'Misc.',
-          },
-          true
-        )
-      );
+      setShowNewAccountModal(true);
+      return;
     }
 
     thunkDispatch(
@@ -250,7 +245,7 @@ function CategorizeTxnForm(props: {
           style={{ gap: 10, display: 'flex', justifyContent: 'flex-end' }}
         >
           <ButtonWithToolTip
-            onClick={() => setDisplayEditModal(true)}
+            onClick={() => setShowEditModal(true)}
             toolTipContent={'Edit Transaction'}
             className='edit-transaction'
           >
@@ -258,7 +253,7 @@ function CategorizeTxnForm(props: {
           </ButtonWithToolTip>
           <ButtonWithToolTip
             onClick={() => {
-              setDisplayDeleteModal(true);
+              setShowDeleteModal(true);
             }}
             toolTipContent={'Delete Transaction'}
             className='delete-transaction'
@@ -268,21 +263,48 @@ function CategorizeTxnForm(props: {
         </div>
 
         <DeleteTxnModal
-          isOpen={displayDeleteModal}
+          isOpen={showDeleteModal}
           onRequestClose={() => {
-            setDisplayDeleteModal(false);
+            setShowDeleteModal(false);
           }}
           transactionData={props.transacitonData}
           amountIsNegative={amountIsNegative}
         />
 
         <EditTransactionModal
-          isOpen={displayEditModal}
+          isOpen={showEditModal}
           onRequestClose={() => {
-            setDisplayEditModal(false);
+            setShowEditModal(false);
           }}
           transaction={props.transacitonData}
         />
+
+        {category.id === -1 ? (
+          <NewAccountModal
+            isOpen={showNewAccountModal}
+            onRequestClose={() => {
+              setShowNewAccountModal(false);
+            }}
+            accountName={category.id === -1 ? inputCategory : undefined}
+            onPostCallback={(accountName: string) => {
+              const categoryAccount: Account =
+                accounts.find(
+                  (account: Account) => account.name === accountName
+                ) ||
+                ({
+                  id:
+                    Math.max(
+                      ...accounts.map((account: Account) => +account.id)
+                    ) + 1,
+                  name: accountName,
+                } as Account);
+
+              setCategory(categoryAccount);
+            }}
+          />
+        ) : (
+          ''
+        )}
       </div>
     </div>
   );

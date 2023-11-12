@@ -11,6 +11,9 @@ import { CategorizeTxnForm } from '../../features/CategorizeTransactions';
 import * as AccountThunks from '../../features/Accounts/stores/accountThunks';
 import * as TransactionThunks from '../../features/Transactions/stores/transactionThunks';
 import { fakeAccounts, otherAccount } from '../Accounts/mockAccounts';
+import ReactModal from 'react-modal';
+
+ReactModal.setAppElement('body');
 
 describe('Categorize Transaction Form', () => {
   let testStore: RootState;
@@ -40,6 +43,15 @@ describe('Categorize Transaction Form', () => {
       },
       accounts: {
         accounts: [activeAccount, otherAccount],
+      },
+      accountTypes: {
+        accountTypes: [
+          {
+            name: activeAccount.account_type,
+            id: activeAccount.account_type_id,
+            group: 'Test',
+          },
+        ],
       },
       transactions: {
         transactionList: { 1: transactionData },
@@ -215,58 +227,6 @@ describe('Categorize Transaction Form', () => {
     );
   });
 
-  it('Add button posts with new account & categorizes transaction', async () => {
-    const addNewAccount = jest.spyOn(AccountThunks, 'addNewAccount');
-    addNewAccount.mockReturnValue(mockThunkReturn);
-
-    const addTransactionCategory = jest.spyOn(
-      TransactionThunks,
-      'addTransactionCategory'
-    );
-    addTransactionCategory.mockReturnValue(mockThunkReturn);
-
-    renderWithProviders(
-      <CategorizeTxnForm
-        transacitonData={transactionData}
-        debitInc={true}
-        account={activeAccount}
-        selectTransaction={selectTransaction}
-        unSelectTransaction={unSelectTransaction}
-        listIndex={0}
-      />,
-      {
-        store: testStore,
-      }
-    );
-
-    const addButton = await screen.findByText('Add');
-
-    const accountDropdown = (await screen.findByPlaceholderText(
-      'Account'
-    )) as HTMLInputElement;
-
-    await userEvent.type(accountDropdown, 'New Account');
-
-    const newAccountSelection = await screen.findByText('New Account');
-
-    await userEvent.click(newAccountSelection);
-
-    await userEvent.click(addButton);
-
-    expect(addTransactionCategory).toHaveBeenCalledWith(
-      activeAccount,
-      transactionData.id,
-      -1,
-      'credit'
-    );
-
-    expect(addNewAccount).toHaveBeenCalledWith(
-      'New Account',
-      { name: 'New Account', id: -1, group_name: 'Misc.' },
-      true
-    );
-  });
-
   it('Clicking toggles greater description detail visibility', async () => {
     const { container } = renderWithProviders(
       <CategorizeTxnForm
@@ -299,5 +259,104 @@ describe('Categorize Transaction Form', () => {
     await userEvent.click(transactionDescription);
 
     expect(transactionDetailsContainer).toHaveClass('hide');
+  });
+
+  describe('When inputing a new account into the category field', () => {
+    it('Add button opens New Account Modal', async () => {
+      renderWithProviders(
+        <CategorizeTxnForm
+          transacitonData={transactionData}
+          debitInc={true}
+          account={activeAccount}
+          selectTransaction={selectTransaction}
+          unSelectTransaction={unSelectTransaction}
+          listIndex={0}
+        />,
+        {
+          store: testStore,
+        }
+      );
+
+      const addButton = await screen.findByText('Add');
+
+      const accountDropdown = (await screen.findByPlaceholderText(
+        'Account'
+      )) as HTMLInputElement;
+
+      await userEvent.type(accountDropdown, 'New Account');
+
+      const newAccountSelection = await screen.findByText('New Account');
+
+      await userEvent.click(newAccountSelection);
+
+      await userEvent.click(addButton);
+
+      const newAccountModalTitle = await screen.findByText('Add New Account');
+
+      expect(newAccountModalTitle).toBeVisible();
+    });
+
+    it('Saving new account posts new account and sets it to the transaction category', async () => {
+      const addNewAccount = jest.spyOn(AccountThunks, 'addNewAccount');
+      addNewAccount.mockReturnValue(mockThunkReturn);
+
+      const newTransaction = jest.spyOn(
+        TransactionThunks,
+        'addTransactionCategory'
+      );
+      newTransaction.mockReturnValue(mockThunkReturn);
+
+      renderWithProviders(
+        <CategorizeTxnForm
+          transacitonData={transactionData}
+          debitInc={true}
+          account={activeAccount}
+          selectTransaction={selectTransaction}
+          unSelectTransaction={unSelectTransaction}
+          listIndex={0}
+        />,
+        {
+          store: testStore,
+        }
+      );
+
+      const addButton = await screen.findByText('Add');
+
+      const accountDropdown = (await screen.findByPlaceholderText(
+        'Account'
+      )) as HTMLInputElement;
+
+      await userEvent.type(accountDropdown, 'New Account');
+
+      const newAccountSelection = await screen.findByText('New Account');
+
+      await userEvent.click(newAccountSelection);
+
+      await userEvent.click(addButton);
+
+      const newAccountModalTitle = await screen.findByText('Add New Account');
+
+      expect(newAccountModalTitle).toBeVisible();
+
+      const AccountTypeDropdown = await screen.findByPlaceholderText(
+        'Account Type'
+      );
+
+      await userEvent.click(AccountTypeDropdown);
+      await userEvent.click(await screen.findByText('Checking Account'));
+
+      await userEvent.click(await screen.findByText('Add Account'));
+
+      expect(addNewAccount).toHaveBeenCalled();
+
+      await userEvent.click(addButton);
+
+      expect(newTransaction).toHaveBeenCalledWith(
+        expect.anything(),
+        transactionData.debit_account_id,
+        3, // New Account ID is 1 more than the number of accounts in state or the new account's ID
+        'credit'
+      );
+    });
   });
 });
