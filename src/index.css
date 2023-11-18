@@ -810,3 +810,13 @@ nav a:hover {
   flex-direction: column;
   gap: 1rem;
 }
+
+.CSVImporter_Importer {
+  width: 90%;
+}
+
+.one-col-checkbox-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
