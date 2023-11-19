@@ -1,19 +1,14 @@
 import React from 'react';
-import userEvent from '@testing-library/user-event';
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
 import Account from '../../features/Accounts/types/types';
-import { ImportedTransactionData } from '../../features/CategorizeTransactions/components/UploadTxnModal';
-import { UploadableTransaction } from '../../features/CategorizeTransactions/types/types';
-import * as TransactionThunks from '../../features/Transactions/stores/transactionThunks';
 
 import { UploadTxnModal } from '../../features/CategorizeTransactions';
 import { RootState, setupStore } from '../../stores/store';
-import { mockThunkReturn, renderWithProviders } from '../setupTests';
+import { renderWithProviders } from '../setupTests';
 
 import ReactModal from 'react-modal';
 import { fakeAccounts } from '../Accounts/mockAccounts';
-import { open, readFile } from 'fs';
 ReactModal.setAppElement('body');
 
 let dataHandler = jest.fn();
@@ -63,5 +58,11 @@ describe('Upload Transaction Modal', () => {
     const header = await screen.findByText('Upload Transactions');
 
     expect(header).toBeVisible();
+
+    const oneColumnCheckbox = (await screen.findByLabelText(
+      'Use one column for amount?'
+    )) as HTMLInputElement;
+
+    expect(oneColumnCheckbox.checked).toBe(false);
   });
 });

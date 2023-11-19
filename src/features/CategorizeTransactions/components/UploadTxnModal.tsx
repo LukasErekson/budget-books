@@ -149,7 +149,7 @@ function UploadTxnModal(props: UploadTransactionModalProps): JSX.Element {
 
           transactionsToUpload.indicies.push(startIndex);
         }}
-        onComplete={(info) => {
+        onComplete={() => {
           thunkDispatch(
             uploadTransactions(activeAccount, transactionsToUpload.transactions)
           );
