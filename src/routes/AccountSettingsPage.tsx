@@ -12,6 +12,8 @@ import EditAccountModal from '../features/Accounts/components/EditAccountModal';
 import { closeEditAccountModal } from '../stores/PageSlice';
 import { RootState } from '../stores/store';
 import { TextField } from '@mui/material';
+import Account from '../features/Accounts/types/types';
+import { Search } from '@mui/icons-material';
 
 function AccountSettingsPage(): JSX.Element {
   const editAccountModalIsOpen: boolean = useSelector(
@@ -30,6 +32,8 @@ function AccountSettingsPage(): JSX.Element {
     boolean,
     React.Dispatch<React.SetStateAction<boolean>>
   ] = useState(false);
+
+  const [searchInput, setSearchInput] = useState<string>('');
 
   return (
     <>
@@ -51,7 +55,13 @@ function AccountSettingsPage(): JSX.Element {
       />
 
       <div className='acct-table-controls'>
-        <TextField size='small' disabled />
+        <Search />
+        <TextField
+          size='small'
+          type='search'
+          value={searchInput}
+          onChange={(event) => setSearchInput(event.target.value)}
+        />
         <ButtonWithToolTip
           toolTipContent={'Add New Account'}
           onClick={() => setNewAccountModalIsOpen(true)}
@@ -67,7 +77,15 @@ function AccountSettingsPage(): JSX.Element {
       </div>
 
       <div className='center'>
-        <AccountList />
+        <AccountList
+          searchFunc={(account: Account) => {
+            const searchText: string = searchInput.toLocaleLowerCase();
+            return (
+              account.name.toLocaleLowerCase().includes(searchText) ||
+              account.account_type.toLocaleLowerCase().includes(searchText)
+            );
+          }}
+        />
       </div>
     </>
   );

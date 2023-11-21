@@ -720,6 +720,7 @@ nav a:hover {
   display: flex;
   gap: 1rem;
   justify-content: right;
+  align-items: center;
   padding: 0% 2.5%;
 }
 

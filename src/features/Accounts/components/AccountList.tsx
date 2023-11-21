@@ -8,7 +8,9 @@ import { useThunkDispatch } from '../../../hooks/hooks';
 import { fetchAccounts } from '../stores/accountThunks';
 import { TbSortAscending, TbSortDescending } from 'react-icons/tb';
 
-function AccountList(): JSX.Element {
+function AccountList(props: {
+  searchFunc: (account: Account) => boolean;
+}): JSX.Element {
   const accounts: Account[] = useSelector((state: RootState) =>
     selectAccounts(state)
   );
@@ -83,9 +85,13 @@ function AccountList(): JSX.Element {
     }
   }, []);
 
-  const sortedAccounts: Account[] = [...accounts];
+  let sortedAccounts: Account[] = [...accounts];
 
   sortedAccounts.sort(sortFuncMap[sortAccountsBy]);
+
+  sortedAccounts = sortedAccounts.filter((account: Account) =>
+    props.searchFunc(account)
+  );
 
   return (
     <table id='accounts-table'>
