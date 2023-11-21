@@ -28,6 +28,7 @@ import {
 } from '../features/CategorizeTransactions';
 import { selectUncategorizedTransactions } from '../features/Transactions/stores/transactionSelectors';
 import Transaction from '../features/Transactions/types/types';
+import { TextField } from '@mui/material';
 
 function CategorizeTransactionsPage() {
   const activeAccount: Account = useSelector(
@@ -222,7 +223,7 @@ function CategorizeTransactionsPage() {
             ' num-transactions-option selected-transactions-space ' +
             (selectedTransactions.length ? 'unhide' : 'hide')
           }
-          style={{ marginRight: 'auto' }}
+          style={{ marginRight: '5rem' }}
         >
           <p>
             You have <b className='alert'>{selectedTransactions.length}</b>{' '}
@@ -235,10 +236,6 @@ function CategorizeTransactionsPage() {
           {[25, 50, 100].map((val) => transactionsPerPageLink(val))}
         </div>
 
-        <div className='search-categorize-txns-container'>
-          <label htmlFor='search-cat-txns'>Search Transactions: </label>
-          <input type='text' className='search-categorize-txns' />
-        </div>
         <ButtonWithToolTip
           onClick={() => {
             if (

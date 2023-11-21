@@ -13,7 +13,7 @@ import {
 } from './accountSlice';
 
 export const fetchAccounts =
-  (accountType = 'all') =>
+  (accountType: string = 'all', changeActiveAccount: boolean = false) =>
   async (dispatch: AppDispatch) => {
     try {
       const {
@@ -42,7 +42,9 @@ export const fetchAccounts =
 
         const accounts: Account[] = responseData.accounts;
         dispatch(loadAccounts(accounts));
-        dispatch(changeCategorizationActiveAccount(accounts[0]));
+        if (changeActiveAccount) {
+          dispatch(changeCategorizationActiveAccount(accounts[0]));
+        }
       } else {
         throw new BadResponseError(
           response.status,

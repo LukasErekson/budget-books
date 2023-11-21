@@ -54,7 +54,7 @@ function AccountCardContainer(props: {
   useEffect(() => {
     if (!isAccountsLoaded) {
       if (!isAccountsFetched) {
-        thunkDispatch(fetchAccounts('all'));
+        thunkDispatch(fetchAccounts('all', true));
         setIsAccountsFetched(true);
       }
       if (!isTypesFetched) {
