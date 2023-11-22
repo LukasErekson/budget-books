@@ -43,6 +43,8 @@ describe('Categorize List Component', () => {
   const setSelectedTransactions = jest.fn();
   const addSelectedTransaction = jest.fn();
   const removeSelectedTransaction = jest.fn();
+  const searchFunc = jest.fn();
+  searchFunc.mockReturnValue(true);
 
   beforeEach(() => {
     testStore = setupStore({
@@ -87,6 +89,7 @@ describe('Categorize List Component', () => {
         removeSelectedTransaction={removeSelectedTransaction}
         startingPosition={0}
         numTransactionsToDisplay={25}
+        searchFunc={searchFunc}
       />,
       {
         store: testStore,
@@ -122,6 +125,7 @@ describe('Categorize List Component', () => {
             removeSelectedTransaction={removeSelectedTransaction}
             startingPosition={0}
             numTransactionsToDisplay={25}
+            searchFunc={searchFunc}
           />,
           {
             store: testStore,
@@ -147,6 +151,7 @@ describe('Categorize List Component', () => {
             removeSelectedTransaction={removeSelectedTransaction}
             startingPosition={0}
             numTransactionsToDisplay={25}
+            searchFunc={searchFunc}
           />,
           {
             store: testStore,
@@ -176,6 +181,7 @@ describe('Categorize List Component', () => {
           removeSelectedTransaction={removeSelectedTransaction}
           startingPosition={0}
           numTransactionsToDisplay={25}
+          searchFunc={searchFunc}
         />,
         {
           store: testStore,
@@ -209,6 +215,7 @@ describe('Categorize List Component', () => {
           removeSelectedTransaction={removeSelectedTransaction}
           startingPosition={0}
           numTransactionsToDisplay={25}
+          searchFunc={searchFunc}
         />
       );
 
@@ -235,6 +242,7 @@ describe('Categorize List Component', () => {
           removeSelectedTransaction={removeSelectedTransaction}
           startingPosition={0}
           numTransactionsToDisplay={25}
+          searchFunc={searchFunc}
         />,
         {
           store: testStore,
@@ -271,6 +279,7 @@ describe('Categorize List Component', () => {
           removeSelectedTransaction={removeSelectedTransaction}
           startingPosition={0}
           numTransactionsToDisplay={25}
+          searchFunc={searchFunc}
         />
       );
 
@@ -297,6 +306,7 @@ describe('Categorize List Component', () => {
           removeSelectedTransaction={removeSelectedTransaction}
           startingPosition={0}
           numTransactionsToDisplay={25}
+          searchFunc={searchFunc}
         />,
         {
           store: testStore,
@@ -336,6 +346,7 @@ describe('Categorize List Component', () => {
           removeSelectedTransaction={removeSelectedTransaction}
           startingPosition={0}
           numTransactionsToDisplay={25}
+          searchFunc={searchFunc}
         />
       );
 
@@ -365,6 +376,7 @@ describe('Categorize List Component', () => {
           removeSelectedTransaction={removeSelectedTransaction}
           startingPosition={0}
           numTransactionsToDisplay={25}
+          searchFunc={searchFunc}
         />,
         {
           store: testStore,
@@ -401,6 +413,7 @@ describe('Categorize List Component', () => {
           removeSelectedTransaction={removeSelectedTransaction}
           startingPosition={0}
           numTransactionsToDisplay={25}
+          searchFunc={searchFunc}
         />
       );
 

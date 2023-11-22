@@ -29,6 +29,7 @@ import {
 import { selectUncategorizedTransactions } from '../features/Transactions/stores/transactionSelectors';
 import Transaction from '../features/Transactions/types/types';
 import { TextField } from '@mui/material';
+import { Search } from '@mui/icons-material';
 
 function CategorizeTransactionsPage() {
   const activeAccount: Account = useSelector(
@@ -76,6 +77,8 @@ function CategorizeTransactionsPage() {
 
   const [showBulkActionModal, setShowBulkActionModal] =
     useState<boolean>(false);
+
+  const [searchInput, setSearchInput] = useState<string>('');
 
   function transactionIndexRange(
     newIndex: number | undefined,
@@ -223,7 +226,7 @@ function CategorizeTransactionsPage() {
             ' num-transactions-option selected-transactions-space ' +
             (selectedTransactions.length ? 'unhide' : 'hide')
           }
-          style={{ marginRight: '5rem' }}
+          style={{ marginRight: 'auto' }}
         >
           <p>
             You have <b className='alert'>{selectedTransactions.length}</b>{' '}
@@ -231,11 +234,35 @@ function CategorizeTransactionsPage() {
             {selectedTransactions.length === 1 ? '' : 's'}
           </p>
         </div>
+
         <div className='num-transactions-option'>
-          <p>Transactions per page:</p>
+          <p>Transactions per page:</p>{' '}
           {[25, 50, 100].map((val) => transactionsPerPageLink(val))}
         </div>
 
+        <div
+          className='search-categorize-txns-container'
+          style={{
+            textAlign: 'left',
+            padding: '.5rem',
+            display: 'flex',
+            gap: '1rem',
+            alignItems: 'center',
+          }}
+        >
+          <Search />
+          <TextField
+            type={'search'}
+            inputProps={{ className: 'search-categorize-txns' }}
+            label={'Search Transactions'}
+            size={'small'}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                setSearchInput((event.target as HTMLInputElement).value);
+              }
+            }}
+          />
+        </div>
         <ButtonWithToolTip
           onClick={() => {
             if (
@@ -292,6 +319,13 @@ function CategorizeTransactionsPage() {
         removeSelectedTransaction={removeSelectedTransaction}
         startingPosition={currentPage * numTransactionsToDisplay}
         numTransactionsToDisplay={numTransactionsToDisplay}
+        searchFunc={(transaction: Transaction) => {
+          const searchText: string = searchInput.toLocaleLowerCase();
+          return (
+            transaction.name.toLocaleLowerCase().includes(searchText) ||
+            transaction.description.toLocaleLowerCase().includes(searchText)
+          );
+        }}
       />
 
       {pages.length ? (

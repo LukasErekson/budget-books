@@ -23,6 +23,7 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import SearchOffIcon from '@mui/icons-material/SearchOff';
+import { Search } from '@mui/icons-material';
 
 type SortDataObj = {
   mode: string;
@@ -50,6 +51,7 @@ function CategorizeList(props: {
   ) => void;
   startingPosition: number;
   numTransactionsToDisplay: number;
+  searchFunc: (transaction: Transaction) => boolean;
 }): JSX.Element {
   const transactions: Transaction[] = useSelector((state: RootState) =>
     props.account.id
@@ -65,24 +67,14 @@ function CategorizeList(props: {
     ascending: true,
   });
 
-  const [searchInput, setSearchInput] = useState<string>('');
-
   const [selectAllTransactions, setSelectAllTransactions] =
     useState<boolean>(false);
 
   const debitInc = props.account.debit_inc === 1;
 
-  const sortedTransactions = searchInput
-    ? transactions
-        .filter((transaction: Transaction) => {
-          const input: string = searchInput.toLocaleLowerCase();
-          return (
-            transaction.name.toLocaleLowerCase().includes(input) ||
-            transaction.description.toLocaleLowerCase().includes(input)
-          );
-        })
-        .sort(sortTransactionsFunc())
-    : transactions.sort(sortTransactionsFunc());
+  const sortedTransactions = transactions
+    .filter((transaction: Transaction) => props.searchFunc(transaction))
+    .sort(sortTransactionsFunc());
 
   const pageTransactions = useMemo<Transaction[]>(
     () =>
@@ -172,26 +164,6 @@ function CategorizeList(props: {
 
   return (
     <>
-      <div
-        className='search-categorize-txns-container'
-        style={{
-          marginTop: '-3.25rem',
-          textAlign: 'left',
-          paddingBottom: '.5rem',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <SearchIcon />
-        <TextField
-          type={'search'}
-          inputProps={{ className: 'search-categorize-txns' }}
-          label={'Search Transactions'}
-          size={'small'}
-          value={searchInput}
-          onChange={(event) => setSearchInput(event.target.value)}
-        />
-      </div>
       <div className='txn-form-container'>
         <div className='categorize-txn-form txn-form-header-row'>
           <span>
@@ -344,7 +316,7 @@ function CategorizeList(props: {
                 />
               )
             )
-          ) : searchInput ? (
+          ) : sortedTransactions.length === 0 ? (
             <span
               style={{
                 margin: '2rem',
