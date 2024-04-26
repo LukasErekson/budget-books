@@ -33,7 +33,7 @@ const ButtonWithToolTip: FC<ButtonWithToolTipProps> = (props): JSX.Element => {
         className={`btn-with-tooltip ${props.className}`}
         onClick={props.onClick}
       >
-        <span>{props.children}</span>
+        {props.children}
       </button>
     </Tooltip>
   );
